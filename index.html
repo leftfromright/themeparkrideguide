@@ -178,12 +178,15 @@
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
     
     .grid.compact { grid-template-columns: 1fr; gap: 0.75rem; }
-    .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.25rem; }
-    .grid.compact .card-body { flex: 1.2; min-width: 0; }
+    .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.25rem; position: relative; }
+    .grid.compact .card-body { flex: 1.2; min-width: 0; padding-right: 2rem; }
     .grid.compact .card-meta { flex: 1.4; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
     .grid.compact .card-actions { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
     .grid.compact .ride-thumb { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
     
+    /* Compact Fav Star positioned top right */
+    .grid.compact .fav-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.6rem; line-height: 1; }
+
     .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; color: var(--muted); display: flex; flex-direction: column; gap: 0.3rem; }
     .meta-item { display: grid; grid-template-columns: 95px 1fr; gap: 0.5rem; align-items: baseline; }
     .meta-label { color: var(--muted); white-space: nowrap; }
@@ -240,6 +243,8 @@
       .height-filter { height: auto; padding: 0.5rem 1rem; }
 
       .grid.compact .card { flex-direction: column; align-items: stretch; gap: 0.75rem; padding: 1rem; }
+      .grid.compact .card-body { padding-right: 0; }
+      .grid.compact .fav-btn { position: static; }
       .grid.compact .meta-item, .meta-item { grid-template-columns: 90px 1fr; }
       .grid.compact .card-actions { flex-direction: row; justify-content: space-between; width: 100%; border-top: 1px solid var(--border); padding-top: 0.75rem; }
       .grid.compact .pov-link { flex: 1; text-align: center; }
@@ -261,7 +266,7 @@
     .tag.clickable { cursor: pointer; }
     .tag.clickable:hover { background: var(--accent); color: #ffffff; }
 
-    .fav-btn { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; transition: color 0.2s ease, transform 0.15s ease; line-height: 1; padding: 0; }
+    .fav-btn { background: none; border: none; color: var(--muted); font-size: 1.6rem; cursor: pointer; transition: color 0.2s ease, transform 0.15s ease; line-height: 1; padding: 0; }
     .fav-btn:hover { transform: scale(1.15); color: var(--star-active); }
     .fav-btn.active { color: var(--star-active); }
 
@@ -317,7 +322,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v43</div>
+    <div class="version-badge" id="versionBadgeBtn">v45</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -502,7 +507,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v43';
+    const CACHE_KEY = 'theme_park_rides_cache_v45';
 
     const SENSORY_TAGS = [
       { id: 'dark', label: 'Dark / Low Light', keywords: ['dark', 'dim', 'shadow', 'night'] },
@@ -858,13 +863,12 @@
       const availableRides = dataset.filter(r => selectedCountries.includes(r.country));
       const parks = [...new Set(availableRides.map(r => r.park).filter(Boolean))].sort();
       
-      selectedParks = selectedParks.filter(p => parks.includes(p));
-      if (selectedParks.length === 0) selectedParks = [...parks];
+      selectedParks = [...parks];
 
       const container = document.getElementById('parkOptions');
       container.innerHTML = parks.map(p => `
         <label class="dropdown-option">
-          <input type="checkbox" value="${p}" ${selectedParks.includes(p) ? 'checked' : ''} class="park-cb">
+          <input type="checkbox" value="${p}" checked class="park-cb">
           ${getFaviconHtml(p)}
           <span>${p}</span>
         </label>
@@ -908,13 +912,12 @@
       const availableRides = dataset.filter(r => selectedCountries.includes(r.country) && selectedParks.includes(r.park));
       const types = [...new Set(availableRides.map(r => r.type).filter(Boolean))].sort();
 
-      selectedTypes = selectedTypes.filter(t => types.includes(t));
-      if (selectedTypes.length === 0) selectedTypes = [...types];
+      selectedTypes = [...types];
 
       const container = document.getElementById('typeOptions');
       container.innerHTML = types.map(t => `
         <label class="dropdown-option">
-          <input type="checkbox" value="${t}" ${selectedTypes.includes(t) ? 'checked' : ''} class="type-cb">
+          <input type="checkbox" value="${t}" checked class="type-cb">
           <span>${t}</span>
         </label>
       `).join('');
