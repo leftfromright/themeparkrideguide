@@ -76,17 +76,13 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; transition: background-color 0.3s ease, color 0.3s ease; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 2rem; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; transition: background-color 0.3s ease, color 0.3s ease; }
     
-    header { max-width: 1000px; margin: 0 auto 1.5rem auto; text-align: center; width: 100%; position: relative; }
-    .header-top-bar { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
-    .version-badge { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; }
-    
-    .theme-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem; }
-    .theme-toggle-btn:hover { border-color: var(--accent); }
+    /* Top-Right Version Badge */
+    .version-badge { position: fixed; top: 0.75rem; right: 0.75rem; background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; z-index: 100; box-shadow: var(--shadow); }
 
-    /* Hero Banner Styling at Top */
-    .hero-banner { max-width: 1000px; margin: 0 auto 1.5rem auto; border-radius: 12px; overflow: hidden; position: relative; height: 180px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; text-align: center; background: var(--card-bg); }
+    /* Hero Banner Styling */
+    .hero-banner { width: 100%; max-width: 1000px; margin: 0 auto 1.5rem auto; border-radius: 0; overflow: hidden; position: relative; height: 180px; box-shadow: var(--shadow); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center; text-align: center; background: var(--card-bg); }
     .hero-banner img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: brightness(0.45) saturate(1.1); transition: filter 0.3s ease; }
     [data-theme="light"] .hero-banner img { filter: brightness(0.65) saturate(1.05); }
     .hero-content { position: relative; z-index: 2; padding: 1rem; color: #ffffff; text-shadow: 0 2px 6px rgba(0,0,0,0.7); }
@@ -94,13 +90,19 @@
     [data-theme="light"] .hero-content h1 { color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
     .hero-content p { font-size: 1rem; opacity: 0.95; max-width: 700px; margin: 0 auto; line-height: 1.4; }
 
-    .view-nav { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    header { max-width: 1000px; margin: 0 auto 1.5rem auto; text-align: center; width: 100%; padding: 0 1rem; }
+
+    /* Navigation Row with Integrated Theme Toggle */
+    .view-nav { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
     .nav-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem; box-shadow: var(--shadow); }
     .nav-btn:hover { color: var(--text); border-color: var(--accent); }
     .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
     .nav-badge { background: rgba(0, 0, 0, 0.15); color: inherit; padding: 0.1rem 0.4rem; border-radius: 12px; font-size: 0.75rem; }
 
-    .controls { max-width: 1000px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+    .theme-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem; box-shadow: var(--shadow); }
+    .theme-toggle-btn:hover { border-color: var(--accent); }
+
+    .controls { max-width: 1000px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; gap: 1rem; width: 100%; padding: 0 1rem; }
     .search-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
     input[type="text"] { flex: 2; min-width: 200px; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; box-shadow: var(--shadow); transition: border-color 0.2s ease; }
     input[type="text"]:focus { border-color: var(--accent); }
@@ -140,7 +142,7 @@
     .unit-btn { background: none; border: none; color: var(--muted); padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
     .unit-btn.active { background: var(--accent); color: #ffffff; }
 
-    .status-bar { max-width: 1000px; margin: 0 auto 1.25rem auto; display: flex; flex-direction: column; gap: 0.75rem; width: 100%; }
+    .status-bar { max-width: 1000px; margin: 0 auto 1.25rem auto; display: flex; flex-direction: column; gap: 0.75rem; width: 100%; padding: 0 1rem; }
     .meta-counts { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--muted); }
     .display-toggle { display: flex; gap: 0.5rem; align-items: center; }
     .toggle-icon-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s ease; }
@@ -151,7 +153,7 @@
     .pill-remove { cursor: pointer; font-size: 0.85rem; opacity: 0.8; }
     .pill-remove:hover { opacity: 1; }
 
-    main { flex: 1; width: 100%; }
+    main { flex: 1; width: 100%; padding: 0 1rem; }
     
     .grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
     
@@ -184,11 +186,13 @@
     .skeleton-line.long { width: 85%; }
     @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 0.7; } 100% { opacity: 0.3; } }
 
+    @media (min-width: 641px) {
+      .hero-banner { border-radius: 12px; width: 100%; max-width: 1000px; }
+    }
+
     @media (max-width: 640px) {
-      body { padding: 1rem 0.75rem; }
-      
-      .hero-banner { height: 140px; }
-      .hero-content h1 { font-size: 1.5rem; }
+      .hero-banner { height: 160px; border-radius: 0; border-left: none; border-right: none; }
+      .hero-content h1 { font-size: 1.4rem; }
       .hero-content p { font-size: 0.8rem; }
 
       .grid.compact .card { flex-direction: column; align-items: stretch; gap: 0.75rem; padding: 1rem; }
@@ -235,7 +239,7 @@
 
     .loading { text-align: center; color: var(--muted); font-size: 1.2rem; grid-column: 1 / -1; padding: 3rem 0; }
 
-    footer { max-width: 1000px; margin: 3rem auto 0 auto; text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem; color: var(--muted); font-size: 0.85rem; width: 100%; }
+    footer { max-width: 1000px; margin: 3rem auto 0 auto; text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem; color: var(--muted); font-size: 0.85rem; width: 100%; padding-left: 1rem; padding-right: 1rem; }
     footer p { margin-bottom: 0.4rem; }
     footer .legal { font-size: 0.75rem; opacity: 0.7; }
 
@@ -252,6 +256,9 @@
 </head>
 <body>
 
+  <!-- Top-Right Version Badge -->
+  <div class="version-badge">v29</div>
+
   <div class="hero-banner">
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
@@ -261,17 +268,13 @@
   </div>
 
   <header>
-    <div class="header-top-bar">
-      <button class="theme-toggle-btn" id="themeToggleBtn">
-        <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
-      </button>
-      <div class="version-badge">v28</div>
-    </div>
-
     <div class="view-nav">
       <button class="nav-btn active" id="viewAllBtn">All Rides</button>
       <button class="nav-btn" id="viewFavsBtn">
         ★ Favourites <span class="nav-badge" id="favCountBadge">0</span>
+      </button>
+      <button class="theme-toggle-btn" id="themeToggleBtn">
+        <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
       </button>
       <button class="nav-btn" id="printFavsBtn" style="display: none;">
         🖨️ Print Checklist
@@ -432,7 +435,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v28';
+    const CACHE_KEY = 'theme_park_rides_cache_v29';
 
     const SENSORY_TAGS = [
       { id: 'dark', label: 'Dark / Low Light', keywords: ['dark', 'dim', 'shadow', 'night'] },
