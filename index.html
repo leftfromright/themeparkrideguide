@@ -170,10 +170,16 @@
     .unit-btn.active { background: var(--accent); color: #ffffff; }
 
     .status-bar { max-width: 1000px; margin: 0 auto 1.25rem auto; display: flex; flex-direction: column; gap: 0.75rem; width: 100%; padding: 0 1rem; }
-    .meta-counts { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--muted); }
+    .meta-counts { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--muted); flex-wrap: wrap; gap: 0.5rem; }
+    
+    .status-controls-group { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    
     .display-toggle { display: flex; gap: 0.5rem; align-items: center; }
     .toggle-icon-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s ease; }
     .toggle-icon-btn.active { color: var(--accent); border-color: var(--accent); background: var(--badge-bg); }
+
+    .live-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .live-toggle-btn.active { background: rgba(34, 197, 94, 0.15); color: #22c55e; border-color: #22c55e; }
 
     .pills-container { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .filter-pill { background: var(--badge-bg); border: 1px solid var(--border); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 16px; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem; }
@@ -206,6 +212,13 @@
     .grid.compact .details { display: block; font-size: 0.85rem; margin-bottom: 0.25rem; line-height: 1.3; }
     .grid.compact .sensory-box { display: block; margin-top: 0.35rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
     .grid.compact .pov-link { width: auto; margin-top: 0; padding: 0.4rem 0.75rem; }
+
+    /* Live Wait Badge */
+    .live-wait-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px; margin-bottom: 0.5rem; }
+    .live-wait-badge.wait-short { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .live-wait-badge.wait-medium { background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
+    .live-wait-badge.wait-long { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .live-wait-badge.wait-down { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
 
     /* About Modal Styles */
     .modal-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); z-index: 300; align-items: center; justify-content: center; padding: 1rem; }
@@ -332,7 +345,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v50</div>
+    <div class="version-badge" id="versionBadgeBtn">v52</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -452,12 +465,19 @@
   <div class="status-bar">
     <div class="meta-counts">
       <span id="rideCounter">Showing 0 rides</span>
-      <div class="display-toggle">
-        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
-          <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
+      
+      <div class="status-controls-group">
+        <button class="live-toggle-btn" id="liveWaitToggleBtn" title="Toggle Live Wait Times">
+          ⚡ <span id="liveToggleText">Show Live Wait Times</span>
         </button>
-        <button class="toggle-icon-btn active" id="cardViewBtn" title="Grid View">田 Grid</button>
-        <button class="toggle-icon-btn" id="compactViewBtn" title="Compact List">≡ Compact</button>
+        
+        <div class="display-toggle">
+          <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+            <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
+          </button>
+          <button class="toggle-icon-btn active" id="cardViewBtn" title="Grid View">田 Grid</button>
+          <button class="toggle-icon-btn" id="compactViewBtn" title="Compact List">≡ Compact</button>
+        </div>
       </div>
     </div>
     <div class="pills-container" id="pillsContainer"></div>
@@ -517,12 +537,12 @@
 
   <footer>
     <p>© 2026 Theme Park Ride Guide. All rights reserved.</p>
-    <p class="legal">Independent fan guide. Curated database, custom structure, and presentation protected under database rights. Park names and trademarks belong to their respective owners.</p>
+    <p class="legal">Live wait times powered by ThemeParks.wiki API. Independent fan guide. Curated database, custom structure, and presentation protected under database rights. Park names and trademarks belong to their respective owners.</p>
   </footer>
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v50';
+    const CACHE_KEY = 'theme_park_rides_cache_v52';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -535,6 +555,23 @@
     ];
 
     const WATER_PARK_NAMES = ['blizzard beach', 'typhoon lagoon', 'volcano bay'];
+
+    const THEME_PARKS_WIKI_IDS = {
+      'magic kingdom': '73405151-0fd0-4d7f-b44e-909d432379b3',
+      'epcot': '438d0111-adc6-4d04-b9c1-8b01267b1407',
+      'disney\'s animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
+      'animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
+      'disney\'s hollywood studios': '284dc8cb-ed80-49ae-9e7d-afa964d4f828',
+      'hollywood studios': '284dc8cb-ed80-49ae-9e7d-afa964d4f828',
+      'disneyland park': 'da40d870-f8f8-4034-8be0-b5bf46f7f637',
+      'disney california adventure': 'eb2d56a4-44bc-4475-b040-4273570624d6',
+      'universal studios florida': 'f516a56e-69f8-44da-bf50-c81215b3992b',
+      'universal\'s islands of adventure': '2105156a-9359-43c7-b76e-48f8bc5b1f63',
+      'islands of adventure': '2105156a-9359-43c7-b76e-48f8bc5b1f63',
+      'alton towers': 'd69e4697-3f36-4cce-9ff1-24fb6a188365',
+      'thorpe park': '6f9c3c13-8b74-4b47-b73a-4efb7189a05b',
+      'chessington world of adventures': 'b0a886f4-c5a4-42ea-9e73-d6c5614eb581'
+    };
 
     const PARK_ICON_OVERRIDES = {
       'magic kingdom': '🏰',
@@ -599,12 +636,15 @@
     let selectedParks = [];
     let selectedTypes = [];
     let selectedSensory = SENSORY_TAGS.map(t => t.id);
-    let selectedParkCategory = 'all'; // 'all', 'theme', 'water'
+    let selectedParkCategory = 'all';
     let currentUnit = 'cm';
     let currentView = 'all';
     let isCompact = false;
+    
+    let showLiveWaitTimes = false;
+    let liveWaitData = {};
+    let isFetchingLive = false;
 
-    // About Modal Management
     const aboutModal = document.getElementById('aboutModal');
     document.getElementById('versionBadgeBtn').addEventListener('click', () => {
       aboutModal.classList.add('show');
@@ -616,7 +656,6 @@
       if (e.target === aboutModal) aboutModal.classList.remove('show');
     });
 
-    // Theme Management
     let currentTheme = localStorage.getItem('site_theme') || 'dark';
 
     function applyTheme(theme) {
@@ -642,7 +681,6 @@
 
     applyTheme(currentTheme);
 
-    // Favourites State
     let favourites = JSON.parse(localStorage.getItem('ride_favourites') || '[]');
 
     function saveFavourites() {
@@ -767,7 +805,7 @@
     function preprocessRides(rides) {
       return rides.map(r => ({
         ...r,
-        _searchNorm: normalizeText(`${r.ride} ${r.park} ${r.type} ${r.details} ${r.location}`)
+        _searchNorm: normalizeText(`${r.ride} ${r.park} ${r.type} ${r.details} ${r.location} ${r.queuePass}`)
       }));
     }
 
@@ -806,6 +844,59 @@
         }
       }
     }
+
+    async function fetchLiveWaitTimes() {
+      if (isFetchingLive) return;
+      isFetchingLive = true;
+      liveWaitData = {};
+
+      const toggleText = document.getElementById('liveToggleText');
+      toggleText.textContent = 'Fetching Live Times...';
+
+      const uniqueParks = [...new Set(allRides.map(r => r.park.toLowerCase().trim()))];
+
+      for (const parkName of uniqueParks) {
+        const wikiId = THEME_PARKS_WIKI_IDS[parkName];
+        if (!wikiId) continue;
+
+        try {
+          const res = await fetch(`https://api.themeparks.wiki/v1/entity/${wikiId}/live`);
+          const data = await res.json();
+          if (data && data.live) {
+            data.live.forEach(item => {
+              if (item.entityType === 'ATTRACTION') {
+                const normName = normalizeText(item.name);
+                const wait = item.queue && item.queue.STANDBY ? item.queue.STANDBY.waitTime : null;
+                const status = item.status || 'OPERATING';
+                liveWaitData[normName] = { waitTime: wait, status: status };
+              }
+            });
+          }
+        } catch (err) {
+          console.error(`Failed to fetch live times for ${parkName}:`, err);
+        }
+      }
+
+      isFetchingLive = false;
+      toggleText.textContent = 'Live Wait Times: ON';
+      renderRidesBatch();
+    }
+
+    document.getElementById('liveWaitToggleBtn').addEventListener('click', () => {
+      showLiveWaitTimes = !showLiveWaitTimes;
+      const btn = document.getElementById('liveWaitToggleBtn');
+      const toggleText = document.getElementById('liveToggleText');
+
+      if (showLiveWaitTimes) {
+        btn.classList.add('active');
+        toggleText.textContent = 'Loading Live Times...';
+        fetchLiveWaitTimes();
+      } else {
+        btn.classList.remove('active');
+        toggleText.textContent = 'Show Live Wait Times';
+        renderRidesBatch();
+      }
+    });
 
     function reinitAllFilters() {
       initCountryFilter();
@@ -1361,6 +1452,27 @@
         const faviconHtml = getFaviconHtml(r.park);
         const sensoryClass = calculateSensorySeverityClass(r.sensory);
 
+        let liveBadgeHtml = '';
+        if (showLiveWaitTimes) {
+          const normRide = normalizeText(r.ride);
+          const liveInfo = liveWaitData[normRide];
+          
+          if (liveInfo) {
+            if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
+              let badgeClass = 'wait-short';
+              if (liveInfo.waitTime >= 30 && liveInfo.waitTime < 60) badgeClass = 'wait-medium';
+              else if (liveInfo.waitTime >= 60) badgeClass = 'wait-long';
+              liveBadgeHtml = `<div class="live-wait-badge ${badgeClass}">⏱️ ${liveInfo.waitTime} min wait</div>`;
+            } else if (liveInfo.status === 'DOWN' || liveInfo.status === 'CLOSED') {
+              liveBadgeHtml = `<div class="live-wait-badge wait-down">🔴 ${liveInfo.status}</div>`;
+            } else {
+              liveBadgeHtml = `<div class="live-wait-badge wait-down">⚪ Status: ${liveInfo.status}</div>`;
+            }
+          } else {
+            liveBadgeHtml = `<div class="live-wait-badge wait-down">⚪ Live Data N/A</div>`;
+          }
+        }
+
         return `
           <div class="card">
             <div class="card-body">
@@ -1374,8 +1486,9 @@
                   ${isFav ? '★' : '☆'}
                 </button>
               </div>
-              <h2>${titleHtml}</h2>
+              <h2>${titleHtml} ${r.queuePass ? `<span style="font-size: 1.1rem; vertical-align: middle;" title="Queue Pass: ${r.queuePass}">⏩</span>` : ''}</h2>
               ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
+              ${liveBadgeHtml}
               ${r.details ? `<p class="details">${r.details}</p>` : ''}
             </div>
 
@@ -1386,6 +1499,7 @@
                 ${r.location ? `<div class="meta-item"><span class="meta-label">Area:</span> <strong>${r.location}</strong></div>` : ''}
                 <div class="meta-item"><span class="meta-label">Min Height:</span> <strong>${heightStr}</strong></div>
                 ${r.heightNotes ? `<div class="meta-item"><span class="meta-label">Height Notes:</span> <strong>${r.heightNotes}</strong></div>` : ''}
+                ${r.queuePass ? `<div class="meta-item"><span class="meta-label">Queue Pass:</span> <strong>${r.queuePass}</strong></div>` : ''}
               </div>
               ${r.sensory ? `<div class="sensory-box ${sensoryClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
             </div>
