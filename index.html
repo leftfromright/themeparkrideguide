@@ -184,6 +184,10 @@
     .grid.compact .sensory-box { display: block; margin-top: 0.35rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
     .grid.compact .pov-link { width: auto; margin-top: 0; padding: 0.4rem 0.75rem; }
 
+    /* Toast Notification */
+    .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); border: 1px solid var(--accent); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 200; transition: transform 0.3s ease; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
     /* Skeleton Loading State Styles */
     .skeleton-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; width: 100%; max-width: 1000px; margin: 0 auto; }
     .skeleton-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; height: 260px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
@@ -270,7 +274,10 @@
 <body>
 
   <!-- Top-Right Version Badge -->
-  <div class="version-badge">v33</div>
+  <div class="version-badge">v34</div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toastNotification">Favourites summary copied to clipboard!</div>
 
   <div class="hero-banner">
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
@@ -285,6 +292,9 @@
       <button class="nav-btn active" id="viewAllBtn">All Rides</button>
       <button class="nav-btn" id="viewFavsBtn">
         ★ Favourites <span class="nav-badge" id="favCountBadge">0</span>
+      </button>
+      <button class="nav-btn" id="shareFavsBtn" style="display: none;">
+        🔗 Share
       </button>
       <button class="nav-btn" id="printFavsBtn" style="display: none;">
         🖨️ Print Checklist
@@ -454,7 +464,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v33';
+    const CACHE_KEY = 'theme_park_rides_cache_v34';
 
     const SENSORY_TAGS = [
       { id: 'dark', label: 'Dark / Low Light', keywords: ['dark', 'dim', 'shadow', 'night'] },
@@ -899,6 +909,7 @@
       document.getElementById('viewAllBtn').classList.add('active');
       document.getElementById('viewFavsBtn').classList.remove('active');
       document.getElementById('printFavsBtn').style.display = 'none';
+      document.getElementById('shareFavsBtn').style.display = 'none';
       reinitAllFilters();
       filterRides();
     });
@@ -909,12 +920,57 @@
       document.getElementById('viewFavsBtn').classList.add('active');
       document.getElementById('viewAllBtn').classList.remove('active');
       document.getElementById('printFavsBtn').style.display = 'inline-flex';
+      document.getElementById('shareFavsBtn').style.display = 'inline-flex';
       reinitAllFilters();
       filterRides();
     });
 
     document.getElementById('printFavsBtn').addEventListener('click', () => {
       window.print();
+    });
+
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    document.getElementById('shareFavsBtn').addEventListener('click', async () => {
+      const favRides = allRides.filter(r => favourites.includes(getRideKey(r)));
+      if (favRides.length === 0) {
+        showToast('No favourites to share yet!');
+        return;
+      }
+
+      let shareText = '🎢 My Theme Park Ride Favourites:\n\n';
+      favRides.forEach(r => {
+        let h = r.minHeightCm ? ` (Min Height: ${r.minHeightCm}cm)` : '';
+        shareText += `• ${r.ride} (${r.park})${h}\n`;
+      });
+      shareText += `\nShared via Theme Park Ride Guide`;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'My Theme Park Ride Favourites',
+            text: shareText
+          });
+          return;
+        } catch (err) {
+          if (err.name !== 'AbortError') console.error('Share error:', err);
+        }
+      }
+
+      // Fallback to clipboard
+      try {
+        await navigator.clipboard.writeText(shareText);
+        showToast('Favourites copied to clipboard!');
+      } catch (err) {
+        showToast('Failed to copy to clipboard.');
+      }
     });
 
     document.getElementById('cardViewBtn').addEventListener('click', () => {
