@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,85 +12,157 @@
       --text: #f8fafc;
       --muted: #94a3b8;
       --border: #334155;
+      --badge-bg: rgba(56, 189, 248, 0.1);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.5; }
+    body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; }
     
-    header { max-width: 1000px; margin: 0 auto 2rem auto; text-align: center; }
+    header { max-width: 1000px; margin: 0 auto 2rem auto; text-align: center; width: 100%; }
     h1 { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.5rem; letter-spacing: -0.025em; }
     p.subtitle { color: var(--muted); font-size: 1.1rem; }
 
-    .controls { max-width: 1000px; margin: 0 auto 2rem auto; display: flex; gap: 1rem; flex-wrap: wrap; }
+    .controls { max-width: 1000px; margin: 0 auto 2rem auto; display: flex; gap: 1rem; flex-wrap: wrap; width: 100%; }
     input[type="text"] { flex: 1; min-width: 250px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; }
     input[type="text"]:focus { border-color: var(--accent); }
     
     select { padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; cursor: pointer; }
 
-    .grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    main { flex: 1; width: 100%; }
+    .grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
     
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: transform 0.2s ease, border-color 0.2s ease; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease; }
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
     
-    .tag { display: inline-block; background: rgba(56, 189, 248, 0.1); color: var(--accent); padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; text-transform: uppercase; }
-    .card h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-    .card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
+    .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .tag { background: var(--badge-bg); color: var(--accent); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .tag.location { background: rgba(148, 163, 184, 0.1); color: var(--muted); }
     
-    .meta { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 0.75rem; }
-    .meta span strong { color: var(--text); }
+    .card h2 { font-size: 1.4rem; margin-bottom: 0.25rem; color: var(--text); }
+    .type-subtitle { color: var(--accent); font-size: 0.9rem; font-weight: 500; margin-bottom: 0.75rem; }
+    .details { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
+    
+    .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; color: var(--muted); display: flex; flex-direction: column; gap: 0.4rem; }
+    .meta-item strong { color: var(--text); }
+    .sensory-box { background: rgba(0, 0, 0, 0.2); border-radius: 6px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; font-size: 0.85rem; border-left: 3px solid var(--accent); }
+    
+    .loading { text-align: center; color: var(--muted); font-size: 1.2rem; grid-column: 1 / -1; padding: 3rem 0; }
+
+    footer { max-width: 1000px; margin: 3rem auto 0 auto; text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem; color: var(--muted); font-size: 0.85rem; width: 100%; }
+    footer p { margin-bottom: 0.4rem; }
+    footer .legal { font-size: 0.75rem; opacity: 0.7; }
   </style>
 </head>
 <body>
 
   <header>
     <h1>Theme Park Ride Guide</h1>
-    <p class="subtitle">Search, filter, and review top rides across Disney, Universal, and world parks.</p>
+    <p class="subtitle">Search, filter, and discover ride requirements and details worldwide.</p>
   </header>
 
   <div class="controls">
-    <input type="text" id="searchInput" placeholder="Search ride name or description...">
+    <input type="text" id="searchInput" placeholder="Search ride, park, type, or details...">
     <select id="parkFilter">
       <option value="all">All Parks</option>
-      <option value="Disney">Disney Parks</option>
-      <option value="Universal">Universal Studios</option>
-      <option value="Alton Towers">Alton Towers</option>
     </select>
   </div>
 
-  <div class="grid" id="rideGrid">
-    <!-- Dynamic cards render here -->
-  </div>
+  <main>
+    <div class="grid" id="rideGrid">
+      <div class="loading">Loading ride data...</div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Theme Park Ride Guide. All rights reserved.</p>
+    <p class="legal">Independent fan guide. Curated database, custom structure, and presentation protected under database rights. Park names and trademarks belong to their respective owners.</p>
+  </footer>
 
   <script>
-    const sampleRides = [
-      { name: "Space Mountain", park: "Disney", type: "Indoor Coaster", thrill: "High", minHeight: "112 cm", desc: "Classic dark rollercoaster through outer space." },
-      { name: "VelociCoaster", park: "Universal", type: "Launch Coaster", thrill: "Extreme", minHeight: "130 cm", desc: "High-speed intense coaster weaving through raptor paddocks." },
-      { name: "The Smiler", park: "Alton Towers", type: "Inversion Coaster", thrill: "Extreme", minHeight: "140 cm", desc: "World record holding rollercoaster with 14 inversions." },
-      { name: "Haunted Mansion", park: "Disney", type: "Dark Ride", thrill: "Low", minHeight: "None", desc: "Slow-moving dark ride through a ghost-filled estate." }
-    ];
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
+
+    let allRides = [];
+
+    async function fetchRideData() {
+      try {
+        const response = await fetch(API_URL);
+        allRides = await response.json();
+
+        populateParkFilter(allRides);
+        renderRides(allRides);
+      } catch (error) {
+        console.error('Error fetching data via Apps Script:', error);
+        document.getElementById('rideGrid').innerHTML = '<div class="loading">Failed to load ride data. Check Apps Script deployment settings.</div>';
+      }
+    }
+
+    function populateParkFilter(rides) {
+      const parkSelect = document.getElementById('parkFilter');
+      const parks = [...new Set(rides.map(r => r.park).filter(Boolean))].sort();
+      
+      parks.forEach(park => {
+        const option = document.createElement('option');
+        option.value = park;
+        option.textContent = park;
+        parkSelect.appendChild(option);
+      });
+    }
 
     function renderRides(rides) {
       const grid = document.getElementById('rideGrid');
-      grid.innerHTML = rides.map(ride => `
-        <div class="card">
-          <span class="tag">${ride.park}</span>
-          <h2>${ride.name}</h2>
-          <p>${ride.desc}</p>
-          <div class="meta">
-            <span>Thrill: <strong>${ride.thrill}</strong></span>
-            <span>Height: <strong>${ride.minHeight}</strong></span>
+      
+      if (!rides || rides.length === 0) {
+        grid.innerHTML = '<div class="loading">No rides found matching your criteria.</div>';
+        return;
+      }
+
+      grid.innerHTML = rides.map(r => {
+        let heightStr = 'None';
+        if (r.minHeightCm && r.minHeightInch) {
+          heightStr = `${r.minHeightCm} cm (${r.minHeightInch}")`;
+        } else if (r.minHeightCm) {
+          heightStr = `${r.minHeightCm} cm`;
+        }
+
+        return `
+          <div class="card">
+            <div>
+              <div class="tags">
+                <span class="tag">${r.park}</span>
+                ${r.country ? `<span class="tag location">${r.country}</span>` : ''}
+              </div>
+              <h2>${r.ride}</h2>
+              ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
+              ${r.details ? `<p class="details">${r.details}</p>` : ''}
+            </div>
+
+            <div>
+              <div class="meta-list">
+                ${r.location ? `<div class="meta-item">Area: <strong>${r.location}</strong></div>` : ''}
+                <div class="meta-item">Min Height: <strong>${heightStr}</strong></div>
+                ${r.heightNotes ? `<div class="meta-item">Height Notes: <strong>${r.heightNotes}</strong></div>` : ''}
+              </div>
+              ${r.sensory ? `<div class="sensory-box"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function filterRides() {
       const search = document.getElementById('searchInput').value.toLowerCase();
-      const park = document.getElementById('parkFilter').value;
+      const selectedPark = document.getElementById('parkFilter').value;
 
-      const filtered = sampleRides.filter(ride => {
-        const matchesSearch = ride.name.toLowerCase().includes(search) || ride.desc.toLowerCase().includes(search);
-        const matchesPark = park === 'all' || ride.park === park;
+      const filtered = allRides.filter(r => {
+        const matchesSearch = 
+          (r.ride && r.ride.toLowerCase().includes(search)) ||
+          (r.park && r.park.toLowerCase().includes(search)) ||
+          (r.type && r.type.toLowerCase().includes(search)) ||
+          (r.details && r.details.toLowerCase().includes(search)) ||
+          (r.location && r.location.toLowerCase().includes(search));
+          
+        const matchesPark = selectedPark === 'all' || r.park === selectedPark;
+
         return matchesSearch && matchesPark;
       });
 
@@ -100,7 +172,7 @@
     document.getElementById('searchInput').addEventListener('input', filterRides);
     document.getElementById('parkFilter').addEventListener('change', filterRides);
 
-    renderRides(sampleRides);
+    fetchRideData();
   </script>
 
 </body>
