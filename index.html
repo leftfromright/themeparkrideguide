@@ -94,6 +94,7 @@
     .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
     .nav-badge { background: rgba(0, 0, 0, 0.15); color: inherit; padding: 0.1rem 0.4rem; border-radius: 12px; font-size: 0.75rem; }
 
+    /* Control & Filter Layout Styles */
     .controls { max-width: 1000px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; gap: 1rem; width: 100%; }
     .search-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
     input[type="text"] { flex: 2; min-width: 200px; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; box-shadow: var(--shadow); transition: border-color 0.2s ease; }
@@ -101,7 +102,8 @@
     
     select.sort-select { flex: 1; min-width: 150px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: var(--shadow); }
 
-    .btn-secondary { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; box-shadow: var(--shadow); }
+    .reset-row { display: flex; justify-content: flex-end; margin-top: 0.25rem; }
+    .btn-secondary { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.25rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; box-shadow: var(--shadow); }
     .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
     .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
@@ -184,7 +186,7 @@
     .sensory-box.sensory-orange { background: var(--sensory-orange-bg); border-color: var(--sensory-orange-border); color: var(--sensory-orange-text); }
     .sensory-box.sensory-red { background: var(--sensory-red-bg); border-color: var(--sensory-red-border); color: var(--sensory-red-text); }
 
-    /* Mobile Compact Mode Fixes */
+    /* Mobile Responsive Tweaks */
     @media (max-width: 640px) {
       body { padding: 1rem 0.75rem; }
       h1 { font-size: 2rem; }
@@ -197,7 +199,9 @@
       
       .controls { gap: 0.75rem; }
       .search-row { flex-direction: column; align-items: stretch; }
-      select.sort-select, .btn-secondary { width: 100%; }
+      select.sort-select { width: 100%; }
+      .reset-row { justify-content: stretch; }
+      .btn-secondary { width: 100%; text-align: center; }
       .height-filter { width: 100%; }
     }
 
@@ -288,7 +292,7 @@
       <button class="theme-toggle-btn" id="themeToggleBtn">
         <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
       </button>
-      <div class="version-badge">v23</div>
+      <div class="version-badge">v24</div>
     </div>
     <h1>Theme Park Ride Guide</h1>
     <p class="subtitle">Search, filter, and discover ride height requirements and details.</p>
@@ -313,7 +317,6 @@
         <option value="height-asc">Sort: Height (Low to High)</option>
         <option value="height-desc">Sort: Height (High to Low)</option>
       </select>
-      <button class="btn-secondary" id="clearFiltersBtn">Reset Filters</button>
     </div>
     
     <div class="filter-row">
@@ -380,6 +383,11 @@
           <button class="unit-btn" id="unitInch">in</button>
         </div>
       </div>
+    </div>
+
+    <!-- Relocated Reset Filters Button (Below Height Slider) -->
+    <div class="reset-row">
+      <button class="btn-secondary" id="clearFiltersBtn">Reset All Filters</button>
     </div>
   </div>
 
@@ -715,7 +723,6 @@
     function filterBySinglePark(parkName) {
       if (!parkName) return;
 
-      // Select country of this park automatically if needed
       const targetRide = allRides.find(r => r.park === parkName);
       if (targetRide && targetRide.country && !selectedCountries.includes(targetRide.country)) {
         selectedCountries.push(targetRide.country);
@@ -724,7 +731,6 @@
         updateCountryBtnLabel();
       }
 
-      // Re-initialize park options if necessary and isolate target park
       initParkFilter();
       selectedParks = [parkName];
 
@@ -736,7 +742,6 @@
       initTypeFilter();
       filterRides();
 
-      // Scroll smoothly to main controls/header area
       document.querySelector('.controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -849,7 +854,6 @@
       return 'sensory-green';
     }
 
-    // View Navigation Toggles
     document.getElementById('viewAllBtn').addEventListener('click', () => {
       if (currentView === 'all') return;
       currentView = 'all';
@@ -874,7 +878,6 @@
       window.print();
     });
 
-    // Display Mode Toggles
     document.getElementById('cardViewBtn').addEventListener('click', () => {
       isCompact = false;
       document.getElementById('cardViewBtn').classList.add('active');
@@ -889,7 +892,6 @@
       document.getElementById('rideGrid').classList.add('compact');
     });
 
-    // Reset All Filters
     document.getElementById('clearFiltersBtn').addEventListener('click', () => {
       document.getElementById('searchInput').value = '';
       const slider = document.getElementById('heightSlider');
@@ -899,7 +901,6 @@
       filterRides();
     });
 
-    // Dropdown Visibility Toggles
     function closeDropdowns() {
       document.getElementById('countryDropdown').classList.remove('show');
       document.getElementById('parkDropdown').classList.remove('show');
@@ -928,7 +929,6 @@
     document.getElementById('typeDropdown').addEventListener('click', e => e.stopPropagation());
     document.getElementById('sensoryDropdown').addEventListener('click', e => e.stopPropagation());
 
-    // Select/Deselect Action Links
     document.getElementById('selectAllCountries').addEventListener('click', () => {
       document.querySelectorAll('.country-cb').forEach(cb => cb.checked = true);
       updateCountrySelections();
@@ -1001,7 +1001,6 @@
       filterRides();
     });
 
-    // Height Slider & Unit Toggle
     function updateSliderConfig() {
       const slider = document.getElementById('heightSlider');
       if (currentUnit === 'cm') {
@@ -1104,7 +1103,6 @@
       const faviconHtml = getFaviconHtml(r.park);
       const sensorySeverityClass = getSensorySeverityClass(r.sensory);
 
-      // Escape park name for safe inline JS handler
       const safeParkName = String(r.park || '').replace(/'/g, "\\'");
 
       return `
@@ -1164,12 +1162,10 @@
         return;
       }
 
-      // Fast initial batch paint (24 items)
       const BATCH_SIZE = 24;
       const initialBatch = rides.slice(0, BATCH_SIZE);
       grid.innerHTML = initialBatch.map(buildCardHtml).join('');
 
-      // Stream remaining cards asynchronously
       if (rides.length > BATCH_SIZE) {
         let currentIndex = BATCH_SIZE;
 
@@ -1217,7 +1213,7 @@
       renderRidesIncremental(sorted);
     }
 
-    // Input Listeners
+    // Input Event Listeners
     document.getElementById('searchInput').addEventListener('input', filterRides);
     document.getElementById('sortSelect').addEventListener('change', filterRides);
 
@@ -1250,11 +1246,3 @@
 
 </body>
 </html>
-```
-
----
-
-### Summary of Changes in v23
-1. **Interactive Park Badges:** Made every park tag on the ride cards clickable. Clicking a park badge instantly isolates the view to show only rides from that park.
-2. **Subtle Watch POV Links:** Replaced any lingering red backgrounds with a clean, theme-adaptive neutral button layout that gently highlights in theme accent color on hover.
-3. **Maintained Performance & Accessibility Features:** Preserved pre-computed search indexing, distinct icon mappings (including 🌳 for Animal Kingdom), 4-tier sensory severity highlights, and Light/Dark mode state storage.
