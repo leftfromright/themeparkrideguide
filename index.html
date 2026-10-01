@@ -345,7 +345,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v52</div>
+    <div class="version-badge" id="versionBadgeBtn">v54</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -542,7 +542,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v52';
+    const CACHE_KEY = 'theme_park_rides_cache_v54';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -717,6 +717,26 @@
         .replace(/[^a-z0-9]/g, "");
     }
 
+    // Flexibly extract QueuePass property (Column M) regardless of Apps Script casing
+    function getQueuePass(r) {
+      return String(r.queuePass || r.queue_pass || r.QueuePass || r['Queue Pass'] || r.queuepass || '').trim();
+    }
+
+    // Check if Queue Pass is active (not empty and not 'no')
+    function hasQueuePass(r) {
+      const val = getQueuePass(r);
+      return val !== '' && val.toLowerCase() !== 'no';
+    }
+
+    // Flexibly extract Attraction UUID (Column N) from Apps Script JSON
+    function getRideUuid(r) {
+      return String(
+        r.uuid || r.wikiUuid || r.themeParkWikiUuid || r.themeparkwikiUuid || 
+        r.themeParkWikiId || r.wikiId || r.attractionUuid || r.themeParksWikiUuid || 
+        r['UUID'] || r['Uuid'] || r.columnN || ''
+      ).trim().toLowerCase();
+    }
+
     function extractDomain(urlStr) {
       if (!urlStr) return '';
       try {
@@ -805,7 +825,7 @@
     function preprocessRides(rides) {
       return rides.map(r => ({
         ...r,
-        _searchNorm: normalizeText(`${r.ride} ${r.park} ${r.type} ${r.details} ${r.location} ${r.queuePass}`)
+        _searchNorm: normalizeText(`${r.ride} ${r.park} ${r.type} ${r.details} ${r.location} ${getQueuePass(r)}`)
       }));
     }
 
@@ -845,6 +865,7 @@
       }
     }
 
+    // Fetch Live Wait Times mapping using Column N UUIDs directly
     async function fetchLiveWaitTimes() {
       if (isFetchingLive) return;
       isFetchingLive = true;
@@ -855,6 +876,7 @@
 
       const uniqueParks = [...new Set(allRides.map(r => r.park.toLowerCase().trim()))];
 
+      // 1. Fetch park live streams for known parks
       for (const parkName of uniqueParks) {
         const wikiId = THEME_PARKS_WIKI_IDS[parkName];
         if (!wikiId) continue;
@@ -865,15 +887,44 @@
           if (data && data.live) {
             data.live.forEach(item => {
               if (item.entityType === 'ATTRACTION') {
-                const normName = normalizeText(item.name);
                 const wait = item.queue && item.queue.STANDBY ? item.queue.STANDBY.waitTime : null;
                 const status = item.status || 'OPERATING';
+                
+                // Map by exact attraction UUID if provided by API
+                if (item.id) {
+                  liveWaitData[item.id.toLowerCase()] = { waitTime: wait, status: status };
+                }
+                
+                // Backup mapping by normalized name
+                const normName = normalizeText(item.name);
                 liveWaitData[normName] = { waitTime: wait, status: status };
               }
             });
           }
         } catch (err) {
           console.error(`Failed to fetch live times for ${parkName}:`, err);
+        }
+      }
+
+      // 2. Direct fetch for rides with Column N UUIDs not captured via park streams
+      const unpopulatedUuids = [...new Set(
+        allRides
+          .map(r => getRideUuid(r))
+          .filter(uuid => uuid && !liveWaitData[uuid])
+      )];
+
+      for (const uuid of unpopulatedUuids) {
+        try {
+          const res = await fetch(`https://api.themeparks.wiki/v1/entity/${uuid}/live`);
+          const data = await res.json();
+          if (data && data.live && data.live.length > 0) {
+            const item = data.live[0];
+            const wait = item.queue && item.queue.STANDBY ? item.queue.STANDBY.waitTime : null;
+            const status = item.status || 'OPERATING';
+            liveWaitData[uuid] = { waitTime: wait, status: status };
+          }
+        } catch (err) {
+          console.error(`Failed to fetch live time for UUID ${uuid}:`, err);
         }
       }
 
@@ -1436,6 +1487,8 @@
         const rideKey = getRideKey(r);
         const isFav = favourites.includes(rideKey);
         const displayPark = getDisplayParkName(r.park);
+        const queuePassVal = getQueuePass(r);
+        const showPassIcon = hasQueuePass(r);
 
         let heightStr = 'None';
         if (r.minHeightCm && r.minHeightInch) {
@@ -1454,8 +1507,9 @@
 
         let liveBadgeHtml = '';
         if (showLiveWaitTimes) {
+          const rideUuid = getRideUuid(r);
           const normRide = normalizeText(r.ride);
-          const liveInfo = liveWaitData[normRide];
+          const liveInfo = (rideUuid && liveWaitData[rideUuid]) || liveWaitData[normRide];
           
           if (liveInfo) {
             if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
@@ -1468,8 +1522,6 @@
             } else {
               liveBadgeHtml = `<div class="live-wait-badge wait-down">⚪ Status: ${liveInfo.status}</div>`;
             }
-          } else {
-            liveBadgeHtml = `<div class="live-wait-badge wait-down">⚪ Live Data N/A</div>`;
           }
         }
 
@@ -1486,7 +1538,7 @@
                   ${isFav ? '★' : '☆'}
                 </button>
               </div>
-              <h2>${titleHtml} ${r.queuePass ? `<span style="font-size: 1.1rem; vertical-align: middle;" title="Queue Pass: ${r.queuePass}">⏩</span>` : ''}</h2>
+              <h2>${titleHtml} ${showPassIcon ? `<span style="font-size: 1.1rem; vertical-align: middle;" title="Queue Pass: ${queuePassVal}">⏩</span>` : ''}</h2>
               ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
               ${liveBadgeHtml}
               ${r.details ? `<p class="details">${r.details}</p>` : ''}
@@ -1499,7 +1551,7 @@
                 ${r.location ? `<div class="meta-item"><span class="meta-label">Area:</span> <strong>${r.location}</strong></div>` : ''}
                 <div class="meta-item"><span class="meta-label">Min Height:</span> <strong>${heightStr}</strong></div>
                 ${r.heightNotes ? `<div class="meta-item"><span class="meta-label">Height Notes:</span> <strong>${r.heightNotes}</strong></div>` : ''}
-                ${r.queuePass ? `<div class="meta-item"><span class="meta-label">Queue Pass:</span> <strong>${r.queuePass}</strong></div>` : ''}
+                ${showPassIcon ? `<div class="meta-item"><span class="meta-label">Queue Pass:</span> <strong>${queuePassVal}</strong></div>` : ''}
               </div>
               ${r.sensory ? `<div class="sensory-box ${sensoryClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
             </div>
