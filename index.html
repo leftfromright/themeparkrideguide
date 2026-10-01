@@ -314,7 +314,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v39</div>
+    <div class="version-badge" id="versionBadgeBtn">v42</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -499,7 +499,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v39';
+    const CACHE_KEY = 'theme_park_rides_cache_v42';
 
     const SENSORY_TAGS = [
       { id: 'dark', label: 'Dark / Low Light', keywords: ['dark', 'dim', 'shadow', 'night'] },
@@ -510,31 +510,33 @@
       { id: '3d', label: '3D / Screen / Sim', keywords: ['3d', '4d', 'screen', 'simulator', 'vr', 'projection'] }
     ];
 
-    const PARK_ICON_OVERRIDES = {
-      'magic kingdom': '🏰',
-      'epcot': '🌐',
-      'disney\'s animal kingdom': '🌳',
-      'animal kingdom': '🌳',
-      'disney\'s hollywood studios': '🎬',
-      'hollywood studios': '🎬',
-      'disneyland park': '🏰',
-      'disney california adventure': '🎡',
-      'disneyland paris': '🏰',
-      'blizzard beach': '❄️',
-      'typhoon lagoon': '🌋',
+    const PARK_DOMAIN_OVERRIDES = {
+      'magic kingdom': 'disneyworld.disney.go.com',
+      'epcot': 'disneyworld.disney.go.com',
+      'disney\'s animal kingdom': 'disneyworld.disney.go.com',
+      'animal kingdom': 'disneyworld.disney.go.com',
+      'disney\'s hollywood studios': 'disneyworld.disney.go.com',
+      'hollywood studios': 'disneyworld.disney.go.com',
+      'disneyland park': 'disneyland.disney.go.com',
+      'disney california adventure': 'disneyland.disney.go.com',
+      'disneyland paris': 'disneylandparis.com',
       
-      'universal epic universe': '⚡',
-      'epic universe': '⚡',
-      'universal studios florida': '🌍',
-      'universal studios hollywood': '🎬',
-      'universal\'s islands of adventure': '🦖',
-      'islands of adventure': '🦖',
-      'universal\'s volcano bay': '🌋',
-      'volcano bay': '🌋',
+      'universal studios florida': 'universalorlando.com',
+      'universal studios hollywood': 'universalstudioshollywood.com',
+      'universal\'s islands of adventure': 'universalorlando.com',
+      'islands of adventure': 'universalorlando.com',
+      'universal epic universe': 'universalorlando.com',
+      'epic universe': 'universalorlando.com',
+      'universal\'s volcano bay': 'universalorlando.com',
+      'volcano bay': 'universalorlando.com',
       
-      'legoland': '🧱',
-      'legoland windsor': '🧱',
-      'legoland florida': '🧱'
+      'legoland': 'legoland.com',
+      'legoland windsor': 'legoland.co.uk',
+      'legoland florida': 'legoland.com',
+
+      'alton towers': 'altontowers.com',
+      'chessington world of adventures': 'chessington.com',
+      'thorpe park': 'thorpepark.com'
     };
 
     const COUNTRY_FLAG_MAP = {
@@ -660,7 +662,11 @@
       parkDomainMap = {};
       rides.forEach(r => {
         if (r.park && !parkDomainMap[r.park]) {
-          const domain = extractDomain(r.rideUrl) || extractDomain(r.imageUrl);
+          const normPark = r.park.toLowerCase().trim();
+          let domain = PARK_DOMAIN_OVERRIDES[normPark];
+          if (!domain) {
+            domain = extractDomain(r.rideUrl) || extractDomain(r.imageUrl);
+          }
           if (domain) parkDomainMap[r.park] = domain;
         }
       });
@@ -678,13 +684,12 @@
       if (!parkName) return '';
       const normPark = parkName.toLowerCase().trim();
 
-      for (const [key, icon] of Object.entries(PARK_ICON_OVERRIDES)) {
-        if (normPark.includes(key)) {
-          return `<span style="font-size: 0.95rem; line-height: 1;">${icon}</span>`;
-        }
+      // Check explicit domain overrides first
+      let domain = PARK_DOMAIN_OVERRIDES[normPark];
+      if (!domain) {
+        domain = parkDomainMap[parkName];
       }
 
-      const domain = parkDomainMap[parkName];
       if (domain) {
         const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
         return `<img src="${faviconUrl}" class="park-favicon" alt="" onerror="this.style.display='none'">`;
