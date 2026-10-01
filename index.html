@@ -13,10 +13,11 @@
       --text: #f8fafc;
       --muted: #94a3b8;
       --border: #334155;
-      --badge-bg: rgba(56, 189, 248, 0.1);
+      --badge-bg: rgba(56, 189, 248, 0.12);
       --star-active: #f59e0b;
-      --yt-red: #ef4444;
-      --yt-bg: rgba(239, 68, 68, 0.1);
+      --pov-bg: rgba(255, 255, 255, 0.05);
+      --pov-border: #334155;
+      --pov-text: #f8fafc;
       --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
       --input-bg: #1e293b;
 
@@ -46,10 +47,11 @@
       --text: #0f172a;
       --muted: #64748b;
       --border: #e2e8f0;
-      --badge-bg: rgba(2, 132, 199, 0.1);
+      --badge-bg: rgba(2, 132, 199, 0.12);
       --star-active: #d97706;
-      --yt-red: #dc2626;
-      --yt-bg: rgba(220, 38, 38, 0.08);
+      --pov-bg: rgba(15, 23, 42, 0.04);
+      --pov-border: #cbd5e1;
+      --pov-text: #0f172a;
       --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
       --input-bg: #ffffff;
 
@@ -121,8 +123,9 @@
     .dropdown-option:hover { background: var(--badge-bg); }
     .dropdown-option input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
 
-    /* Park Favicon / Logo Styling */
+    /* Park Favicon / Custom Icon Styling */
     .park-favicon { width: 16px; height: 16px; border-radius: 3px; object-fit: contain; vertical-align: middle; flex-shrink: 0; background: rgba(255,255,255,0.2); }
+    .park-custom-icon { font-size: 0.95rem; line-height: 1; flex-shrink: 0; }
 
     /* Height Filter */
     .height-filter { flex: 1.5; min-width: 240px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem; height: 48px; box-shadow: var(--shadow); }
@@ -155,7 +158,7 @@
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; overflow: hidden; position: relative; box-shadow: var(--shadow); }
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
 
-    /* Metadata Column Alignment Grid (Shared across both Grid & Compact Views) */
+    /* Metadata Column Alignment Grid */
     .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.35rem; }
     .meta-item { display: grid; grid-template-columns: 95px 1fr; gap: 0.5rem; align-items: baseline; font-size: 0.85rem; }
     .meta-label { color: var(--muted); white-space: nowrap; }
@@ -200,7 +203,29 @@
 
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
     .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .tag { background: var(--badge-bg); color: var(--accent); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.35rem; }
+    
+    /* Interactive Clickable Park Tag */
+    .tag { 
+      background: var(--badge-bg); 
+      color: var(--accent); 
+      padding: 0.25rem 0.6rem; 
+      border-radius: 6px; 
+      font-size: 0.75rem; 
+      font-weight: 600; 
+      text-transform: uppercase; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 0.4rem; 
+      cursor: pointer; 
+      border: 1px solid transparent; 
+      transition: all 0.2s ease; 
+      user-select: none;
+    }
+    .tag:hover { 
+      border-color: var(--accent); 
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
     
     .fav-btn { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; transition: color 0.2s ease, transform 0.15s ease; line-height: 1; padding: 0; }
     .fav-btn:hover { transform: scale(1.15); color: var(--star-active); }
@@ -215,9 +240,29 @@
     .type-subtitle { color: var(--accent); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
     .details { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
     
-    /* POV Video Button */
-    .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.85rem; padding: 0.45rem 0.85rem; background: var(--yt-bg); color: var(--yt-red); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; width: 100%; }
-    .pov-link:hover { background: var(--yt-red); color: #ffffff; border-color: var(--yt-red); }
+    /* POV Video Button - Subtle Neutral / Theme Matching Style */
+    .pov-link { 
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 0.4rem; 
+      margin-top: 0.85rem; 
+      padding: 0.5rem 0.9rem; 
+      background: var(--pov-bg); 
+      color: var(--pov-text); 
+      border: 1px solid var(--pov-border); 
+      border-radius: 6px; 
+      font-size: 0.825rem; 
+      font-weight: 600; 
+      text-decoration: none; 
+      transition: all 0.2s ease; 
+      width: 100%; 
+    }
+    .pov-link:hover { 
+      background: var(--accent); 
+      color: #ffffff; 
+      border-color: var(--accent); 
+    }
 
     .loading { text-align: center; color: var(--muted); font-size: 1.2rem; grid-column: 1 / -1; padding: 3rem 0; }
 
@@ -243,7 +288,7 @@
       <button class="theme-toggle-btn" id="themeToggleBtn">
         <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
       </button>
-      <div class="version-badge">v20</div>
+      <div class="version-badge">v23</div>
     </div>
     <h1>Theme Park Ride Guide</h1>
     <p class="subtitle">Search, filter, and discover ride height requirements and details.</p>
@@ -362,6 +407,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
+    const CACHE_KEY_FAVICONS = 'park_favicon_cache_v1';
 
     // Standardized Sensory Tag Definitions
     const SENSORY_TAGS = [
@@ -373,8 +419,37 @@
       { id: '3d', label: '3D / Screen / Sim', keywords: ['3d', '4d', 'screen', 'simulator', 'vr', 'projection'] }
     ];
 
+    // Distinct park icon overrides map
+    const PARK_ICON_OVERRIDES = {
+      // Disney Parks
+      'magic kingdom': '🏰',
+      'epcot': '🌐',
+      'animal kingdom': '🌳',
+      'disney\'s animal kingdom': '🌳',
+      'hollywood studios': '🎬',
+      'disney\'s hollywood studios': '🎬',
+      'disneyland park': '🏰',
+      'disney california adventure': '🎡',
+      'disneyland paris': '🏰',
+      
+      // Universal Parks
+      'universal epic universe': '⚡',
+      'epic universe': '⚡',
+      'universal studios florida': '🌍',
+      'universal studios hollywood': '🌍',
+      'islands of adventure': '🦖',
+      'universal\'s islands of adventure': '🦖',
+      'volcano bay': '🌋',
+      'universal\'s volcano bay': '🌋',
+
+      // Legoland
+      'legoland': '🧱',
+      'legoland windsor': '🧱',
+      'legoland florida': '🧱'
+    };
+
     let allRides = [];
-    let parkDomainMap = {};
+    let parkDomainMap = JSON.parse(localStorage.getItem(CACHE_KEY_FAVICONS) || '{}');
     let selectedCountries = [];
     let selectedParks = [];
     let selectedTypes = [];
@@ -382,8 +457,8 @@
     let currentUnit = 'cm';
     let currentView = 'all';
     let isCompact = false;
+    let renderBatchTimer = null;
 
-    // Theme Management
     let currentTheme = localStorage.getItem('site_theme') || 'dark';
 
     function applyTheme(theme) {
@@ -457,63 +532,54 @@
     }
 
     function buildParkDomainMap(rides) {
-      parkDomainMap = {};
+      let updated = false;
       rides.forEach(r => {
         if (r.park && !parkDomainMap[r.park]) {
           const domain = extractDomain(r.rideUrl) || extractDomain(r.imageUrl);
-          if (domain) parkDomainMap[r.park] = domain;
+          if (domain) {
+            parkDomainMap[r.park] = domain;
+            updated = true;
+          }
         }
       });
+      if (updated) {
+        localStorage.setItem(CACHE_KEY_FAVICONS, JSON.stringify(parkDomainMap));
+      }
     }
 
     function getFaviconHtml(parkName) {
+      if (!parkName) return '';
+      const normPark = parkName.toLowerCase().trim();
+
+      // 1. Check for specific park override
+      for (const [key, icon] of Object.entries(PARK_ICON_OVERRIDES)) {
+        if (normPark.includes(key)) {
+          return `<span class="park-custom-icon">${icon}</span>`;
+        }
+      }
+
+      // 2. Fall back to domain favicon if mapped
       const domain = parkDomainMap[parkName];
-      if (!domain) return '';
-      const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-      return `<img src="${faviconUrl}" class="park-favicon" alt="" onerror="this.style.display='none'">`;
+      if (domain) {
+        const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+        return `<img src="${faviconUrl}" class="park-favicon" alt="" onerror="this.style.display='none'">`;
+      }
+
+      // 3. Fallback generic coaster icon
+      return `<span class="park-custom-icon">🎢</span>`;
     }
 
-    /* Evaluates sensory severity level & returns appropriate color class */
-    function getSensorySeverityClass(sensoryText) {
-      if (!sensoryText) return 'sensory-green';
-      const text = String(sensoryText).toLowerCase().trim();
-
-      if (['none', 'nil', 'n/a', 'mild', 'low', 'gentle', 'no sensory issues'].includes(text)) {
-        return 'sensory-green';
-      }
-
-      // Count keywords matching standard categories
-      let hitCount = 0;
-      let hasStrobe = text.includes('strobe') || text.includes('flash');
-      let hasExtremeDrop = text.includes('extreme') || text.includes('launch') || text.includes('g-force');
-
-      SENSORY_TAGS.forEach(tag => {
-        if (tag.keywords.some(kw => text.includes(kw))) {
-          hitCount++;
-        }
+    function preIndexRides(rides) {
+      rides.forEach(r => {
+        r._normSearch = normalizeText(`${r.ride} ${r.park} ${r.type} ${r.details} ${r.location}`);
+        r._normSensory = String(r.sensory || '').toLowerCase();
+        r._key = getRideKey(r);
       });
-
-      // Red: High Severity (Multiple factors or intense warnings)
-      if (hitCount >= 3 || hasStrobe || hasExtremeDrop) {
-        return 'sensory-red';
-      }
-
-      // Orange: Moderate Severity (2 factors or standard intensity)
-      if (hitCount === 2 || text.includes('dark') || text.includes('loud') || text.includes('drop')) {
-        return 'sensory-orange';
-      }
-
-      // Yellow: Minor Severity (1 mild warning factor)
-      if (hitCount === 1) {
-        return 'sensory-yellow';
-      }
-
-      return 'sensory-green';
     }
 
     function getActiveDataset() {
       if (currentView === 'favourites') {
-        return allRides.filter(r => favourites.includes(getRideKey(r)));
+        return allRides.filter(r => favourites.includes(r._key || getRideKey(r)));
       }
       return allRides;
     }
@@ -528,6 +594,7 @@
         const response = await fetch(API_URL);
         allRides = await response.json();
 
+        preIndexRides(allRides);
         buildParkDomainMap(allRides);
         updateFavBadge();
         reinitAllFilters();
@@ -645,6 +712,34 @@
       else btn.textContent = `Parks (${selectedParks.length})`;
     }
 
+    function filterBySinglePark(parkName) {
+      if (!parkName) return;
+
+      // Select country of this park automatically if needed
+      const targetRide = allRides.find(r => r.park === parkName);
+      if (targetRide && targetRide.country && !selectedCountries.includes(targetRide.country)) {
+        selectedCountries.push(targetRide.country);
+        const countryCb = document.querySelector(`.country-cb[value="${CSS.escape(targetRide.country)}"]`);
+        if (countryCb) countryCb.checked = true;
+        updateCountryBtnLabel();
+      }
+
+      // Re-initialize park options if necessary and isolate target park
+      initParkFilter();
+      selectedParks = [parkName];
+
+      document.querySelectorAll('.park-cb').forEach(cb => {
+        cb.checked = (cb.value === parkName);
+      });
+
+      updateParkBtnLabel();
+      initTypeFilter();
+      filterRides();
+
+      // Scroll smoothly to main controls/header area
+      document.querySelector('.controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     function initTypeFilter() {
       const dataset = getActiveDataset();
       const availableRides = dataset.filter(r => selectedCountries.includes(r.country) && selectedParks.includes(r.park));
@@ -720,17 +815,38 @@
       else btn.textContent = `Sensory (${selectedSensory.length})`;
     }
 
-    function rideMatchesSensory(rideSensoryText) {
+    function rideMatchesSensory(r) {
       if (selectedSensory.length === SENSORY_TAGS.length) return true;
-      if (!rideSensoryText && selectedSensory.length > 0) return true;
+      if (!r._normSensory && selectedSensory.length > 0) return true;
 
-      const text = String(rideSensoryText || '').toLowerCase();
-      
       return selectedSensory.some(tagId => {
         const tag = SENSORY_TAGS.find(t => t.id === tagId);
         if (!tag) return false;
-        return tag.keywords.some(kw => text.includes(kw));
+        return tag.keywords.some(kw => r._normSensory.includes(kw));
       });
+    }
+
+    function getSensorySeverityClass(sensoryText) {
+      if (!sensoryText) return 'sensory-green';
+      const text = sensoryText.toLowerCase();
+
+      let matchCount = 0;
+      SENSORY_TAGS.forEach(tag => {
+        if (tag.keywords.some(kw => text.includes(kw))) {
+          matchCount++;
+        }
+      });
+
+      const isHighIntensity = text.includes('strobe') || text.includes('drop') || text.includes('launch') || text.includes('g-force') || text.includes('extreme');
+
+      if (matchCount >= 3 || (matchCount >= 2 && isHighIntensity)) {
+        return 'sensory-red';
+      } else if (matchCount === 2 || isHighIntensity) {
+        return 'sensory-orange';
+      } else if (matchCount === 1) {
+        return 'sensory-yellow';
+      }
+      return 'sensory-green';
     }
 
     // View Navigation Toggles
@@ -812,7 +928,7 @@
     document.getElementById('typeDropdown').addEventListener('click', e => e.stopPropagation());
     document.getElementById('sensoryDropdown').addEventListener('click', e => e.stopPropagation());
 
-    // Select/Deselect Links
+    // Select/Deselect Action Links
     document.getElementById('selectAllCountries').addEventListener('click', () => {
       document.querySelectorAll('.country-cb').forEach(cb => cb.checked = true);
       updateCountrySelections();
@@ -916,7 +1032,11 @@
 
       const totalParks = document.querySelectorAll('.park-cb').length;
       if (selectedParks.length > 0 && selectedParks.length < totalParks) {
-        pills.push({ label: `Parks: ${selectedParks.length}`, clear: () => { document.getElementById('selectAllParks').click(); } });
+        if (selectedParks.length === 1) {
+          pills.push({ label: `Park: ${selectedParks[0]}`, clear: () => { document.getElementById('selectAllParks').click(); } });
+        } else {
+          pills.push({ label: `Parks: ${selectedParks.length}`, clear: () => { document.getElementById('selectAllParks').click(); } });
+        }
       }
 
       const totalTypes = document.querySelectorAll('.type-cb').length;
@@ -965,11 +1085,76 @@
       });
     }
 
-    function renderRides(rides) {
+    function buildCardHtml(r) {
+      const rideKey = r._key || getRideKey(r);
+      const isFav = favourites.includes(rideKey);
+
+      let heightStr = 'None';
+      if (r.minHeightCm && r.minHeightInch) {
+        heightStr = `${r.minHeightCm} cm (${r.minHeightInch}")`;
+      } else if (r.minHeightCm) {
+        heightStr = `${r.minHeightCm} cm`;
+      }
+
+      const titleHtml = r.rideUrl 
+        ? `<a href="${r.rideUrl}" target="_blank" rel="noopener">${r.ride}</a>` 
+        : r.ride;
+
+      const povUrl = getPovVideoUrl(r.park, r.ride);
+      const faviconHtml = getFaviconHtml(r.park);
+      const sensorySeverityClass = getSensorySeverityClass(r.sensory);
+
+      // Escape park name for safe inline JS handler
+      const safeParkName = String(r.park || '').replace(/'/g, "\\'");
+
+      return `
+        <div class="card">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="tags">
+                <span class="tag" onclick="filterBySinglePark('${safeParkName}')" title="Click to filter by ${r.park}">
+                  ${faviconHtml}<span>${r.park}</span>
+                </span>
+              </div>
+              <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavourite('${rideKey}')" title="${isFav ? 'Remove from Favourites' : 'Add to Favourites'}">
+                ${isFav ? '★' : '☆'}
+              </button>
+            </div>
+            <h2>${titleHtml}</h2>
+            ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
+            ${r.details ? `<p class="details">${r.details}</p>` : ''}
+          </div>
+
+          ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" decoding="async" onerror="this.style.display='none'">` : ''}
+
+          <div class="card-meta">
+            <div class="meta-list">
+              ${r.location ? `<div class="meta-item"><span class="meta-label">Area:</span> <strong>${r.location}</strong></div>` : ''}
+              <div class="meta-item"><span class="meta-label">Min Height:</span> <strong>${heightStr}</strong></div>
+              ${r.heightNotes ? `<div class="meta-item"><span class="meta-label">Height Notes:</span> <strong>${r.heightNotes}</strong></div>` : ''}
+            </div>
+            ${r.sensory ? `<div class="sensory-box ${sensorySeverityClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
+          </div>
+
+          <div class="card-actions">
+            <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link">
+              ▶ Watch POV
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRidesIncremental(rides) {
       const grid = document.getElementById('rideGrid');
       const dataset = getActiveDataset();
       
       document.getElementById('rideCounter').textContent = `Showing ${rides.length} of ${dataset.length} rides`;
+
+      if (renderBatchTimer) {
+        cancelAnimationFrame(renderBatchTimer);
+        renderBatchTimer = null;
+      }
 
       if (!rides || rides.length === 0) {
         const msg = currentView === 'favourites' 
@@ -979,60 +1164,32 @@
         return;
       }
 
-      grid.innerHTML = rides.map(r => {
-        const rideKey = getRideKey(r);
-        const isFav = favourites.includes(rideKey);
+      // Fast initial batch paint (24 items)
+      const BATCH_SIZE = 24;
+      const initialBatch = rides.slice(0, BATCH_SIZE);
+      grid.innerHTML = initialBatch.map(buildCardHtml).join('');
 
-        let heightStr = 'None';
-        if (r.minHeightCm && r.minHeightInch) {
-          heightStr = `${r.minHeightCm} cm (${r.minHeightInch}")`;
-        } else if (r.minHeightCm) {
-          heightStr = `${r.minHeightCm} cm`;
+      // Stream remaining cards asynchronously
+      if (rides.length > BATCH_SIZE) {
+        let currentIndex = BATCH_SIZE;
+
+        function renderNextChunk() {
+          const nextChunk = rides.slice(currentIndex, currentIndex + BATCH_SIZE);
+          if (nextChunk.length > 0) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = nextChunk.map(buildCardHtml).join('');
+            while (tempDiv.firstChild) {
+              grid.appendChild(tempDiv.firstChild);
+            }
+            currentIndex += BATCH_SIZE;
+            if (currentIndex < rides.length) {
+              renderBatchTimer = requestAnimationFrame(renderNextChunk);
+            }
+          }
         }
 
-        const titleHtml = r.rideUrl 
-          ? `<a href="${r.rideUrl}" target="_blank" rel="noopener">${r.ride}</a>` 
-          : r.ride;
-
-        const povUrl = getPovVideoUrl(r.park, r.ride);
-        const faviconHtml = getFaviconHtml(r.park);
-        const sensorySeverityClass = getSensorySeverityClass(r.sensory);
-
-        return `
-          <div class="card">
-            <div class="card-body">
-              <div class="card-top">
-                <div class="tags">
-                  <span class="tag">${faviconHtml}<span>${r.park}</span></span>
-                </div>
-                <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavourite('${rideKey}')" title="${isFav ? 'Remove from Favourites' : 'Add to Favourites'}">
-                  ${isFav ? '★' : '☆'}
-                </button>
-              </div>
-              <h2>${titleHtml}</h2>
-              ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
-              ${r.details ? `<p class="details">${r.details}</p>` : ''}
-            </div>
-
-            ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" onerror="this.style.display='none'">` : ''}
-
-            <div class="card-meta">
-              <div class="meta-list">
-                ${r.location ? `<div class="meta-item"><span class="meta-label">Area:</span> <strong>${r.location}</strong></div>` : ''}
-                <div class="meta-item"><span class="meta-label">Min Height:</span> <strong>${heightStr}</strong></div>
-                ${r.heightNotes ? `<div class="meta-item"><span class="meta-label">Height Notes:</span> <strong>${r.heightNotes}</strong></div>` : ''}
-              </div>
-              ${r.sensory ? `<div class="sensory-box ${sensorySeverityClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
-            </div>
-
-            <div class="card-actions">
-              <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link">
-                ▶ Watch POV
-              </a>
-            </div>
-          </div>
-        `;
-      }).join('');
+        renderBatchTimer = requestAnimationFrame(renderNextChunk);
+      }
     }
 
     function filterRides() {
@@ -1043,23 +1200,11 @@
       const dataset = getActiveDataset();
 
       const filtered = dataset.filter(r => {
-        const rideNameNorm = normalizeText(r.ride);
-        const parkNameNorm = normalizeText(r.park);
-        const rideTypeNorm = normalizeText(r.type);
-        const rideDetailsNorm = normalizeText(r.details);
-        const rideLocationNorm = normalizeText(r.location);
-
-        const matchesSearch = !searchNormalized || 
-          rideNameNorm.includes(searchNormalized) ||
-          parkNameNorm.includes(searchNormalized) ||
-          rideTypeNorm.includes(searchNormalized) ||
-          rideDetailsNorm.includes(searchNormalized) ||
-          rideLocationNorm.includes(searchNormalized);
-          
+        const matchesSearch = !searchNormalized || r._normSearch.includes(searchNormalized);
         const matchesCountry = selectedCountries.includes(r.country);
         const matchesPark = selectedParks.includes(r.park);
         const matchesType = selectedTypes.includes(r.type);
-        const matchesSensory = rideMatchesSensory(r.sensory);
+        const matchesSensory = rideMatchesSensory(r);
         
         const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
         const matchesHeight = rideHeight <= maxHeight;
@@ -1069,7 +1214,7 @@
 
       const sorted = sortRides(filtered);
       renderActivePills();
-      renderRides(sorted);
+      renderRidesIncremental(sorted);
     }
 
     // Input Listeners
@@ -1099,8 +1244,17 @@
       filterRides();
     });
 
+    // Bootstrapping App Data
     fetchRideData();
   </script>
 
 </body>
 </html>
+```
+
+---
+
+### Summary of Changes in v23
+1. **Interactive Park Badges:** Made every park tag on the ride cards clickable. Clicking a park badge instantly isolates the view to show only rides from that park.
+2. **Subtle Watch POV Links:** Replaced any lingering red backgrounds with a clean, theme-adaptive neutral button layout that gently highlights in theme accent color on hover.
+3. **Maintained Performance & Accessibility Features:** Preserved pre-computed search indexing, distinct icon mappings (including 🌳 for Animal Kingdom), 4-tier sensory severity highlights, and Light/Dark mode state storage.
