@@ -109,14 +109,14 @@
     
     select.sort-select { flex: 1; min-width: 150px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: var(--shadow); }
 
-    .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
+    .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: stretch; }
     
     .reset-row { display: flex; justify-content: flex-end; margin-top: -0.25rem; }
     .btn-secondary { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; box-shadow: var(--shadow); }
     .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
     .multiselect-container { position: relative; flex: 1; min-width: 150px; }
-    .multiselect-btn { width: 100%; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
+    .multiselect-btn { width: 100%; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); height: 48px; }
     .multiselect-btn:after { content: '▼'; font-size: 0.7rem; color: var(--muted); }
     
     .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 0.5rem; min-width: 220px; }
@@ -133,12 +133,13 @@
 
     .park-favicon { width: 16px; height: 16px; border-radius: 3px; object-fit: contain; vertical-align: middle; flex-shrink: 0; background: rgba(255,255,255,0.2); }
 
-    .height-filter { flex: 1.5; min-width: 240px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem; height: 48px; box-shadow: var(--shadow); }
-    .height-label { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
-    .height-label strong { color: var(--accent); font-size: 0.95rem; }
+    .height-filter { flex: 1.5; min-width: 240px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; flex-direction: column; justify-content: center; gap: 0.35rem; min-height: 48px; box-shadow: var(--shadow); }
+    .height-top { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.85rem; color: var(--muted); }
+    .height-label strong { color: var(--accent); font-size: 0.9rem; }
+    .height-bottom { display: flex; align-items: center; gap: 0.75rem; width: 100%; }
     input[type="range"] { flex: 1; accent-color: var(--accent); cursor: pointer; }
     
-    .unit-toggle { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .unit-toggle { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; flex-shrink: 0; }
     .unit-btn { background: none; border: none; color: var(--muted); padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
     .unit-btn.active { background: var(--accent); color: #ffffff; }
 
@@ -186,7 +187,7 @@
     .skeleton-line.long { width: 85%; }
     @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 0.7; } 100% { opacity: 0.3; } }
 
-    /* Responsive Mobile Theme Toggle Button Label Hide */
+    /* Responsive Mobile Theme Toggle & Filter Adjustments */
     @media (max-width: 640px) {
       .hero-banner { height: 150px; }
       .hero-content h1 { font-size: 1.4rem; }
@@ -194,6 +195,9 @@
 
       #themeLabel { display: none; }
       .theme-toggle-btn { padding: 0.5rem 0.65rem; }
+
+      .filter-row { flex-direction: column; align-items: stretch; }
+      .multiselect-container, .height-filter { width: 100%; flex: none; }
 
       .grid.compact .card { flex-direction: column; align-items: stretch; gap: 0.75rem; padding: 1rem; }
       .grid.compact .meta-item, .meta-item { grid-template-columns: 90px 1fr; }
@@ -204,7 +208,6 @@
       .controls { gap: 0.75rem; }
       .search-row { flex-direction: column; align-items: stretch; }
       select.sort-select, .btn-secondary { width: 100%; }
-      .height-filter { width: 100%; }
     }
 
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
@@ -257,7 +260,7 @@
 <body>
 
   <!-- Top-Right Version Badge -->
-  <div class="version-badge">v30</div>
+  <div class="version-badge">v31</div>
 
   <div class="hero-banner">
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
@@ -350,11 +353,16 @@
 
       <!-- Height Slider -->
       <div class="height-filter">
-        <span class="height-label">Max Height: <strong id="heightValue">200 cm</strong></span>
-        <input type="range" id="heightSlider" min="80" max="200" value="200" step="1">
-        <div class="unit-toggle">
-          <button class="unit-btn active" id="unitCm">cm</button>
-          <button class="unit-btn" id="unitInch">in</button>
+        <div class="height-top">
+          <span class="height-label">Max Height:</span>
+          <strong id="heightValue">200 cm</strong>
+        </div>
+        <div class="height-bottom">
+          <input type="range" id="heightSlider" min="80" max="200" value="200" step="1">
+          <div class="unit-toggle">
+            <button class="unit-btn active" id="unitCm">cm</button>
+            <button class="unit-btn" id="unitInch">in</button>
+          </div>
         </div>
       </div>
     </div>
@@ -435,7 +443,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v30';
+    const CACHE_KEY = 'theme_park_rides_cache_v31';
 
     const SENSORY_TAGS = [
       { id: 'dark', label: 'Dark / Low Light', keywords: ['dark', 'dim', 'shadow', 'night'] },
