@@ -22,11 +22,23 @@
     h1 { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.5rem; letter-spacing: -0.025em; }
     p.subtitle { color: var(--muted); font-size: 1.1rem; }
 
-    .controls { max-width: 1000px; margin: 0 auto 2rem auto; display: flex; gap: 1rem; flex-wrap: wrap; width: 100%; }
+    .controls { max-width: 1000px; margin: 0 auto 2rem auto; display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+    .search-row { display: flex; gap: 1rem; flex-wrap: wrap; }
     input[type="text"] { flex: 1; min-width: 250px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; }
     input[type="text"]:focus { border-color: var(--accent); }
     
-    select { padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; cursor: pointer; }
+    .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+    select { flex: 1; min-width: 180px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; cursor: pointer; }
+
+    /* Height Filter Controls */
+    .height-filter { flex: 2; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 1rem; }
+    .height-label { font-size: 0.9rem; color: var(--muted); white-space: nowrap; }
+    .height-label strong { color: var(--accent); font-size: 1rem; }
+    input[type="range"] { flex: 1; accent-color: var(--accent); cursor: pointer; }
+    
+    .unit-toggle { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .unit-btn { background: none; border: none; color: var(--muted); padding: 0.3rem 0.6rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+    .unit-btn.active { background: var(--accent); color: var(--bg); }
 
     main { flex: 1; width: 100%; }
     .grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
@@ -57,14 +69,32 @@
 
   <header>
     <h1>Theme Park Ride Guide</h1>
-    <p class="subtitle">Search, filter, and discover ride requirements and details worldwide.</p>
+    <p class="subtitle">Search, filter, and discover ride height requirements and details.</p>
   </header>
 
   <div class="controls">
-    <input type="text" id="searchInput" placeholder="Search ride, park, type, or details...">
-    <select id="parkFilter">
-      <option value="all">All Parks</option>
-    </select>
+    <div class="search-row">
+      <input type="text" id="searchInput" placeholder="Search ride, park, type, or details...">
+    </div>
+    
+    <div class="filter-row">
+      <select id="countyFilter">
+        <option value="all">All Counties</option>
+      </select>
+
+      <select id="parkFilter">
+        <option value="all">All Parks</option>
+      </select>
+
+      <div class="height-filter">
+        <span class="height-label">Max Height: <strong id="heightValue">200 cm</strong></span>
+        <input type="range" id="heightSlider" min="80" max="200" value="200" step="1">
+        <div class="unit-toggle">
+          <button class="unit-btn active" id="unitCm">cm</button>
+          <button class="unit-btn" id="unitInch">in</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <main>
@@ -82,30 +112,66 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
 
     let allRides = [];
+    let currentUnit = 'cm'; // 'cm' or 'inch'
 
     async function fetchRideData() {
       try {
         const response = await fetch(API_URL);
         allRides = await response.json();
 
+        populateCountyFilter(allRides);
         populateParkFilter(allRides);
-        renderRides(allRides);
+        filterRides();
       } catch (error) {
-        console.error('Error fetching data via Apps Script:', error);
-        document.getElementById('rideGrid').innerHTML = '<div class="loading">Failed to load ride data. Check Apps Script deployment settings.</div>';
+        console.error('Error fetching data:', error);
+        document.getElementById('rideGrid').innerHTML = '<div class="loading">Failed to load ride data.</div>';
       }
+    }
+
+    function populateCountyFilter(rides) {
+      const countySelect = document.getElementById('countyFilter');
+      const counties = [...new Set(rides.map(r => r.county).filter(Boolean))].sort();
+      
+      countySelect.innerHTML = '<option value="all">All Counties</option>';
+      counties.forEach(county => {
+        const option = document.createElement('option');
+        option.value = county;
+        option.textContent = county;
+        countySelect.appendChild(option);
+      });
     }
 
     function populateParkFilter(rides) {
       const parkSelect = document.getElementById('parkFilter');
-      const parks = [...new Set(rides.map(r => r.park).filter(Boolean))].sort();
+      const selectedCounty = document.getElementById('countyFilter').value;
       
+      const filteredForPark = selectedCounty === 'all' 
+        ? rides 
+        : rides.filter(r => r.county === selectedCounty);
+
+      const parks = [...new Set(filteredForPark.map(r => r.park).filter(Boolean))].sort();
+      
+      parkSelect.innerHTML = '<option value="all">All Parks</option>';
       parks.forEach(park => {
         const option = document.createElement('option');
         option.value = park;
         option.textContent = park;
         parkSelect.appendChild(option);
       });
+    }
+
+    function updateSliderConfig() {
+      const slider = document.getElementById('heightSlider');
+      if (currentUnit === 'cm') {
+        slider.min = 80;
+        slider.max = 200;
+        if (slider.value < 80 || slider.value > 200) slider.value = 200;
+      } else {
+        slider.min = 30;
+        slider.max = 80;
+        if (slider.value < 30 || slider.value > 80) slider.value = 80;
+      }
+      document.getElementById('heightValue').textContent = `${slider.value} ${currentUnit}`;
     }
 
     function renderRides(rides) {
@@ -129,7 +195,7 @@
             <div>
               <div class="tags">
                 <span class="tag">${r.park}</span>
-                ${r.country ? `<span class="tag location">${r.country}</span>` : ''}
+                ${r.county ? `<span class="tag location">${r.county}</span>` : ''}
               </div>
               <h2>${r.ride}</h2>
               ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
@@ -151,7 +217,9 @@
 
     function filterRides() {
       const search = document.getElementById('searchInput').value.toLowerCase();
+      const selectedCounty = document.getElementById('countyFilter').value;
       const selectedPark = document.getElementById('parkFilter').value;
+      const maxHeight = Number(document.getElementById('heightSlider').value);
 
       const filtered = allRides.filter(r => {
         const matchesSearch = 
@@ -161,16 +229,51 @@
           (r.details && r.details.toLowerCase().includes(search)) ||
           (r.location && r.location.toLowerCase().includes(search));
           
+        const matchesCounty = selectedCounty === 'all' || r.county === selectedCounty;
         const matchesPark = selectedPark === 'all' || r.park === selectedPark;
+        
+        // Height condition check
+        const rideHeight = currentUnit === 'cm' ? (r.minHeightCm || 0) : (r.minHeightInch || 0);
+        const matchesHeight = rideHeight <= maxHeight;
 
-        return matchesSearch && matchesPark;
+        return matchesSearch && matchesCounty && matchesPark && matchesHeight;
       });
 
       renderRides(filtered);
     }
 
+    // Event Listeners
     document.getElementById('searchInput').addEventListener('input', filterRides);
+    
+    document.getElementById('countyFilter').addEventListener('change', () => {
+      populateParkFilter(allRides);
+      filterRides();
+    });
+    
     document.getElementById('parkFilter').addEventListener('change', filterRides);
+
+    document.getElementById('heightSlider').addEventListener('input', (e) => {
+      document.getElementById('heightValue').textContent = `${e.target.value} ${currentUnit}`;
+      filterRides();
+    });
+
+    document.getElementById('unitCm').addEventListener('click', () => {
+      if (currentUnit === 'cm') return;
+      currentUnit = 'cm';
+      document.getElementById('unitCm').classList.add('active');
+      document.getElementById('unitInch').classList.remove('active');
+      updateSliderConfig();
+      filterRides();
+    });
+
+    document.getElementById('unitInch').addEventListener('click', () => {
+      if (currentUnit === 'inch') return;
+      currentUnit = 'inch';
+      document.getElementById('unitInch').classList.add('active');
+      document.getElementById('unitCm').classList.remove('active');
+      updateSliderConfig();
+      filterRides();
+    });
 
     fetchRideData();
   </script>
