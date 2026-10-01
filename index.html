@@ -345,7 +345,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v54</div>
+    <div class="version-badge" id="versionBadgeBtn">v56</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -542,7 +542,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v54';
+    const CACHE_KEY = 'theme_park_rides_cache_v56';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -670,7 +670,7 @@
         icon.textContent = '🌙';
         label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀️';
+        icon.textContent = '☀️️';
         label.textContent = 'Light Mode';
       }
     }
@@ -717,24 +717,21 @@
         .replace(/[^a-z0-9]/g, "");
     }
 
-    // Flexibly extract QueuePass property (Column M) regardless of Apps Script casing
+    // Direct mapping for Column M: QueuePass
     function getQueuePass(r) {
-      return String(r.queuePass || r.queue_pass || r.QueuePass || r['Queue Pass'] || r.queuepass || '').trim();
+      const val = r.queuePass ?? r.queuepass ?? r['QueuePass'] ?? r['Queue Pass'] ?? '';
+      return String(val).trim();
     }
 
-    // Check if Queue Pass is active (not empty and not 'no')
     function hasQueuePass(r) {
       const val = getQueuePass(r);
-      return val !== '' && val.toLowerCase() !== 'no';
+      return val !== '' && val.toLowerCase() !== 'no' && val.toLowerCase() !== 'n/a' && val.toLowerCase() !== 'none';
     }
 
-    // Flexibly extract Attraction UUID (Column N) from Apps Script JSON
+    // Direct mapping for Column N: ThemeParkWikiRideID
     function getRideUuid(r) {
-      return String(
-        r.uuid || r.wikiUuid || r.themeParkWikiUuid || r.themeparkwikiUuid || 
-        r.themeParkWikiId || r.wikiId || r.attractionUuid || r.themeParksWikiUuid || 
-        r['UUID'] || r['Uuid'] || r.columnN || ''
-      ).trim().toLowerCase();
+      const uuid = r.themeParkWikiRideID ?? r.themeparkwikirideid ?? r.themeParkWikiId ?? r.wikiId ?? r.uuid ?? '';
+      return String(uuid).trim().toLowerCase();
     }
 
     function extractDomain(urlStr) {
@@ -754,7 +751,7 @@
           const normPark = r.park.toLowerCase().trim();
           let domain = PARK_DOMAIN_OVERRIDES[normPark];
           if (!domain) {
-            domain = extractDomain(r.rideUrl) || extractDomain(r.imageUrl);
+            domain = extractDomain(r.rideUrl) || extractDomain(r.rideImage);
           }
           if (domain) parkDomainMap[r.park] = domain;
         }
@@ -865,7 +862,7 @@
       }
     }
 
-    // Fetch Live Wait Times mapping using Column N UUIDs directly
+    // Direct UUID & Park Stream Live Wait Times Engine
     async function fetchLiveWaitTimes() {
       if (isFetchingLive) return;
       isFetchingLive = true;
@@ -890,30 +887,27 @@
                 const wait = item.queue && item.queue.STANDBY ? item.queue.STANDBY.waitTime : null;
                 const status = item.status || 'OPERATING';
                 
-                // Map by exact attraction UUID if provided by API
                 if (item.id) {
                   liveWaitData[item.id.toLowerCase()] = { waitTime: wait, status: status };
                 }
-                
-                // Backup mapping by normalized name
                 const normName = normalizeText(item.name);
                 liveWaitData[normName] = { waitTime: wait, status: status };
               }
             });
           }
         } catch (err) {
-          console.error(`Failed to fetch live times for ${parkName}:`, err);
+          console.error(`Failed to fetch live times for park ${parkName}:`, err);
         }
       }
 
-      // 2. Direct fetch for rides with Column N UUIDs not captured via park streams
-      const unpopulatedUuids = [...new Set(
+      // 2. Direct fetch for any rides with ThemeParkWikiRideID UUIDs not captured in park streams
+      const missingUuids = [...new Set(
         allRides
           .map(r => getRideUuid(r))
-          .filter(uuid => uuid && !liveWaitData[uuid])
+          .filter(uuid => uuid && uuid.length > 10 && !liveWaitData[uuid])
       )];
 
-      for (const uuid of unpopulatedUuids) {
+      for (const uuid of missingUuids) {
         try {
           const res = await fetch(`https://api.themeparks.wiki/v1/entity/${uuid}/live`);
           const data = await res.json();
@@ -924,7 +918,7 @@
             liveWaitData[uuid] = { waitTime: wait, status: status };
           }
         } catch (err) {
-          console.error(`Failed to fetch live time for UUID ${uuid}:`, err);
+          console.error(`Failed direct fetch for UUID ${uuid}:`, err);
         }
       }
 
@@ -1223,7 +1217,7 @@
 
       let shareText = '🎢 My Theme Park Ride Favourites:\n\n';
       favRides.forEach(r => {
-        let h = r.minHeightCm ? ` (Min Height: ${r.minHeightCm}cm)` : '';
+        let h = r.minimumHeightCm ? ` (Min Height: ${r.minimumHeightCm}cm)` : '';
         shareText += `• ${r.ride} (${r.park})${h}\n`;
       });
       shareText += `\nShared via Theme Park Ride Guide`;
@@ -1448,12 +1442,12 @@
         } else if (sortVal === 'park-asc') {
           return String(a.park).localeCompare(String(b.park));
         } else if (sortVal === 'height-asc') {
-          const hA = currentUnit === 'cm' ? (a.minHeightCm || 0) : (a.minHeightInch || 0);
-          const hB = currentUnit === 'cm' ? (b.minHeightCm || 0) : (b.minHeightInch || 0);
+          const hA = currentUnit === 'cm' ? (a.minimumHeightCm || 0) : (a.minimumHeightInch || 0);
+          const hB = currentUnit === 'cm' ? (b.minimumHeightCm || 0) : (b.minimumHeightInch || 0);
           return hA - hB;
         } else if (sortVal === 'height-desc') {
-          const hA = currentUnit === 'cm' ? (a.minHeightCm || 0) : (a.minHeightInch || 0);
-          const hB = currentUnit === 'cm' ? (b.minHeightCm || 0) : (b.minHeightInch || 0);
+          const hA = currentUnit === 'cm' ? (a.minimumHeightCm || 0) : (a.minimumHeightInch || 0);
+          const hB = currentUnit === 'cm' ? (b.minimumHeightCm || 0) : (b.minimumHeightInch || 0);
           return hB - hA;
         }
         return 0;
@@ -1491,10 +1485,10 @@
         const showPassIcon = hasQueuePass(r);
 
         let heightStr = 'None';
-        if (r.minHeightCm && r.minHeightInch) {
-          heightStr = `${r.minHeightCm} cm (${r.minHeightInch}")`;
-        } else if (r.minHeightCm) {
-          heightStr = `${r.minHeightCm} cm`;
+        if (r.minimumHeightCm && r.minimumHeightInch) {
+          heightStr = `${r.minimumHeightCm} cm (${r.minimumHeightInch}")`;
+        } else if (r.minimumHeightCm) {
+          heightStr = `${r.minimumHeightCm} cm`;
         }
 
         const titleHtml = r.rideUrl 
@@ -1544,7 +1538,7 @@
               ${r.details ? `<p class="details">${r.details}</p>` : ''}
             </div>
 
-            ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" decoding="async" onerror="this.style.display='none'">` : ''}
+            ${r.rideImage ? `<img src="${r.rideImage}" alt="${r.ride}" class="ride-thumb" loading="lazy" decoding="async" onerror="this.style.display='none'">` : ''}
 
             <div class="card-meta">
               <div class="meta-list">
@@ -1592,7 +1586,7 @@
         const matchesType = selectedTypes.includes(r.type);
         const matchesSensory = rideMatchesSensory(r.sensory);
         
-        const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
+        const rideHeight = currentUnit === 'cm' ? (Number(r.minimumHeightCm) || 0) : (Number(r.minimumHeightInch) || 0);
         const matchesHeight = rideHeight <= maxHeight;
 
         return matchesSearch && matchesCountry && matchesPark && matchesType && matchesSensory && matchesHeight;
