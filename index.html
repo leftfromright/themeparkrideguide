@@ -18,7 +18,9 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; }
     
-    header { max-width: 1000px; margin: 0 auto 2rem auto; text-align: center; width: 100%; }
+    header { max-width: 1000px; margin: 0 auto 2rem auto; text-align: center; width: 100%; position: relative; }
+    .version-badge { position: absolute; top: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; }
+    
     h1 { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.5rem; letter-spacing: -0.025em; }
     p.subtitle { color: var(--muted); font-size: 1.1rem; }
 
@@ -30,8 +32,8 @@
     .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
 
     /* Custom Multi-Select Dropdowns */
-    .multiselect-container { position: relative; flex: 1; min-width: 220px; }
-    .multiselect-btn { width: 100%; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .multiselect-container { position: relative; flex: 1; min-width: 180px; }
+    .multiselect-btn { width: 100%; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .multiselect-btn:after { content: '▼'; font-size: 0.7rem; color: var(--muted); }
     
     .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 260px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); padding: 0.5rem; }
@@ -41,12 +43,12 @@
     .action-link { font-size: 0.75rem; color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
     .action-link:hover { text-decoration: underline; }
 
-    .dropdown-option { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; color: var(--text); }
+    .dropdown-option { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; color: var(--text); }
     .dropdown-option:hover { background: rgba(56, 189, 248, 0.1); }
     .dropdown-option input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
 
     /* Height Filter */
-    .height-filter { flex: 1.5; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 1rem; height: 48px; }
+    .height-filter { flex: 1.5; min-width: 260px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 1rem; height: 48px; }
     .height-label { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
     .height-label strong { color: var(--accent); font-size: 0.95rem; }
     input[type="range"] { flex: 1; accent-color: var(--accent); cursor: pointer; }
@@ -58,14 +60,19 @@
     main { flex: 1; width: 100%; }
     .grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
     
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease; overflow: hidden; }
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
     
     .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
     .tag { background: var(--badge-bg); color: var(--accent); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
-    .tag.location { background: rgba(148, 163, 184, 0.1); color: var(--muted); }
     
     .card h2 { font-size: 1.4rem; margin-bottom: 0.25rem; color: var(--text); }
+    .card h2 a { color: inherit; text-decoration: none; }
+    .card h2 a:hover { color: var(--accent); text-decoration: underline; }
+
+    /* Thumbnail Styling */
+    .ride-thumb { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin: 0.5rem 0 0.75rem 0; border: 1px solid var(--border); background-color: var(--bg); }
+
     .type-subtitle { color: var(--accent); font-size: 0.9rem; font-weight: 500; margin-bottom: 0.75rem; }
     .details { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
     
@@ -83,6 +90,7 @@
 <body>
 
   <header>
+    <div class="version-badge">v7</div>
     <h1>Theme Park Ride Guide</h1>
     <p class="subtitle">Search, filter, and discover ride height requirements and details.</p>
   </header>
@@ -117,6 +125,18 @@
         </div>
       </div>
 
+      <!-- Type Multi-Select -->
+      <div class="multiselect-container">
+        <button class="multiselect-btn" id="typeBtn">Ride Types (All)</button>
+        <div class="multiselect-dropdown" id="typeDropdown">
+          <div class="multiselect-actions">
+            <span class="action-link" id="selectAllTypes">Select All</span>
+            <span class="action-link" id="deselectAllTypes">Deselect All</span>
+          </div>
+          <div id="typeOptions"></div>
+        </div>
+      </div>
+
       <!-- Height Slider -->
       <div class="height-filter">
         <span class="height-label">Max Height: <strong id="heightValue">200 cm</strong></span>
@@ -146,6 +166,7 @@
     let allRides = [];
     let selectedCountries = [];
     let selectedParks = [];
+    let selectedTypes = [];
     let currentUnit = 'cm';
 
     async function fetchRideData() {
@@ -155,6 +176,7 @@
 
         initCountryFilter();
         initParkFilter();
+        initTypeFilter();
         filterRides();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -180,6 +202,7 @@
         cb.addEventListener('change', () => {
           updateCountrySelections();
           initParkFilter();
+          initTypeFilter();
           filterRides();
         });
       });
@@ -219,6 +242,7 @@
       document.querySelectorAll('.park-cb').forEach(cb => {
         cb.addEventListener('change', () => {
           updateParkSelections();
+          initTypeFilter();
           filterRides();
         });
       });
@@ -238,32 +262,85 @@
       else btn.textContent = `Parks (${selectedParks.length})`;
     }
 
+    function initTypeFilter() {
+      const availableRides = allRides.filter(r => selectedCountries.includes(r.country) && selectedParks.includes(r.park));
+      const types = [...new Set(availableRides.map(r => r.type).filter(Boolean))].sort();
+
+      selectedTypes = selectedTypes.filter(t => types.includes(t));
+      if (selectedTypes.length === 0) selectedTypes = [...types];
+
+      const container = document.getElementById('typeOptions');
+      container.innerHTML = types.map(t => `
+        <label class="dropdown-option">
+          <input type="checkbox" value="${t}" ${selectedTypes.includes(t) ? 'checked' : ''} class="type-cb">
+          <span>${t}</span>
+        </label>
+      `).join('');
+
+      updateTypeBtnLabel();
+
+      document.querySelectorAll('.type-cb').forEach(cb => {
+        cb.addEventListener('change', () => {
+          updateTypeSelections();
+          filterRides();
+        });
+      });
+    }
+
+    function updateTypeSelections() {
+      const cbs = document.querySelectorAll('.type-cb');
+      selectedTypes = Array.from(cbs).filter(cb => cb.checked).map(cb => cb.value);
+      updateTypeBtnLabel();
+    }
+
+    function updateTypeBtnLabel() {
+      const total = document.querySelectorAll('.type-cb').length;
+      const btn = document.getElementById('typeBtn');
+      if (selectedTypes.length === total) btn.textContent = 'Types (All)';
+      else if (selectedTypes.length === 0) btn.textContent = 'Types (None)';
+      else btn.textContent = `Types (${selectedTypes.length})`;
+    }
+
     // Dropdown Toggles
+    function closeDropdowns() {
+      document.getElementById('countryDropdown').classList.remove('show');
+      document.getElementById('parkDropdown').classList.remove('show');
+      document.getElementById('typeDropdown').classList.remove('show');
+    }
+
     document.getElementById('countryBtn').addEventListener('click', (e) => {
       e.stopPropagation();
-      document.getElementById('countryDropdown').classList.toggle('show');
-      document.getElementById('parkDropdown').classList.remove('show');
+      const show = document.getElementById('countryDropdown').classList.contains('show');
+      closeDropdowns();
+      if (!show) document.getElementById('countryDropdown').classList.add('show');
     });
 
     document.getElementById('parkBtn').addEventListener('click', (e) => {
       e.stopPropagation();
-      document.getElementById('parkDropdown').classList.toggle('show');
-      document.getElementById('countryDropdown').classList.remove('show');
+      const show = document.getElementById('parkDropdown').classList.contains('show');
+      closeDropdowns();
+      if (!show) document.getElementById('parkDropdown').classList.add('show');
     });
 
-    document.addEventListener('click', () => {
-      document.getElementById('countryDropdown').classList.remove('show');
-      document.getElementById('parkDropdown').classList.remove('show');
+    document.getElementById('typeBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const show = document.getElementById('typeDropdown').classList.contains('show');
+      closeDropdowns();
+      if (!show) document.getElementById('typeDropdown').classList.add('show');
     });
+
+    document.addEventListener('click', closeDropdowns);
 
     document.getElementById('countryDropdown').addEventListener('click', e => e.stopPropagation());
     document.getElementById('parkDropdown').addEventListener('click', e => e.stopPropagation());
+    document.getElementById('typeDropdown').addEventListener('click', e => e.stopPropagation());
 
     // Select/Deselect Links
     document.getElementById('selectAllCountries').addEventListener('click', () => {
       document.querySelectorAll('.country-cb').forEach(cb => cb.checked = true);
       updateCountrySelections();
       initParkFilter();
+      initTypeFilter();
       filterRides();
     });
 
@@ -271,18 +348,33 @@
       document.querySelectorAll('.country-cb').forEach(cb => cb.checked = false);
       updateCountrySelections();
       initParkFilter();
+      initTypeFilter();
       filterRides();
     });
 
     document.getElementById('selectAllParks').addEventListener('click', () => {
       document.querySelectorAll('.park-cb').forEach(cb => cb.checked = true);
       updateParkSelections();
+      initTypeFilter();
       filterRides();
     });
 
     document.getElementById('deselectAllParks').addEventListener('click', () => {
       document.querySelectorAll('.park-cb').forEach(cb => cb.checked = false);
       updateParkSelections();
+      initTypeFilter();
+      filterRides();
+    });
+
+    document.getElementById('selectAllTypes').addEventListener('click', () => {
+      document.querySelectorAll('.type-cb').forEach(cb => cb.checked = true);
+      updateTypeSelections();
+      filterRides();
+    });
+
+    document.getElementById('deselectAllTypes').addEventListener('click', () => {
+      document.querySelectorAll('.type-cb').forEach(cb => cb.checked = false);
+      updateTypeSelections();
       filterRides();
     });
 
@@ -317,14 +409,18 @@
           heightStr = `${r.minHeightCm} cm`;
         }
 
+        const titleHtml = r.rideUrl 
+          ? `<a href="${r.rideUrl}" target="_blank" rel="noopener">${r.ride}</a>` 
+          : r.ride;
+
         return `
           <div class="card">
             <div>
               <div class="tags">
                 <span class="tag">${r.park}</span>
-                ${r.country ? `<span class="tag location">${r.country}</span>` : ''}
               </div>
-              <h2>${r.ride}</h2>
+              <h2>${titleHtml}</h2>
+              ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" onerror="this.style.display='none'">` : ''}
               ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
               ${r.details ? `<p class="details">${r.details}</p>` : ''}
             </div>
@@ -356,11 +452,12 @@
           
         const matchesCountry = selectedCountries.includes(r.country);
         const matchesPark = selectedParks.includes(r.park);
+        const matchesType = selectedTypes.includes(r.type);
         
         const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
         const matchesHeight = rideHeight <= maxHeight;
 
-        return matchesSearch && matchesCountry && matchesPark && matchesHeight;
+        return matchesSearch && matchesCountry && matchesPark && matchesType && matchesHeight;
       });
 
       renderRides(filtered);
