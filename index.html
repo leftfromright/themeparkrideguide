@@ -19,6 +19,23 @@
       --yt-bg: rgba(239, 68, 68, 0.1);
       --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
       --input-bg: #1e293b;
+
+      /* Sensory Severity Dark Mode Tokens */
+      --sensory-green-bg: rgba(34, 197, 94, 0.12);
+      --sensory-green-border: #22c55e;
+      --sensory-green-text: #4ade80;
+
+      --sensory-yellow-bg: rgba(234, 179, 8, 0.12);
+      --sensory-yellow-border: #eab308;
+      --sensory-yellow-text: #fde047;
+
+      --sensory-orange-bg: rgba(249, 115, 22, 0.12);
+      --sensory-orange-border: #f97316;
+      --sensory-orange-text: #fb923c;
+
+      --sensory-red-bg: rgba(239, 68, 68, 0.12);
+      --sensory-red-border: #ef4444;
+      --sensory-red-text: #fca5a5;
     }
 
     /* Family Friendly Light Theme */
@@ -35,6 +52,23 @@
       --yt-bg: rgba(220, 38, 38, 0.08);
       --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
       --input-bg: #ffffff;
+
+      /* Sensory Severity Light Mode Tokens */
+      --sensory-green-bg: rgba(34, 197, 94, 0.08);
+      --sensory-green-border: #16a34a;
+      --sensory-green-text: #15803d;
+
+      --sensory-yellow-bg: rgba(234, 179, 8, 0.08);
+      --sensory-yellow-border: #ca8a04;
+      --sensory-yellow-text: #854d0e;
+
+      --sensory-orange-bg: rgba(249, 115, 22, 0.08);
+      --sensory-orange-border: #ea580c;
+      --sensory-orange-text: #c2410c;
+
+      --sensory-red-bg: rgba(239, 68, 68, 0.08);
+      --sensory-red-border: #dc2626;
+      --sensory-red-text: #b91c1c;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
@@ -75,7 +109,7 @@
     .multiselect-btn { width: 100%; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
     .multiselect-btn:after { content: '▼'; font-size: 0.7rem; color: var(--muted); }
     
-    .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 0.5rem; min-width: 200px; }
+    .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 0.5rem; min-width: 220px; }
     .multiselect-dropdown.show { display: block; }
     
     .multiselect-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: space-between; padding: 0.25rem 0.5rem 0.5rem 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; }
@@ -86,6 +120,9 @@
     .dropdown-option { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; color: var(--text); }
     .dropdown-option:hover { background: var(--badge-bg); }
     .dropdown-option input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
+
+    /* Park Favicon / Logo Styling */
+    .park-favicon { width: 16px; height: 16px; border-radius: 3px; object-fit: contain; vertical-align: middle; flex-shrink: 0; background: rgba(255,255,255,0.2); }
 
     /* Height Filter */
     .height-filter { flex: 1.5; min-width: 240px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem; height: 48px; box-shadow: var(--shadow); }
@@ -117,6 +154,12 @@
     /* Expanded Card */
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; overflow: hidden; position: relative; box-shadow: var(--shadow); }
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
+
+    /* Metadata Column Alignment Grid (Shared across both Grid & Compact Views) */
+    .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.35rem; }
+    .meta-item { display: grid; grid-template-columns: 95px 1fr; gap: 0.5rem; align-items: baseline; font-size: 0.85rem; }
+    .meta-label { color: var(--muted); white-space: nowrap; }
+    .meta-item strong { color: var(--text); word-break: break-word; }
     
     /* Desktop Compact Mode */
     .grid.compact { grid-template-columns: 1fr; gap: 0.75rem; }
@@ -126,19 +169,17 @@
     .grid.compact .card-actions { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
     .grid.compact .ride-thumb { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
     
-    /* Align 3 objects without table outlines in Compact View */
-    .grid.compact .meta-list { border-top: none; padding-top: 0; display: flex; flex-direction: column; gap: 0.3rem; }
-    .grid.compact .meta-item { display: grid; grid-template-columns: 95px 1fr; gap: 0.5rem; align-items: baseline; font-size: 0.85rem; }
-    .grid.compact .meta-label { color: var(--muted); white-space: nowrap; }
-    .grid.compact .meta-item strong { color: var(--text); }
-
+    .grid.compact .meta-list { border-top: none; padding-top: 0; gap: 0.3rem; }
     .grid.compact .details { display: block; font-size: 0.85rem; margin-bottom: 0.25rem; line-height: 1.3; }
     .grid.compact .sensory-box { display: block; margin-top: 0.35rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
     .grid.compact .pov-link { width: auto; margin-top: 0; padding: 0.4rem 0.75rem; }
 
-    /* Expanded Grid Standard Meta Layout */
-    .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; color: var(--muted); display: flex; flex-direction: column; gap: 0.4rem; }
-    .meta-item strong { color: var(--text); }
+    /* Sensory Box Severity Color Coding */
+    .sensory-box { border-radius: 6px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; font-size: 0.85rem; border-left: 3.5px solid; transition: all 0.2s ease; }
+    .sensory-box.sensory-green { background: var(--sensory-green-bg); border-color: var(--sensory-green-border); color: var(--sensory-green-text); }
+    .sensory-box.sensory-yellow { background: var(--sensory-yellow-bg); border-color: var(--sensory-yellow-border); color: var(--sensory-yellow-text); }
+    .sensory-box.sensory-orange { background: var(--sensory-orange-bg); border-color: var(--sensory-orange-border); color: var(--sensory-orange-text); }
+    .sensory-box.sensory-red { background: var(--sensory-red-bg); border-color: var(--sensory-red-border); color: var(--sensory-red-text); }
 
     /* Mobile Compact Mode Fixes */
     @media (max-width: 640px) {
@@ -146,7 +187,7 @@
       h1 { font-size: 2rem; }
       
       .grid.compact .card { flex-direction: column; align-items: stretch; gap: 0.75rem; padding: 1rem; }
-      .grid.compact .meta-item { grid-template-columns: 90px 1fr; }
+      .meta-item { grid-template-columns: 90px 1fr; }
       .grid.compact .card-actions { flex-direction: row; justify-content: space-between; width: 100%; border-top: 1px solid var(--border); padding-top: 0.75rem; }
       .grid.compact .pov-link { flex: 1; text-align: center; }
       .grid.compact .ride-thumb { display: none; }
@@ -159,7 +200,7 @@
 
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
     .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .tag { background: var(--badge-bg); color: var(--accent); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .tag { background: var(--badge-bg); color: var(--accent); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.35rem; }
     
     .fav-btn { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; transition: color 0.2s ease, transform 0.15s ease; line-height: 1; padding: 0; }
     .fav-btn:hover { transform: scale(1.15); color: var(--star-active); }
@@ -173,8 +214,6 @@
 
     .type-subtitle { color: var(--accent); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
     .details { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
-    
-    .sensory-box { background: var(--badge-bg); border-radius: 6px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; font-size: 0.85rem; border-left: 3px solid var(--accent); color: var(--text); }
     
     /* POV Video Button */
     .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.85rem; padding: 0.45rem 0.85rem; background: var(--yt-bg); color: var(--yt-red); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; width: 100%; }
@@ -204,7 +243,7 @@
       <button class="theme-toggle-btn" id="themeToggleBtn">
         <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
       </button>
-      <div class="version-badge">v18</div>
+      <div class="version-badge">v20</div>
     </div>
     <h1>Theme Park Ride Guide</h1>
     <p class="subtitle">Search, filter, and discover ride height requirements and details.</p>
@@ -335,6 +374,7 @@
     ];
 
     let allRides = [];
+    let parkDomainMap = {};
     let selectedCountries = [];
     let selectedParks = [];
     let selectedTypes = [];
@@ -406,6 +446,71 @@
         .replace(/[^a-z0-9]/g, "");
     }
 
+    function extractDomain(urlStr) {
+      if (!urlStr) return '';
+      try {
+        const url = new URL(urlStr.startsWith('http') ? urlStr : `https://${urlStr}`);
+        return url.hostname;
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function buildParkDomainMap(rides) {
+      parkDomainMap = {};
+      rides.forEach(r => {
+        if (r.park && !parkDomainMap[r.park]) {
+          const domain = extractDomain(r.rideUrl) || extractDomain(r.imageUrl);
+          if (domain) parkDomainMap[r.park] = domain;
+        }
+      });
+    }
+
+    function getFaviconHtml(parkName) {
+      const domain = parkDomainMap[parkName];
+      if (!domain) return '';
+      const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+      return `<img src="${faviconUrl}" class="park-favicon" alt="" onerror="this.style.display='none'">`;
+    }
+
+    /* Evaluates sensory severity level & returns appropriate color class */
+    function getSensorySeverityClass(sensoryText) {
+      if (!sensoryText) return 'sensory-green';
+      const text = String(sensoryText).toLowerCase().trim();
+
+      if (['none', 'nil', 'n/a', 'mild', 'low', 'gentle', 'no sensory issues'].includes(text)) {
+        return 'sensory-green';
+      }
+
+      // Count keywords matching standard categories
+      let hitCount = 0;
+      let hasStrobe = text.includes('strobe') || text.includes('flash');
+      let hasExtremeDrop = text.includes('extreme') || text.includes('launch') || text.includes('g-force');
+
+      SENSORY_TAGS.forEach(tag => {
+        if (tag.keywords.some(kw => text.includes(kw))) {
+          hitCount++;
+        }
+      });
+
+      // Red: High Severity (Multiple factors or intense warnings)
+      if (hitCount >= 3 || hasStrobe || hasExtremeDrop) {
+        return 'sensory-red';
+      }
+
+      // Orange: Moderate Severity (2 factors or standard intensity)
+      if (hitCount === 2 || text.includes('dark') || text.includes('loud') || text.includes('drop')) {
+        return 'sensory-orange';
+      }
+
+      // Yellow: Minor Severity (1 mild warning factor)
+      if (hitCount === 1) {
+        return 'sensory-yellow';
+      }
+
+      return 'sensory-green';
+    }
+
     function getActiveDataset() {
       if (currentView === 'favourites') {
         return allRides.filter(r => favourites.includes(getRideKey(r)));
@@ -423,6 +528,7 @@
         const response = await fetch(API_URL);
         allRides = await response.json();
 
+        buildParkDomainMap(allRides);
         updateFavBadge();
         reinitAllFilters();
         filterRides();
@@ -501,6 +607,7 @@
       container.innerHTML = parks.map(p => `
         <label class="dropdown-option">
           <input type="checkbox" value="${p}" ${selectedParks.includes(p) ? 'checked' : ''} class="park-cb">
+          ${getFaviconHtml(p)}
           <span>${p}</span>
         </label>
       `).join('');
@@ -888,13 +995,15 @@
           : r.ride;
 
         const povUrl = getPovVideoUrl(r.park, r.ride);
+        const faviconHtml = getFaviconHtml(r.park);
+        const sensorySeverityClass = getSensorySeverityClass(r.sensory);
 
         return `
           <div class="card">
             <div class="card-body">
               <div class="card-top">
                 <div class="tags">
-                  <span class="tag">${r.park}</span>
+                  <span class="tag">${faviconHtml}<span>${r.park}</span></span>
                 </div>
                 <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavourite('${rideKey}')" title="${isFav ? 'Remove from Favourites' : 'Add to Favourites'}">
                   ${isFav ? '★' : '☆'}
@@ -913,7 +1022,7 @@
                 <div class="meta-item"><span class="meta-label">Min Height:</span> <strong>${heightStr}</strong></div>
                 ${r.heightNotes ? `<div class="meta-item"><span class="meta-label">Height Notes:</span> <strong>${r.heightNotes}</strong></div>` : ''}
               </div>
-              ${r.sensory ? `<div class="sensory-box"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
+              ${r.sensory ? `<div class="sensory-box ${sensorySeverityClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
             </div>
 
             <div class="card-actions">
