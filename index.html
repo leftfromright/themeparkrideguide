@@ -322,7 +322,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v45</div>
+    <div class="version-badge" id="versionBadgeBtn">v46</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -507,7 +507,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v45';
+    const CACHE_KEY = 'theme_park_rides_cache_v46';
 
     const SENSORY_TAGS = [
       { id: 'dark', label: 'Dark / Low Light', keywords: ['dark', 'dim', 'shadow', 'night'] },
@@ -855,7 +855,7 @@
 
     function isUniversalPark(parkName) {
       const name = parkName.toLowerCase();
-      return name.includes('universal') || name.includes('islands of adventure') || name.includes('volcano bay');
+      return name.includes('universal') || name.includes('epic') || name.includes('islands of adventure') || name.includes('volcano bay');
     }
 
     function initParkFilter() {
