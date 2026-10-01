@@ -145,6 +145,8 @@
     .action-link { font-size: 0.75rem; color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
     .action-link:hover { text-decoration: underline; }
 
+    .dropdown-section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); margin: 0.5rem 0.5rem 0.2rem 0.5rem; letter-spacing: 0.05em; }
+
     .dropdown-option { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; color: var(--text); }
     .dropdown-option:hover { background: var(--badge-bg); }
     .dropdown-option input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
@@ -328,7 +330,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v47</div>
+    <div class="version-badge" id="versionBadgeBtn">v49</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -513,9 +515,10 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v47';
+    const CACHE_KEY = 'theme_park_rides_cache_v49';
 
     const SENSORY_TAGS = [
+      { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
       { id: 'dark', label: 'Dark / Low Light', keywords: ['dark', 'dim', 'shadow', 'night'] },
       { id: 'loud', label: 'Loud Noises', keywords: ['loud', 'noise', 'sound', 'audio', 'music', 'roar', 'explosion'] },
       { id: 'strobe', label: 'Strobes / Flashing', keywords: ['strobe', 'flash', 'lighting', 'light', 'laser'] },
@@ -523,6 +526,8 @@
       { id: 'water', label: 'Water / Wet', keywords: ['water', 'splash', 'wet', 'soak', 'river', 'rapids'] },
       { id: '3d', label: '3D / Screen / Sim', keywords: ['3d', '4d', 'screen', 'simulator', 'vr', 'projection'] }
     ];
+
+    const WATER_PARK_KEYWORDS = ['slide', 'water slide', 'lazy river', 'wave pool', 'raft ride', 'splash', 'water play'];
 
     const PARK_ICON_OVERRIDES = {
       'magic kingdom': '🏰',
@@ -731,7 +736,7 @@
 
       let matchedCount = 0;
       SENSORY_TAGS.forEach(t => {
-        if (t.keywords.some(kw => text.includes(kw))) matchedCount++;
+        if (t.id !== 'none' && t.keywords.some(kw => text.includes(kw))) matchedCount++;
       });
 
       if (matchedCount >= 3 || text.includes('strobe') || text.includes('extreme')) return 'severity-red';
@@ -913,20 +918,45 @@
       else btn.textContent = `Parks (${selectedParks.length})`;
     }
 
+    function isWaterParkType(typeName) {
+      const t = typeName.toLowerCase();
+      return WATER_PARK_KEYWORDS.some(kw => t.includes(kw)) || t.includes('water') || t.includes('slide') || t.includes('pool');
+    }
+
     function initTypeFilter() {
       const dataset = getActiveDataset();
       const availableRides = dataset.filter(r => selectedCountries.includes(r.country) && selectedParks.includes(r.park));
-      const types = [...new Set(availableRides.map(r => r.type).filter(Boolean))].sort();
+      const allTypes = [...new Set(availableRides.map(r => r.type).filter(Boolean))].sort();
 
-      selectedTypes = [...types];
+      selectedTypes = [...allTypes];
+
+      const themeParkTypes = allTypes.filter(t => !isWaterParkType(t));
+      const waterParkTypes = allTypes.filter(t => isWaterParkType(t));
 
       const container = document.getElementById('typeOptions');
-      container.innerHTML = types.map(t => `
-        <label class="dropdown-option">
-          <input type="checkbox" value="${t}" checked class="type-cb">
-          <span>${t}</span>
-        </label>
-      `).join('');
+      let html = '';
+
+      if (themeParkTypes.length > 0) {
+        html += `<div class="dropdown-section-title">🎢 Theme Park Rides</div>`;
+        html += themeParkTypes.map(t => `
+          <label class="dropdown-option">
+            <input type="checkbox" value="${t}" checked class="type-cb">
+            <span>${t}</span>
+          </label>
+        `).join('');
+      }
+
+      if (waterParkTypes.length > 0) {
+        html += `<div class="dropdown-section-title" style="margin-top: 0.75rem;">🌊 Water Park Rides</div>`;
+        html += waterParkTypes.map(t => `
+          <label class="dropdown-option">
+            <input type="checkbox" value="${t}" checked class="type-cb">
+            <span>${t}</span>
+          </label>
+        `).join('');
+      }
+
+      container.innerHTML = html;
 
       updateTypeBtnLabel();
 
@@ -989,11 +1019,17 @@
 
     function rideMatchesSensory(rideSensoryText) {
       if (selectedSensory.length === SENSORY_TAGS.length) return true;
-      if (!rideSensoryText && selectedSensory.length > 0) return true;
+      if (selectedSensory.length === 0) return false;
 
       const text = String(rideSensoryText || '').toLowerCase();
-      
+      const hasNoWarnings = (!text || text.includes('none') || text.includes('mild') || text.includes('gentle') || text.includes('calm'));
+
+      if (selectedSensory.includes('none') && hasNoWarnings) {
+        return true;
+      }
+
       return selectedSensory.some(tagId => {
+        if (tagId === 'none') return false;
         const tag = SENSORY_TAGS.find(t => t.id === tagId);
         if (!tag) return false;
         return tag.keywords.some(kw => text.includes(kw));
@@ -1061,7 +1097,6 @@
         }
       }
 
-      // Fallback to clipboard
       try {
         await navigator.clipboard.writeText(shareText);
         showToast('Favourites copied to clipboard!');
