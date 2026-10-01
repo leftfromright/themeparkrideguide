@@ -27,17 +27,32 @@
     input[type="text"] { flex: 1; min-width: 250px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; }
     input[type="text"]:focus { border-color: var(--accent); }
     
-    .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
-    select { flex: 1; min-width: 180px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; cursor: pointer; }
+    .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
 
-    /* Height Filter Controls */
-    .height-filter { flex: 2; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 1rem; }
-    .height-label { font-size: 0.9rem; color: var(--muted); white-space: nowrap; }
-    .height-label strong { color: var(--accent); font-size: 1rem; }
+    /* Custom Multi-Select Dropdowns */
+    .multiselect-container { position: relative; flex: 1; min-width: 220px; }
+    .multiselect-btn { width: 100%; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .multiselect-btn:after { content: '▼'; font-size: 0.7rem; color: var(--muted); }
+    
+    .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 260px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); padding: 0.5rem; }
+    .multiselect-dropdown.show { display: block; }
+    
+    .multiselect-actions { display: flex; justify-content: space-between; padding: 0.25rem 0.5rem 0.5rem 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; }
+    .action-link { font-size: 0.75rem; color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
+    .action-link:hover { text-decoration: underline; }
+
+    .dropdown-option { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; color: var(--text); }
+    .dropdown-option:hover { background: rgba(56, 189, 248, 0.1); }
+    .dropdown-option input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
+
+    /* Height Filter */
+    .height-filter { flex: 1.5; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 1rem; height: 48px; }
+    .height-label { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
+    .height-label strong { color: var(--accent); font-size: 0.95rem; }
     input[type="range"] { flex: 1; accent-color: var(--accent); cursor: pointer; }
     
     .unit-toggle { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-    .unit-btn { background: none; border: none; color: var(--muted); padding: 0.3rem 0.6rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+    .unit-btn { background: none; border: none; color: var(--muted); padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
     .unit-btn.active { background: var(--accent); color: var(--bg); }
 
     main { flex: 1; width: 100%; }
@@ -78,14 +93,31 @@
     </div>
     
     <div class="filter-row">
-      <select id="countyFilter">
-        <option value="all">All Counties</option>
-      </select>
+      <!-- County Multi-Select -->
+      <div class="multiselect-container">
+        <button class="multiselect-btn" id="countyBtn">Counties (All)</button>
+        <div class="multiselect-dropdown" id="countyDropdown">
+          <div class="multiselect-actions">
+            <span class="action-link" id="selectAllCounties">Select All</span>
+            <span class="action-link" id="deselectAllCounties">Deselect All</span>
+          </div>
+          <div id="countyOptions"></div>
+        </div>
+      </div>
 
-      <select id="parkFilter">
-        <option value="all">All Parks</option>
-      </select>
+      <!-- Park Multi-Select -->
+      <div class="multiselect-container">
+        <button class="multiselect-btn" id="parkBtn">Parks (All)</button>
+        <div class="multiselect-dropdown" id="parkDropdown">
+          <div class="multiselect-actions">
+            <span class="action-link" id="selectAllParks">Select All</span>
+            <span class="action-link" id="deselectAllParks">Deselect All</span>
+          </div>
+          <div id="parkOptions"></div>
+        </div>
+      </div>
 
+      <!-- Height Slider -->
       <div class="height-filter">
         <span class="height-label">Max Height: <strong id="heightValue">200 cm</strong></span>
         <input type="range" id="heightSlider" min="80" max="200" value="200" step="1">
@@ -112,15 +144,18 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
 
     let allRides = [];
-    let currentUnit = 'cm'; // 'cm' or 'inch'
+    let selectedCounties = [];
+    let selectedParks = [];
+    let currentUnit = 'cm';
 
     async function fetchRideData() {
       try {
         const response = await fetch(API_URL);
         allRides = await response.json();
 
-        populateCountyFilter(allRides);
-        populateParkFilter(allRides);
+        // Populate initial options
+        initCountyFilter();
+        initParkFilter();
         filterRides();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -128,38 +163,133 @@
       }
     }
 
-    function populateCountyFilter(rides) {
-      const countySelect = document.getElementById('countyFilter');
-      const counties = [...new Set(rides.map(r => r.county).filter(Boolean))].sort();
-      
-      countySelect.innerHTML = '<option value="all">All Counties</option>';
-      counties.forEach(county => {
-        const option = document.createElement('option');
-        option.value = county;
-        option.textContent = county;
-        countySelect.appendChild(option);
+    function initCountyFilter() {
+      const counties = [...new Set(allRides.map(r => r.county || r.country).filter(Boolean))].sort();
+      selectedCounties = [...counties]; // Default: all selected
+
+      const container = document.getElementById('countyOptions');
+      container.innerHTML = counties.map(c => `
+        <label class="dropdown-option">
+          <input type="checkbox" value="${c}" checked class="county-cb">
+          <span>${c}</span>
+        </label>
+      `).join('');
+
+      updateCountyBtnLabel();
+
+      document.querySelectorAll('.county-cb').forEach(cb => {
+        cb.addEventListener('change', () => {
+          updateCountySelections();
+          initParkFilter(); // Refresh park options based on selected counties
+          filterRides();
+        });
       });
     }
 
-    function populateParkFilter(rides) {
-      const parkSelect = document.getElementById('parkFilter');
-      const selectedCounty = document.getElementById('countyFilter').value;
-      
-      const filteredForPark = selectedCounty === 'all' 
-        ? rides 
-        : rides.filter(r => r.county === selectedCounty);
+    function updateCountySelections() {
+      const cbs = document.querySelectorAll('.county-cb');
+      selectedCounties = Array.from(cbs).filter(cb => cb.checked).map(cb => cb.value);
+      updateCountyBtnLabel();
+    }
 
-      const parks = [...new Set(filteredForPark.map(r => r.park).filter(Boolean))].sort();
+    function updateCountyBtnLabel() {
+      const total = document.querySelectorAll('.county-cb').length;
+      const btn = document.getElementById('countyBtn');
+      if (selectedCounties.length === total) btn.textContent = 'Counties (All)';
+      else if (selectedCounties.length === 0) btn.textContent = 'Counties (None)';
+      else btn.textContent = `Counties (${selectedCounties.length})`;
+    }
+
+    function initParkFilter() {
+      // Filter parks by currently selected counties
+      const availableRides = allRides.filter(r => selectedCounties.includes(r.county || r.country));
+      const parks = [...new Set(availableRides.map(r => r.park).filter(Boolean))].sort();
       
-      parkSelect.innerHTML = '<option value="all">All Parks</option>';
-      parks.forEach(park => {
-        const option = document.createElement('option');
-        option.value = park;
-        option.textContent = park;
-        parkSelect.appendChild(option);
+      // Preserve existing selections where still available
+      selectedParks = selectedParks.filter(p => parks.includes(p));
+      if (selectedParks.length === 0) selectedParks = [...parks];
+
+      const container = document.getElementById('parkOptions');
+      container.innerHTML = parks.map(p => `
+        <label class="dropdown-option">
+          <input type="checkbox" value="${p}" ${selectedParks.includes(p) ? 'checked' : ''} class="park-cb">
+          <span>${p}</span>
+        </label>
+      `).join('');
+
+      updateParkBtnLabel();
+
+      document.querySelectorAll('.park-cb').forEach(cb => {
+        cb.addEventListener('change', () => {
+          updateParkSelections();
+          filterRides();
+        });
       });
     }
 
+    function updateParkSelections() {
+      const cbs = document.querySelectorAll('.park-cb');
+      selectedParks = Array.from(cbs).filter(cb => cb.checked).map(cb => cb.value);
+      updateParkBtnLabel();
+    }
+
+    function updateParkBtnLabel() {
+      const total = document.querySelectorAll('.park-cb').length;
+      const btn = document.getElementById('parkBtn');
+      if (selectedParks.length === total) btn.textContent = 'Parks (All)';
+      else if (selectedParks.length === 0) btn.textContent = 'Parks (None)';
+      else btn.textContent = `Parks (${selectedParks.length})`;
+    }
+
+    // Toggle Dropdown Visibility
+    document.getElementById('countyBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('countyDropdown').classList.toggle('show');
+      document.getElementById('parkDropdown').classList.remove('show');
+    });
+
+    document.getElementById('parkBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('parkDropdown').classList.toggle('show');
+      document.getElementById('countyDropdown').classList.remove('show');
+    });
+
+    document.addEventListener('click', () => {
+      document.getElementById('countyDropdown').classList.remove('show');
+      document.getElementById('parkDropdown').classList.remove('show');
+    });
+
+    document.getElementById('countyDropdown').addEventListener('click', e => e.stopPropagation());
+    document.getElementById('parkDropdown').addEventListener('click', e => e.stopPropagation());
+
+    // Action Links (Select All / Deselect All)
+    document.getElementById('selectAllCounties').addEventListener('click', () => {
+      document.querySelectorAll('.county-cb').forEach(cb => cb.checked = true);
+      updateCountySelections();
+      initParkFilter();
+      filterRides();
+    });
+
+    document.getElementById('deselectAllCounties').addEventListener('click', () => {
+      document.querySelectorAll('.county-cb').forEach(cb => cb.checked = false);
+      updateCountySelections();
+      initParkFilter();
+      filterRides();
+    });
+
+    document.getElementById('selectAllParks').addEventListener('click', () => {
+      document.querySelectorAll('.park-cb').forEach(cb => cb.checked = true);
+      updateParkSelections();
+      filterRides();
+    });
+
+    document.getElementById('deselectAllParks').addEventListener('click', () => {
+      document.querySelectorAll('.park-cb').forEach(cb => cb.checked = false);
+      updateParkSelections();
+      filterRides();
+    });
+
+    // Slider & Unit Toggle
     function updateSliderConfig() {
       const slider = document.getElementById('heightSlider');
       if (currentUnit === 'cm') {
@@ -195,7 +325,7 @@
             <div>
               <div class="tags">
                 <span class="tag">${r.park}</span>
-                ${r.county ? `<span class="tag location">${r.county}</span>` : ''}
+                ${(r.county || r.country) ? `<span class="tag location">${r.county || r.country}</span>` : ''}
               </div>
               <h2>${r.ride}</h2>
               ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
@@ -217,8 +347,6 @@
 
     function filterRides() {
       const search = document.getElementById('searchInput').value.toLowerCase();
-      const selectedCounty = document.getElementById('countyFilter').value;
-      const selectedPark = document.getElementById('parkFilter').value;
       const maxHeight = Number(document.getElementById('heightSlider').value);
 
       const filtered = allRides.filter(r => {
@@ -229,11 +357,10 @@
           (r.details && r.details.toLowerCase().includes(search)) ||
           (r.location && r.location.toLowerCase().includes(search));
           
-        const matchesCounty = selectedCounty === 'all' || r.county === selectedCounty;
-        const matchesPark = selectedPark === 'all' || r.park === selectedPark;
+        const matchesCounty = selectedCounties.includes(r.county || r.country);
+        const matchesPark = selectedParks.includes(r.park);
         
-        // Height condition check
-        const rideHeight = currentUnit === 'cm' ? (r.minHeightCm || 0) : (r.minHeightInch || 0);
+        const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
         const matchesHeight = rideHeight <= maxHeight;
 
         return matchesSearch && matchesCounty && matchesPark && matchesHeight;
@@ -242,15 +369,8 @@
       renderRides(filtered);
     }
 
-    // Event Listeners
+    // Input Listeners
     document.getElementById('searchInput').addEventListener('input', filterRides);
-    
-    document.getElementById('countyFilter').addEventListener('change', () => {
-      populateParkFilter(allRides);
-      filterRides();
-    });
-    
-    document.getElementById('parkFilter').addEventListener('change', filterRides);
 
     document.getElementById('heightSlider').addEventListener('input', (e) => {
       document.getElementById('heightValue').textContent = `${e.target.value} ${currentUnit}`;
