@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en-GB" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Theme Park Ride Guide</title>
   <style>
-    :root {
+    /* Dark Theme (Default) */
+    [data-theme="dark"] {
       --bg: #0f172a;
       --card-bg: #1e293b;
       --accent: #38bdf8;
@@ -16,37 +17,60 @@
       --star-active: #f59e0b;
       --yt-red: #ef4444;
       --yt-bg: rgba(239, 68, 68, 0.1);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      --input-bg: #1e293b;
+    }
+
+    /* Family Friendly Light Theme */
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --accent: #0284c7;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --badge-bg: rgba(2, 132, 199, 0.1);
+      --star-active: #d97706;
+      --yt-red: #dc2626;
+      --yt-bg: rgba(220, 38, 38, 0.08);
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      --input-bg: #ffffff;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; }
+    body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; transition: background-color 0.3s ease, color 0.3s ease; }
     
     header { max-width: 1000px; margin: 0 auto 1.5rem auto; text-align: center; width: 100%; position: relative; }
-    .version-badge { position: absolute; top: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; }
+    .header-top-bar { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .version-badge { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; }
     
+    /* Theme Toggle Button */
+    .theme-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem; }
+    .theme-toggle-btn:hover { border-color: var(--accent); }
+
     h1 { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.5rem; letter-spacing: -0.025em; }
     p.subtitle { color: var(--muted); font-size: 1.1rem; margin-bottom: 1rem; }
 
     /* View Switcher */
     .view-nav { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; }
-    .nav-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem; }
+    .nav-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem; box-shadow: var(--shadow); }
     .nav-btn:hover { color: var(--text); border-color: var(--accent); }
-    .nav-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
-    .nav-badge { background: rgba(0, 0, 0, 0.2); padding: 0.1rem 0.4rem; border-radius: 12px; font-size: 0.75rem; }
+    .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+    .nav-badge { background: rgba(0, 0, 0, 0.15); color: inherit; padding: 0.1rem 0.4rem; border-radius: 12px; font-size: 0.75rem; }
 
     .controls { max-width: 1000px; margin: 0 auto 2rem auto; display: flex; flex-direction: column; gap: 1rem; width: 100%; }
     .search-row { display: flex; gap: 1rem; flex-wrap: wrap; }
-    input[type="text"] { flex: 1; min-width: 250px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; }
+    input[type="text"] { flex: 1; min-width: 250px; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; box-shadow: var(--shadow); transition: border-color 0.2s ease; }
     input[type="text"]:focus { border-color: var(--accent); }
     
     .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
 
     /* Custom Multi-Select Dropdowns */
     .multiselect-container { position: relative; flex: 1; min-width: 180px; }
-    .multiselect-btn { width: 100%; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .multiselect-btn { width: 100%; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
     .multiselect-btn:after { content: '▼'; font-size: 0.7rem; color: var(--muted); }
     
-    .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); padding: 0.5rem; }
+    .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 0.5rem; }
     .multiselect-dropdown.show { display: block; }
     
     .multiselect-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: space-between; padding: 0.25rem 0.5rem 0.5rem 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; }
@@ -55,23 +79,23 @@
     .action-link:hover { text-decoration: underline; }
 
     .dropdown-option { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; color: var(--text); }
-    .dropdown-option:hover { background: rgba(56, 189, 248, 0.1); }
+    .dropdown-option:hover { background: var(--badge-bg); }
     .dropdown-option input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
 
     /* Height Filter */
-    .height-filter { flex: 1.5; min-width: 260px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 1rem; height: 48px; }
+    .height-filter { flex: 1.5; min-width: 260px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 1rem; height: 48px; box-shadow: var(--shadow); }
     .height-label { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
     .height-label strong { color: var(--accent); font-size: 0.95rem; }
     input[type="range"] { flex: 1; accent-color: var(--accent); cursor: pointer; }
     
     .unit-toggle { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
     .unit-btn { background: none; border: none; color: var(--muted); padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
-    .unit-btn.active { background: var(--accent); color: var(--bg); }
+    .unit-btn.active { background: var(--accent); color: #ffffff; }
 
     main { flex: 1; width: 100%; }
     .grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
     
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease; overflow: hidden; position: relative; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; overflow: hidden; position: relative; box-shadow: var(--shadow); }
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
     
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
@@ -88,12 +112,12 @@
 
     .ride-thumb { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin: 0.5rem 0 0.75rem 0; border: 1px solid var(--border); background-color: var(--bg); }
 
-    .type-subtitle { color: var(--accent); font-size: 0.9rem; font-weight: 500; margin-bottom: 0.75rem; }
+    .type-subtitle { color: var(--accent); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.75rem; }
     .details { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
     
     .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; color: var(--muted); display: flex; flex-direction: column; gap: 0.4rem; }
     .meta-item strong { color: var(--text); }
-    .sensory-box { background: rgba(0, 0, 0, 0.2); border-radius: 6px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; font-size: 0.85rem; border-left: 3px solid var(--accent); }
+    .sensory-box { background: var(--badge-bg); border-radius: 6px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; font-size: 0.85rem; border-left: 3px solid var(--accent); color: var(--text); }
     
     /* POV Video Button */
     .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.85rem; padding: 0.45rem 0.85rem; background: var(--yt-bg); color: var(--yt-red); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; width: 100%; }
@@ -109,7 +133,12 @@
 <body>
 
   <header>
-    <div class="version-badge">v13</div>
+    <div class="header-top-bar">
+      <button class="theme-toggle-btn" id="themeToggleBtn">
+        <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
+      </button>
+      <div class="version-badge">v14</div>
+    </div>
     <h1>Theme Park Ride Guide</h1>
     <p class="subtitle">Search, filter, and discover ride height requirements and details.</p>
     
@@ -202,6 +231,35 @@
     let currentUnit = 'cm';
     let currentView = 'all';
 
+    // Theme Management
+    let currentTheme = localStorage.getItem('site_theme') || 'dark';
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('site_theme', theme);
+      currentTheme = theme;
+
+      const icon = document.getElementById('themeIcon');
+      const label = document.getElementById('themeLabel');
+
+      if (theme === 'light') {
+        icon.textContent = '🌙';
+        label.textContent = 'Dark Mode';
+      } else {
+        icon.textContent = '☀️';
+        label.textContent = 'Light Mode';
+      }
+    }
+
+    document.getElementById('themeToggleBtn').addEventListener('click', () => {
+      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+    });
+
+    // Initialize Theme immediately on page load
+    applyTheme(currentTheme);
+
+    // Favourites State
     let favourites = JSON.parse(localStorage.getItem('ride_favourites') || '[]');
 
     function saveFavourites() {
@@ -245,7 +303,6 @@
       return allRides;
     }
 
-    // Age-filtered YouTube POV URL Generator
     function getPovVideoUrl(parkName, rideName) {
       const query = encodeURIComponent(`${parkName} ${rideName} ride POV official family friendly`);
       return `https://www.youtube.com/results?search_query=${query}&safe=active`;
