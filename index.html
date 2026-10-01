@@ -232,6 +232,9 @@
       .hero-content h1 { font-size: 1.4rem; }
       .hero-content p { font-size: 0.8rem; }
 
+      /* Make Search and Sort equal width on mobile */
+      .top-controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+
       .filter-row { display: flex; flex-direction: column; gap: 0.75rem; }
       .multiselect-container, .height-filter, .btn-secondary { width: 100%; }
       .height-filter { height: auto; padding: 0.5rem 1rem; }
@@ -314,7 +317,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v42</div>
+    <div class="version-badge" id="versionBadgeBtn">v43</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -499,7 +502,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v42';
+    const CACHE_KEY = 'theme_park_rides_cache_v43';
 
     const SENSORY_TAGS = [
       { id: 'dark', label: 'Dark / Low Light', keywords: ['dark', 'dim', 'shadow', 'night'] },
@@ -510,30 +513,34 @@
       { id: '3d', label: '3D / Screen / Sim', keywords: ['3d', '4d', 'screen', 'simulator', 'vr', 'projection'] }
     ];
 
-    const PARK_DOMAIN_OVERRIDES = {
-      'magic kingdom': 'disneyworld.disney.go.com',
-      'epcot': 'disneyworld.disney.go.com',
-      'disney\'s animal kingdom': 'disneyworld.disney.go.com',
-      'animal kingdom': 'disneyworld.disney.go.com',
-      'disney\'s hollywood studios': 'disneyworld.disney.go.com',
-      'hollywood studios': 'disneyworld.disney.go.com',
-      'disneyland park': 'disneyland.disney.go.com',
-      'disney california adventure': 'disneyland.disney.go.com',
-      'disneyland paris': 'disneylandparis.com',
+    const PARK_ICON_OVERRIDES = {
+      'magic kingdom': '🏰',
+      'epcot': '🌐',
+      'disney\'s animal kingdom': '🌳',
+      'animal kingdom': '🌳',
+      'disney\'s hollywood studios': '🎬',
+      'hollywood studios': '🎬',
+      'disneyland park': '🏰',
+      'disney california adventure': '🎡',
+      'disneyland paris': '🏰',
+      'blizzard beach': '❄️',
+      'typhoon lagoon': '🌋',
       
-      'universal studios florida': 'universalorlando.com',
-      'universal studios hollywood': 'universalstudioshollywood.com',
-      'universal\'s islands of adventure': 'universalorlando.com',
-      'islands of adventure': 'universalorlando.com',
-      'universal epic universe': 'universalorlando.com',
-      'epic universe': 'universalorlando.com',
-      'universal\'s volcano bay': 'universalorlando.com',
-      'volcano bay': 'universalorlando.com',
+      'universal epic universe': '⚡',
+      'epic universe': '⚡',
+      'universal studios florida': '🌍',
+      'universal studios hollywood': '🎬',
+      'universal\'s islands of adventure': '🦖',
+      'islands of adventure': '🦖',
+      'universal\'s volcano bay': '🌋',
+      'volcano bay': '🌋',
       
-      'legoland': 'legoland.com',
-      'legoland windsor': 'legoland.co.uk',
-      'legoland florida': 'legoland.com',
+      'legoland': '🧱',
+      'legoland windsor': '🧱',
+      'legoland florida': '🧱'
+    };
 
+    const PARK_DOMAIN_OVERRIDES = {
       'alton towers': 'altontowers.com',
       'chessington world of adventures': 'chessington.com',
       'thorpe park': 'thorpepark.com'
@@ -684,7 +691,14 @@
       if (!parkName) return '';
       const normPark = parkName.toLowerCase().trim();
 
-      // Check explicit domain overrides first
+      // Check explicit symbol/emoji overrides first (Disney, Universal, Legoland)
+      for (const [key, icon] of Object.entries(PARK_ICON_OVERRIDES)) {
+        if (normPark.includes(key)) {
+          return `<span style="font-size: 0.95rem; line-height: 1;">${icon}</span>`;
+        }
+      }
+
+      // Check domain favicon overrides for UK parks
       let domain = PARK_DOMAIN_OVERRIDES[normPark];
       if (!domain) {
         domain = parkDomainMap[parkName];
