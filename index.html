@@ -557,37 +557,45 @@
       }).join('');
     }
 
-    function filterRides() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const maxHeight = Number(document.getElementById('heightSlider').value);
+ function filterRides() {
+  const search = document.getElementById('searchInput').value.trim().toLowerCase();
+  const maxHeight = Number(document.getElementById('heightSlider').value);
 
-      const filtered = allRides.filter(r => {
-        const rideKey = getRideKey(r);
-        
-        // Check Favourites Filter Mode
-        if (currentView === 'favourites' && !favourites.includes(rideKey)) {
-          return false;
-        }
-
-        const matchesSearch = 
-          (r.ride && r.ride.toLowerCase().includes(search)) ||
-          (r.park && r.park.toLowerCase().includes(search)) ||
-          (r.type && r.type.toLowerCase().includes(search)) ||
-          (r.details && r.details.toLowerCase().includes(search)) ||
-          (r.location && r.location.toLowerCase().includes(search));
-          
-        const matchesCountry = selectedCountries.includes(r.country);
-        const matchesPark = selectedParks.includes(r.park);
-        const matchesType = selectedTypes.includes(r.type);
-        
-        const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
-        const matchesHeight = rideHeight <= maxHeight;
-
-        return matchesSearch && matchesCountry && matchesPark && matchesType && matchesHeight;
-      });
-
-      renderRides(filtered);
+  const filtered = allRides.filter(r => {
+    const rideKey = getRideKey(r);
+    
+    // Check Favourites Filter Mode
+    if (currentView === 'favourites' && !favourites.includes(rideKey)) {
+      return false;
     }
+
+    // Convert fields safely to string
+    const rideName = String(r.ride || '').toLowerCase();
+    const parkName = String(r.park || '').toLowerCase();
+    const rideType = String(r.type || '').toLowerCase();
+    const rideDetails = String(r.details || '').toLowerCase();
+    const rideLocation = String(r.location || '').toLowerCase();
+
+    // Search logic
+    const matchesSearch = !search || 
+      rideName.includes(search) ||
+      parkName.includes(search) ||
+      rideType.includes(search) ||
+      rideDetails.includes(search) ||
+      rideLocation.includes(search);
+      
+    const matchesCountry = selectedCountries.includes(r.country);
+    const matchesPark = selectedParks.includes(r.park);
+    const matchesType = selectedTypes.includes(r.type);
+    
+    const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
+    const matchesHeight = rideHeight <= maxHeight;
+
+    return matchesSearch && matchesCountry && matchesPark && matchesType && matchesHeight;
+  });
+
+  renderRides(filtered);
+}
 
     // Input Listeners
     document.getElementById('searchInput').addEventListener('input', filterRides);
