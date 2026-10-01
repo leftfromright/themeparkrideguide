@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Park Ride Guide</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.5; }
+    
+    header { max-width: 1000px; margin: 0 auto 2rem auto; text-align: center; }
+    h1 { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.5rem; letter-spacing: -0.025em; }
+    p.subtitle { color: var(--muted); font-size: 1.1rem; }
+
+    .controls { max-width: 1000px; margin: 0 auto 2rem auto; display: flex; gap: 1rem; flex-wrap: wrap; }
+    input[type="text"] { flex: 1; min-width: 250px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; }
+    input[type="text"]:focus { border-color: var(--accent); }
+    
+    select { padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; cursor: pointer; }
+
+    .grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: transform 0.2s ease, border-color 0.2s ease; }
+    .card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    
+    .tag { display: inline-block; background: rgba(56, 189, 248, 0.1); color: var(--accent); padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; text-transform: uppercase; }
+    .card h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
+    
+    .meta { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 0.75rem; }
+    .meta span strong { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Theme Park Ride Guide</h1>
+    <p class="subtitle">Search, filter, and review top rides across Disney, Universal, and world parks.</p>
+  </header>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search ride name or description...">
+    <select id="parkFilter">
+      <option value="all">All Parks</option>
+      <option value="Disney">Disney Parks</option>
+      <option value="Universal">Universal Studios</option>
+      <option value="Alton Towers">Alton Towers</option>
+    </select>
+  </div>
+
+  <div class="grid" id="rideGrid">
+    <!-- Ride cards render here -->
+  </div>
+
+  <script>
+    const sampleRides = [
+      { name: "Space Mountain", park: "Disney", type: "Indoor Coaster", thrill: "High", minHeight: "112 cm", desc: "Classic dark rollercoaster through outer space." },
+      { name: "VelociCoaster", park: "Universal", type: "Launch Coaster", thrill: "Extreme", minHeight: "130 cm", desc: "High-speed intense coaster weaving through raptor paddocks." },
+      { name: "The Smiler", park: "Alton Towers", type: "Inversion Coaster", thrill: "Extreme", minHeight: "140 cm", desc: "World record holding rollercoaster with 14 inversions." },
+      { name: "Haunted Mansion", park: "Disney", type: "Dark Ride", thrill: "Low", minHeight: "None", desc: "Slow-moving dark ride through a ghost-filled estate." }
+    ];
+
+    function renderRides(rides) {
+      const grid = document.getElementById('rideGrid');
+      grid.innerHTML = rides.map(ride => `
+        <div class="card">
+          <span class="tag">${ride.park}</span>
+          <h2>${ride.name}</h2>
+          <p>${ride.desc}</p>
+          <div class="meta">
+            <span>Thrill: <strong>${ride.thrill}</strong></span>
+            <span>Height: <strong>${ride.minHeight}</strong></span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterRides() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const park = document.getElementById('parkFilter').value;
+
+      const filtered = sampleRides.filter(ride => {
+        const matchesSearch = ride.name.toLowerCase().includes(search) || ride.desc.toLowerCase().includes(search);
+        const matchesPark = park === 'all' || ride.park === park;
+        return matchesSearch && matchesPark;
+      });
+
+      renderRides(filtered);
+    }
+
+    document.getElementById('searchInput').addEventListener('input', filterRides);
+    document.getElementById('parkFilter').addEventListener('change', filterRides);
+
+    renderRides(sampleRides);
+  </script>
+
+</body>
+</html>
