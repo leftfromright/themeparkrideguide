@@ -345,7 +345,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v56</div>
+    <div class="version-badge" id="versionBadgeBtn">v57</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -542,7 +542,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v56';
+    const CACHE_KEY = 'theme_park_rides_cache_v57';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -670,7 +670,7 @@
         icon.textContent = '🌙';
         label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀️️';
+        icon.textContent = '☀️';
         label.textContent = 'Light Mode';
       }
     }
@@ -717,10 +717,9 @@
         .replace(/[^a-z0-9]/g, "");
     }
 
-    // Direct mapping for Column M: QueuePass
+    // Read queuePass from Apps Script JSON
     function getQueuePass(r) {
-      const val = r.queuePass ?? r.queuepass ?? r['QueuePass'] ?? r['Queue Pass'] ?? '';
-      return String(val).trim();
+      return String(r.queuePass || '').trim();
     }
 
     function hasQueuePass(r) {
@@ -728,10 +727,9 @@
       return val !== '' && val.toLowerCase() !== 'no' && val.toLowerCase() !== 'n/a' && val.toLowerCase() !== 'none';
     }
 
-    // Direct mapping for Column N: ThemeParkWikiRideID
+    // Read themeParkWikiRideID from Apps Script JSON (Column N)
     function getRideUuid(r) {
-      const uuid = r.themeParkWikiRideID ?? r.themeparkwikirideid ?? r.themeParkWikiId ?? r.wikiId ?? r.uuid ?? '';
-      return String(uuid).trim().toLowerCase();
+      return String(r.themeParkWikiRideID || '').trim().toLowerCase();
     }
 
     function extractDomain(urlStr) {
@@ -751,7 +749,7 @@
           const normPark = r.park.toLowerCase().trim();
           let domain = PARK_DOMAIN_OVERRIDES[normPark];
           if (!domain) {
-            domain = extractDomain(r.rideUrl) || extractDomain(r.rideImage);
+            domain = extractDomain(r.rideUrl) || extractDomain(r.imageUrl);
           }
           if (domain) parkDomainMap[r.park] = domain;
         }
@@ -827,20 +825,6 @@
     }
 
     async function fetchRideData() {
-      const cached = localStorage.getItem(CACHE_KEY);
-      
-      if (cached) {
-        try {
-          allRides = preprocessRides(JSON.parse(cached));
-          buildParkDomainMap(allRides);
-          updateFavBadge();
-          reinitAllFilters();
-          filterRides();
-        } catch (e) {
-          console.error('Cache parse error:', e);
-        }
-      }
-
       try {
         const response = await fetch(API_URL);
         const freshRides = await response.json();
@@ -849,20 +833,24 @@
         allRides = preprocessRides(freshRides);
         buildParkDomainMap(allRides);
         updateFavBadge();
-        
-        if (!cached) {
-          reinitAllFilters();
-        }
+        reinitAllFilters();
         filterRides();
       } catch (error) {
         console.error('Error fetching data:', error);
-        if (!cached) {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          allRides = preprocessRides(JSON.parse(cached));
+          buildParkDomainMap(allRides);
+          updateFavBadge();
+          reinitAllFilters();
+          filterRides();
+        } else {
           document.getElementById('rideGrid').innerHTML = '<div class="loading">Failed to load ride data.</div>';
         }
       }
     }
 
-    // Direct UUID & Park Stream Live Wait Times Engine
+    // Live Wait Times mapped via ThemeParkWikiRideID UUIDs
     async function fetchLiveWaitTimes() {
       if (isFetchingLive) return;
       isFetchingLive = true;
@@ -873,7 +861,6 @@
 
       const uniqueParks = [...new Set(allRides.map(r => r.park.toLowerCase().trim()))];
 
-      // 1. Fetch park live streams for known parks
       for (const parkName of uniqueParks) {
         const wikiId = THEME_PARKS_WIKI_IDS[parkName];
         if (!wikiId) continue;
@@ -883,42 +870,15 @@
           const data = await res.json();
           if (data && data.live) {
             data.live.forEach(item => {
-              if (item.entityType === 'ATTRACTION') {
+              if (item.entityType === 'ATTRACTION' && item.id) {
                 const wait = item.queue && item.queue.STANDBY ? item.queue.STANDBY.waitTime : null;
                 const status = item.status || 'OPERATING';
-                
-                if (item.id) {
-                  liveWaitData[item.id.toLowerCase()] = { waitTime: wait, status: status };
-                }
-                const normName = normalizeText(item.name);
-                liveWaitData[normName] = { waitTime: wait, status: status };
+                liveWaitData[item.id.toLowerCase()] = { waitTime: wait, status: status };
               }
             });
           }
         } catch (err) {
           console.error(`Failed to fetch live times for park ${parkName}:`, err);
-        }
-      }
-
-      // 2. Direct fetch for any rides with ThemeParkWikiRideID UUIDs not captured in park streams
-      const missingUuids = [...new Set(
-        allRides
-          .map(r => getRideUuid(r))
-          .filter(uuid => uuid && uuid.length > 10 && !liveWaitData[uuid])
-      )];
-
-      for (const uuid of missingUuids) {
-        try {
-          const res = await fetch(`https://api.themeparks.wiki/v1/entity/${uuid}/live`);
-          const data = await res.json();
-          if (data && data.live && data.live.length > 0) {
-            const item = data.live[0];
-            const wait = item.queue && item.queue.STANDBY ? item.queue.STANDBY.waitTime : null;
-            const status = item.status || 'OPERATING';
-            liveWaitData[uuid] = { waitTime: wait, status: status };
-          }
-        } catch (err) {
-          console.error(`Failed direct fetch for UUID ${uuid}:`, err);
         }
       }
 
@@ -1217,7 +1177,7 @@
 
       let shareText = '🎢 My Theme Park Ride Favourites:\n\n';
       favRides.forEach(r => {
-        let h = r.minimumHeightCm ? ` (Min Height: ${r.minimumHeightCm}cm)` : '';
+        let h = r.minHeightCm ? ` (Min Height: ${r.minHeightCm}cm)` : '';
         shareText += `• ${r.ride} (${r.park})${h}\n`;
       });
       shareText += `\nShared via Theme Park Ride Guide`;
@@ -1442,12 +1402,12 @@
         } else if (sortVal === 'park-asc') {
           return String(a.park).localeCompare(String(b.park));
         } else if (sortVal === 'height-asc') {
-          const hA = currentUnit === 'cm' ? (a.minimumHeightCm || 0) : (a.minimumHeightInch || 0);
-          const hB = currentUnit === 'cm' ? (b.minimumHeightCm || 0) : (b.minimumHeightInch || 0);
+          const hA = currentUnit === 'cm' ? (a.minHeightCm || 0) : (a.minHeightInch || 0);
+          const hB = currentUnit === 'cm' ? (b.minHeightCm || 0) : (b.minHeightInch || 0);
           return hA - hB;
         } else if (sortVal === 'height-desc') {
-          const hA = currentUnit === 'cm' ? (a.minimumHeightCm || 0) : (a.minimumHeightInch || 0);
-          const hB = currentUnit === 'cm' ? (b.minimumHeightCm || 0) : (b.minimumHeightInch || 0);
+          const hA = currentUnit === 'cm' ? (a.minHeightCm || 0) : (a.minHeightInch || 0);
+          const hB = currentUnit === 'cm' ? (b.minHeightCm || 0) : (b.minHeightInch || 0);
           return hB - hA;
         }
         return 0;
@@ -1485,10 +1445,10 @@
         const showPassIcon = hasQueuePass(r);
 
         let heightStr = 'None';
-        if (r.minimumHeightCm && r.minimumHeightInch) {
-          heightStr = `${r.minimumHeightCm} cm (${r.minimumHeightInch}")`;
-        } else if (r.minimumHeightCm) {
-          heightStr = `${r.minimumHeightCm} cm`;
+        if (r.minHeightCm && r.minHeightInch) {
+          heightStr = `${r.minHeightCm} cm (${r.minHeightInch}")`;
+        } else if (r.minHeightCm) {
+          heightStr = `${r.minHeightCm} cm`;
         }
 
         const titleHtml = r.rideUrl 
@@ -1502,8 +1462,7 @@
         let liveBadgeHtml = '';
         if (showLiveWaitTimes) {
           const rideUuid = getRideUuid(r);
-          const normRide = normalizeText(r.ride);
-          const liveInfo = (rideUuid && liveWaitData[rideUuid]) || liveWaitData[normRide];
+          const liveInfo = rideUuid ? liveWaitData[rideUuid] : null;
           
           if (liveInfo) {
             if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
@@ -1538,7 +1497,7 @@
               ${r.details ? `<p class="details">${r.details}</p>` : ''}
             </div>
 
-            ${r.rideImage ? `<img src="${r.rideImage}" alt="${r.ride}" class="ride-thumb" loading="lazy" decoding="async" onerror="this.style.display='none'">` : ''}
+            ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" decoding="async" onerror="this.style.display='none'">` : ''}
 
             <div class="card-meta">
               <div class="meta-list">
@@ -1586,7 +1545,7 @@
         const matchesType = selectedTypes.includes(r.type);
         const matchesSensory = rideMatchesSensory(r.sensory);
         
-        const rideHeight = currentUnit === 'cm' ? (Number(r.minimumHeightCm) || 0) : (Number(r.minimumHeightInch) || 0);
+        const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
         const matchesHeight = rideHeight <= maxHeight;
 
         return matchesSearch && matchesCountry && matchesPark && matchesType && matchesSensory && matchesHeight;
