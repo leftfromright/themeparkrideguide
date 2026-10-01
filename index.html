@@ -169,6 +169,15 @@
     .grid.compact .sensory-box { display: block; margin-top: 0.35rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
     .grid.compact .pov-link { width: auto; margin-top: 0; padding: 0.4rem 0.75rem; }
 
+    /* Skeleton Loading State Styles */
+    .skeleton-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; width: 100%; max-width: 1000px; margin: 0 auto; }
+    .skeleton-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; height: 260px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
+    .skeleton-line { background: var(--border); border-radius: 4px; height: 16px; animation: pulse 1.4s infinite ease-in-out; }
+    .skeleton-line.title { height: 22px; width: 65%; }
+    .skeleton-line.short { width: 35%; }
+    .skeleton-line.long { width: 85%; }
+    @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 0.7; } 100% { opacity: 0.3; } }
+
     @media (max-width: 640px) {
       body { padding: 1rem 0.75rem; }
       h1 { font-size: 2rem; }
@@ -205,7 +214,6 @@
     .type-subtitle { color: var(--accent); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
     .details { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
     
-    /* Dynamic Sensory Severity Styling */
     .sensory-box { border-radius: 6px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; font-size: 0.85rem; border-left: 3px solid var(--accent); color: var(--text); background: var(--badge-bg); }
     
     .sensory-box.severity-green { background: var(--sensory-green-bg); border-left-color: var(--sensory-green-border); color: var(--sensory-green-text); }
@@ -213,7 +221,6 @@
     .sensory-box.severity-orange { background: var(--sensory-orange-bg); border-left-color: var(--sensory-orange-border); color: var(--sensory-orange-text); }
     .sensory-box.severity-red { background: var(--sensory-red-bg); border-left-color: var(--sensory-red-border); color: var(--sensory-red-text); }
 
-    /* Neutral POV Button */
     .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.85rem; padding: 0.45rem 0.85rem; background: var(--yt-bg); color: var(--yt-text); border: 1px solid var(--yt-border); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; width: 100%; }
     .pov-link:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
@@ -241,7 +248,7 @@
       <button class="theme-toggle-btn" id="themeToggleBtn">
         <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
       </button>
-      <div class="version-badge">v25</div>
+      <div class="version-badge">v26</div>
     </div>
     <h1>Theme Park Ride Guide</h1>
     <p class="subtitle">Search, filter, and discover ride height requirements and details.</p>
@@ -334,7 +341,7 @@
       </div>
     </div>
 
-    <!-- Relocated Reset Filters Row -->
+    <!-- Reset Filters Row -->
     <div class="reset-row">
       <button class="btn-secondary" id="clearFiltersBtn">↺ Reset All Filters</button>
     </div>
@@ -353,7 +360,53 @@
 
   <main>
     <div class="grid" id="rideGrid">
-      <div class="loading">Loading ride data...</div>
+      <!-- Initial Skeleton Placeholder Loader -->
+      <div class="skeleton-grid">
+        <div class="skeleton-card">
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line long"></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line long"></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line long"></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line long"></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -364,9 +417,8 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v25';
+    const CACHE_KEY = 'theme_park_rides_cache_v26';
 
-    // Standardized Sensory Tag Definitions
     const SENSORY_TAGS = [
       { id: 'dark', label: 'Dark / Low Light', keywords: ['dark', 'dim', 'shadow', 'night'] },
       { id: 'loud', label: 'Loud Noises', keywords: ['loud', 'noise', 'sound', 'audio', 'music', 'roar', 'explosion'] },
@@ -376,7 +428,6 @@
       { id: '3d', label: '3D / Screen / Sim', keywords: ['3d', '4d', 'screen', 'simulator', 'vr', 'projection'] }
     ];
 
-    // Distinct SVG/Emoji icons for specific parks and brands
     const PARK_ICON_OVERRIDES = {
       'magic kingdom': '🏰',
       'epcot': '🌐',
@@ -555,11 +606,9 @@
       }));
     }
 
-    // Fast Data Loading with LocalStorage Caching
     async function fetchRideData() {
       const cached = localStorage.getItem(CACHE_KEY);
       
-      // 1. Load instantly from LocalStorage cache if available
       if (cached) {
         try {
           allRides = preprocessRides(JSON.parse(cached));
@@ -572,7 +621,6 @@
         }
       }
 
-      // 2. Quiet background fetch to keep data up to date
       try {
         const response = await fetch(API_URL);
         const freshRides = await response.json();
@@ -800,7 +848,6 @@
       });
     }
 
-    // View Navigation Toggles
     document.getElementById('viewAllBtn').addEventListener('click', () => {
       if (currentView === 'all') return;
       currentView = 'all';
@@ -825,7 +872,6 @@
       window.print();
     });
 
-    // Display Mode Toggles
     document.getElementById('cardViewBtn').addEventListener('click', () => {
       isCompact = false;
       document.getElementById('cardViewBtn').classList.add('active');
@@ -840,7 +886,6 @@
       document.getElementById('rideGrid').classList.add('compact');
     });
 
-    // Reset All Filters
     document.getElementById('clearFiltersBtn').addEventListener('click', () => {
       document.getElementById('searchInput').value = '';
       const slider = document.getElementById('heightSlider');
@@ -850,7 +895,6 @@
       filterRides();
     });
 
-    // Dropdown Visibility Toggles
     function closeDropdowns() {
       document.getElementById('countryDropdown').classList.remove('show');
       document.getElementById('parkDropdown').classList.remove('show');
@@ -879,7 +923,6 @@
     document.getElementById('typeDropdown').addEventListener('click', e => e.stopPropagation());
     document.getElementById('sensoryDropdown').addEventListener('click', e => e.stopPropagation());
 
-    // Select/Deselect Links
     document.getElementById('selectAllCountries').addEventListener('click', () => {
       document.querySelectorAll('.country-cb').forEach(cb => cb.checked = true);
       updateCountrySelections();
@@ -952,7 +995,6 @@
       filterRides();
     });
 
-    // Height Slider & Unit Toggle
     function updateSliderConfig() {
       const slider = document.getElementById('heightSlider');
       if (currentUnit === 'cm') {
@@ -1032,7 +1074,6 @@
       });
     }
 
-    // Infinite-Scroll Chunked Rendering
     function renderRidesBatch() {
       const grid = document.getElementById('rideGrid');
       const dataset = getActiveDataset();
@@ -1107,7 +1148,6 @@
       }).join('');
     }
 
-    // Scroll trigger for Next Batch
     window.addEventListener('scroll', () => {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
         if (displayedCount < currentFilteredRides.length) {
@@ -1138,12 +1178,11 @@
       });
 
       currentFilteredRides = sortRides(filtered);
-      displayedCount = 24; // Reset chunking window
+      displayedCount = 24;
       renderActivePills();
       renderRidesBatch();
     }
 
-    // Input Listeners
     document.getElementById('searchInput').addEventListener('input', filterRides);
     document.getElementById('sortSelect').addEventListener('change', filterRides);
 
