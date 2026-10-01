@@ -60,10 +60,10 @@
 
     .controls { max-width: 1000px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; gap: 1rem; width: 100%; }
     .search-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
-    input[type="text"] { flex: 2; min-width: 220px; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; box-shadow: var(--shadow); transition: border-color 0.2s ease; }
+    input[type="text"] { flex: 2; min-width: 200px; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; box-shadow: var(--shadow); transition: border-color 0.2s ease; }
     input[type="text"]:focus { border-color: var(--accent); }
     
-    select.sort-select { flex: 1; min-width: 160px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: var(--shadow); }
+    select.sort-select { flex: 1; min-width: 150px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: var(--shadow); }
 
     .btn-secondary { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; box-shadow: var(--shadow); }
     .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
@@ -71,11 +71,11 @@
     .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
 
     /* Custom Multi-Select Dropdowns */
-    .multiselect-container { position: relative; flex: 1; min-width: 160px; }
+    .multiselect-container { position: relative; flex: 1; min-width: 150px; }
     .multiselect-btn { width: 100%; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
     .multiselect-btn:after { content: '▼'; font-size: 0.7rem; color: var(--muted); }
     
-    .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 0.5rem; }
+    .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 0.5rem; min-width: 200px; }
     .multiselect-dropdown.show { display: block; }
     
     .multiselect-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: space-between; padding: 0.25rem 0.5rem 0.5rem 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; }
@@ -88,7 +88,7 @@
     .dropdown-option input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
 
     /* Height Filter */
-    .height-filter { flex: 1.5; min-width: 250px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 1rem; height: 48px; box-shadow: var(--shadow); }
+    .height-filter { flex: 1.5; min-width: 240px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem; height: 48px; box-shadow: var(--shadow); }
     .height-label { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
     .height-label strong { color: var(--accent); font-size: 0.95rem; }
     input[type="range"] { flex: 1; accent-color: var(--accent); cursor: pointer; }
@@ -111,21 +111,39 @@
 
     main { flex: 1; width: 100%; }
     
-    /* Grid vs Compact Modes */
+    /* Grid Mode */
     .grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-    .grid.compact { grid-template-columns: 1fr; gap: 0.75rem; }
     
     /* Expanded Card */
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; overflow: hidden; position: relative; box-shadow: var(--shadow); }
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
     
-    /* Compact Card Style */
-    .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; gap: 1rem; }
-    .grid.compact .ride-thumb { width: 70px; height: 70px; margin: 0; flex-shrink: 0; }
-    .grid.compact .card-body { flex: 1; }
-    .grid.compact .meta-list { border-top: none; padding-top: 0; flex-direction: row; gap: 1.5rem; margin-top: 0.25rem; }
-    .grid.compact .sensory-box { display: none; }
-    .grid.compact .pov-link { width: auto; margin-top: 0; }
+    /* Desktop Compact Mode */
+    .grid.compact { grid-template-columns: 1fr; gap: 0.75rem; }
+    .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1rem; }
+    .grid.compact .card-body { flex: 1.2; min-width: 0; }
+    .grid.compact .card-meta { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; }
+    .grid.compact .card-actions { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+    .grid.compact .ride-thumb { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
+    .grid.compact .meta-list { border-top: none; padding-top: 0; flex-direction: column; gap: 0.2rem; }
+    .grid.compact .sensory-box, .grid.compact .details { display: none; }
+    .grid.compact .pov-link { width: auto; margin-top: 0; padding: 0.4rem 0.75rem; }
+
+    /* Mobile Compact Mode Fixes */
+    @media (max-width: 640px) {
+      body { padding: 1rem 0.75rem; }
+      h1 { font-size: 2rem; }
+      
+      .grid.compact .card { flex-direction: column; align-items: stretch; gap: 0.75rem; padding: 1rem; }
+      .grid.compact .card-actions { flex-direction: row; justify-content: space-between; width: 100%; border-top: 1px solid var(--border); padding-top: 0.75rem; }
+      .grid.compact .pov-link { flex: 1; text-align: center; }
+      .grid.compact .ride-thumb { display: none; }
+      
+      .controls { gap: 0.75rem; }
+      .search-row { flex-direction: column; align-items: stretch; }
+      select.sort-select, .btn-secondary { width: 100%; }
+      .height-filter { width: 100%; }
+    }
 
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
     .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
@@ -135,7 +153,7 @@
     .fav-btn:hover { transform: scale(1.15); color: var(--star-active); }
     .fav-btn.active { color: var(--star-active); }
 
-    .card h2 { font-size: 1.3rem; margin-bottom: 0.25rem; color: var(--text); padding-right: 0.5rem; }
+    .card h2 { font-size: 1.3rem; margin-bottom: 0.25rem; color: var(--text); padding-right: 0.5rem; word-break: break-word; }
     .card h2 a { color: inherit; text-decoration: none; }
     .card h2 a:hover { color: var(--accent); text-decoration: underline; }
 
@@ -158,7 +176,6 @@
     footer p { margin-bottom: 0.4rem; }
     footer .legal { font-size: 0.75rem; opacity: 0.7; }
 
-    /* Print Specific Styles */
     @media print {
       body { background: #ffffff !important; color: #000000 !important; padding: 0 !important; }
       header, .controls, .status-bar, footer, .pov-link, .fav-btn, .version-badge { display: none !important; }
@@ -177,7 +194,7 @@
       <button class="theme-toggle-btn" id="themeToggleBtn">
         <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
       </button>
-      <div class="version-badge">v15</div>
+      <div class="version-badge">v16</div>
     </div>
     <h1>Theme Park Ride Guide</h1>
     <p class="subtitle">Search, filter, and discover ride height requirements and details.</p>
@@ -297,11 +314,21 @@
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
 
+    // Standardized Sensory Tag Definitions
+    const SENSORY_TAGS = [
+      { id: 'dark', label: 'Dark / Low Light', keywords: ['dark', 'dim', 'shadow', 'night'] },
+      { id: 'loud', label: 'Loud Noises', keywords: ['loud', 'noise', 'sound', 'audio', 'music', 'roar', 'explosion'] },
+      { id: 'strobe', label: 'Strobes / Flashing', keywords: ['strobe', 'flash', 'lighting', 'light', 'laser'] },
+      { id: 'drops', label: 'Sudden Drops / Motion', keywords: ['drop', 'launch', 'speed', 'motion', 'g-force', 'fast', 'invert', 'loop'] },
+      { id: 'water', label: 'Water / Wet', keywords: ['water', 'splash', 'wet', 'soak', 'river', 'rapids'] },
+      { id: '3d', label: '3D / Screen / Sim', keywords: ['3d', '4d', 'screen', 'simulator', 'vr', 'projection'] }
+    ];
+
     let allRides = [];
     let selectedCountries = [];
     let selectedParks = [];
     let selectedTypes = [];
-    let selectedSensory = [];
+    let selectedSensory = SENSORY_TAGS.map(t => t.id);
     let currentUnit = 'cm';
     let currentView = 'all';
     let isCompact = false;
@@ -321,7 +348,7 @@
         icon.textContent = '🌙';
         label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀️️';
+        icon.textContent = '☀️';
         label.textContent = 'Light Mode';
       }
     }
@@ -422,7 +449,6 @@
           updateCountrySelections();
           initParkFilter();
           initTypeFilter();
-          initSensoryFilter();
           filterRides();
         });
       });
@@ -482,7 +508,6 @@
         cb.addEventListener('change', () => {
           updateParkSelections();
           initTypeFilter();
-          initSensoryFilter();
           filterRides();
         });
       });
@@ -524,7 +549,6 @@
       document.querySelectorAll('.type-cb').forEach(cb => {
         cb.addEventListener('change', () => {
           updateTypeSelections();
-          initSensoryFilter();
           filterRides();
         });
       });
@@ -546,18 +570,12 @@
     }
 
     function initSensoryFilter() {
-      const dataset = getActiveDataset();
-      const availableRides = dataset.filter(r => selectedCountries.includes(r.country) && selectedParks.includes(r.park) && selectedTypes.includes(r.type));
-      const items = [...new Set(availableRides.map(r => r.sensory).filter(Boolean))].sort();
-
-      selectedSensory = selectedSensory.filter(s => items.includes(s));
-      if (selectedSensory.length === 0) selectedSensory = [...items];
-
+      selectedSensory = SENSORY_TAGS.map(t => t.id);
       const container = document.getElementById('sensoryOptions');
-      container.innerHTML = items.map(s => `
+      container.innerHTML = SENSORY_TAGS.map(t => `
         <label class="dropdown-option">
-          <input type="checkbox" value="${s}" ${selectedSensory.includes(s) ? 'checked' : ''} class="sensory-cb">
-          <span>${s}</span>
+          <input type="checkbox" value="${t.id}" checked class="sensory-cb">
+          <span>${t.label}</span>
         </label>
       `).join('');
 
@@ -578,12 +596,24 @@
     }
 
     function updateSensoryBtnLabel() {
-      const total = document.querySelectorAll('.sensory-cb').length;
+      const total = SENSORY_TAGS.length;
       const btn = document.getElementById('sensoryBtn');
-      if (total === 0) btn.textContent = 'Sensory (None)';
-      else if (selectedSensory.length === total) btn.textContent = 'Sensory (All)';
+      if (selectedSensory.length === total) btn.textContent = 'Sensory (All)';
       else if (selectedSensory.length === 0) btn.textContent = 'Sensory (None)';
       else btn.textContent = `Sensory (${selectedSensory.length})`;
+    }
+
+    function rideMatchesSensory(rideSensoryText) {
+      if (selectedSensory.length === SENSORY_TAGS.length) return true;
+      if (!rideSensoryText && selectedSensory.length > 0) return true;
+
+      const text = String(rideSensoryText || '').toLowerCase();
+      
+      return selectedSensory.some(tagId => {
+        const tag = SENSORY_TAGS.find(t => t.id === tagId);
+        if (!tag) return false;
+        return tag.keywords.some(kw => text.includes(kw));
+      });
     }
 
     // View Navigation Toggles
@@ -671,7 +701,6 @@
       updateCountrySelections();
       initParkFilter();
       initTypeFilter();
-      initSensoryFilter();
       filterRides();
     });
 
@@ -680,7 +709,6 @@
       updateCountrySelections();
       initParkFilter();
       initTypeFilter();
-      initSensoryFilter();
       filterRides();
     });
 
@@ -688,7 +716,6 @@
       document.querySelectorAll('.park-cb').forEach(cb => cb.checked = true);
       updateParkSelections();
       initTypeFilter();
-      initSensoryFilter();
       filterRides();
     });
 
@@ -696,7 +723,6 @@
       document.querySelectorAll('.park-cb').forEach(cb => cb.checked = false);
       updateParkSelections();
       initTypeFilter();
-      initSensoryFilter();
       filterRides();
     });
 
@@ -706,7 +732,6 @@
       });
       updateParkSelections();
       initTypeFilter();
-      initSensoryFilter();
       filterRides();
     });
 
@@ -716,21 +741,18 @@
       });
       updateParkSelections();
       initTypeFilter();
-      initSensoryFilter();
       filterRides();
     });
 
     document.getElementById('selectAllTypes').addEventListener('click', () => {
       document.querySelectorAll('.type-cb').forEach(cb => cb.checked = true);
       updateTypeSelections();
-      initSensoryFilter();
       filterRides();
     });
 
     document.getElementById('deselectAllTypes').addEventListener('click', () => {
       document.querySelectorAll('.type-cb').forEach(cb => cb.checked = false);
       updateTypeSelections();
-      initSensoryFilter();
       filterRides();
     });
 
@@ -785,8 +807,7 @@
         pills.push({ label: `Types: ${selectedTypes.length}`, clear: () => { document.getElementById('selectAllTypes').click(); } });
       }
 
-      const totalSensory = document.querySelectorAll('.sensory-cb').length;
-      if (selectedSensory.length > 0 && selectedSensory.length < totalSensory) {
+      if (selectedSensory.length > 0 && selectedSensory.length < SENSORY_TAGS.length) {
         pills.push({ label: `Sensory: ${selectedSensory.length}`, clear: () => { document.getElementById('selectAllSensory').click(); } });
       }
 
@@ -876,15 +897,18 @@
 
             ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" onerror="this.style.display='none'">` : ''}
 
-            <div>
+            <div class="card-meta">
               <div class="meta-list">
                 ${r.location ? `<div class="meta-item">Area: <strong>${r.location}</strong></div>` : ''}
                 <div class="meta-item">Min Height: <strong>${heightStr}</strong></div>
                 ${r.heightNotes ? `<div class="meta-item">Height Notes: <strong>${r.heightNotes}</strong></div>` : ''}
               </div>
               ${r.sensory ? `<div class="sensory-box"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
+            </div>
+
+            <div class="card-actions">
               <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link">
-                ▶ Watch POV Video
+                ▶ Watch POV
               </a>
             </div>
           </div>
@@ -916,7 +940,7 @@
         const matchesCountry = selectedCountries.includes(r.country);
         const matchesPark = selectedParks.includes(r.park);
         const matchesType = selectedTypes.includes(r.type);
-        const matchesSensory = !r.sensory || selectedSensory.includes(r.sensory);
+        const matchesSensory = rideMatchesSensory(r.sensory);
         
         const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
         const matchesHeight = rideHeight <= maxHeight;
