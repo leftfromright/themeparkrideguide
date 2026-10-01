@@ -122,13 +122,23 @@
     .grid.compact { grid-template-columns: 1fr; gap: 0.75rem; }
     .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.25rem; }
     .grid.compact .card-body { flex: 1.2; min-width: 0; }
-    .grid.compact .card-meta { flex: 1.2; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+    .grid.compact .card-meta { flex: 1.4; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
     .grid.compact .card-actions { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
     .grid.compact .ride-thumb { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
-    .grid.compact .meta-list { border-top: none; padding-top: 0; flex-direction: column; gap: 0.2rem; }
+    
+    /* Align 3 objects without table outlines in Compact View */
+    .grid.compact .meta-list { border-top: none; padding-top: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+    .grid.compact .meta-item { display: grid; grid-template-columns: 95px 1fr; gap: 0.5rem; align-items: baseline; font-size: 0.85rem; }
+    .grid.compact .meta-label { color: var(--muted); white-space: nowrap; }
+    .grid.compact .meta-item strong { color: var(--text); }
+
     .grid.compact .details { display: block; font-size: 0.85rem; margin-bottom: 0.25rem; line-height: 1.3; }
     .grid.compact .sensory-box { display: block; margin-top: 0.35rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
     .grid.compact .pov-link { width: auto; margin-top: 0; padding: 0.4rem 0.75rem; }
+
+    /* Expanded Grid Standard Meta Layout */
+    .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; color: var(--muted); display: flex; flex-direction: column; gap: 0.4rem; }
+    .meta-item strong { color: var(--text); }
 
     /* Mobile Compact Mode Fixes */
     @media (max-width: 640px) {
@@ -136,6 +146,7 @@
       h1 { font-size: 2rem; }
       
       .grid.compact .card { flex-direction: column; align-items: stretch; gap: 0.75rem; padding: 1rem; }
+      .grid.compact .meta-item { grid-template-columns: 90px 1fr; }
       .grid.compact .card-actions { flex-direction: row; justify-content: space-between; width: 100%; border-top: 1px solid var(--border); padding-top: 0.75rem; }
       .grid.compact .pov-link { flex: 1; text-align: center; }
       .grid.compact .ride-thumb { display: none; }
@@ -163,8 +174,6 @@
     .type-subtitle { color: var(--accent); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
     .details { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
     
-    .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; color: var(--muted); display: flex; flex-direction: column; gap: 0.4rem; }
-    .meta-item strong { color: var(--text); }
     .sensory-box { background: var(--badge-bg); border-radius: 6px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; font-size: 0.85rem; border-left: 3px solid var(--accent); color: var(--text); }
     
     /* POV Video Button */
@@ -195,7 +204,7 @@
       <button class="theme-toggle-btn" id="themeToggleBtn">
         <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
       </button>
-      <div class="version-badge">v17</div>
+      <div class="version-badge">v18</div>
     </div>
     <h1>Theme Park Ride Guide</h1>
     <p class="subtitle">Search, filter, and discover ride height requirements and details.</p>
@@ -900,9 +909,9 @@
 
             <div class="card-meta">
               <div class="meta-list">
-                ${r.location ? `<div class="meta-item">Area: <strong>${r.location}</strong></div>` : ''}
-                <div class="meta-item">Min Height: <strong>${heightStr}</strong></div>
-                ${r.heightNotes ? `<div class="meta-item">Height Notes: <strong>${r.heightNotes}</strong></div>` : ''}
+                ${r.location ? `<div class="meta-item"><span class="meta-label">Area:</span> <strong>${r.location}</strong></div>` : ''}
+                <div class="meta-item"><span class="meta-label">Min Height:</span> <strong>${heightStr}</strong></div>
+                ${r.heightNotes ? `<div class="meta-item"><span class="meta-label">Height Notes:</span> <strong>${r.heightNotes}</strong></div>` : ''}
               </div>
               ${r.sensory ? `<div class="sensory-box"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
             </div>
