@@ -13,20 +13,21 @@
       --text: #f8fafc;
       --muted: #94a3b8;
       --border: #334155;
-      --badge-bg: rgba(56, 189, 248, 0.12);
+      --badge-bg: rgba(56, 189, 248, 0.1);
       --star-active: #f59e0b;
-      --pov-bg: rgba(255, 255, 255, 0.05);
-      --pov-border: #334155;
-      --pov-text: #f8fafc;
+      --yt-red: #ef4444;
+      --yt-bg: rgba(56, 189, 248, 0.08);
+      --yt-border: rgba(56, 189, 248, 0.25);
+      --yt-text: #38bdf8;
       --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
       --input-bg: #1e293b;
 
-      /* Sensory Severity Dark Mode Tokens */
-      --sensory-green-bg: rgba(34, 197, 94, 0.12);
+      /* Sensory Severity Colors */
+      --sensory-green-bg: rgba(34, 197, 94, 0.1);
       --sensory-green-border: #22c55e;
       --sensory-green-text: #4ade80;
 
-      --sensory-yellow-bg: rgba(234, 179, 8, 0.12);
+      --sensory-yellow-bg: rgba(234, 179, 8, 0.1);
       --sensory-yellow-border: #eab308;
       --sensory-yellow-text: #fde047;
 
@@ -47,20 +48,21 @@
       --text: #0f172a;
       --muted: #64748b;
       --border: #e2e8f0;
-      --badge-bg: rgba(2, 132, 199, 0.12);
+      --badge-bg: rgba(2, 132, 199, 0.1);
       --star-active: #d97706;
-      --pov-bg: rgba(15, 23, 42, 0.04);
-      --pov-border: #cbd5e1;
-      --pov-text: #0f172a;
+      --yt-red: #dc2626;
+      --yt-bg: rgba(2, 132, 199, 0.08);
+      --yt-border: rgba(2, 132, 199, 0.25);
+      --yt-text: #0284c7;
       --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
       --input-bg: #ffffff;
 
-      /* Sensory Severity Light Mode Tokens */
+      /* Sensory Severity Colors */
       --sensory-green-bg: rgba(34, 197, 94, 0.08);
       --sensory-green-border: #16a34a;
       --sensory-green-text: #15803d;
 
-      --sensory-yellow-bg: rgba(234, 179, 8, 0.08);
+      --sensory-yellow-bg: rgba(234, 179, 8, 0.1);
       --sensory-yellow-border: #ca8a04;
       --sensory-yellow-text: #854d0e;
 
@@ -80,21 +82,18 @@
     .header-top-bar { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
     .version-badge { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; }
     
-    /* Theme Toggle Button */
     .theme-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem; }
     .theme-toggle-btn:hover { border-color: var(--accent); }
 
     h1 { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.5rem; letter-spacing: -0.025em; }
     p.subtitle { color: var(--muted); font-size: 1.1rem; margin-bottom: 1rem; }
 
-    /* View Switcher */
     .view-nav { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .nav-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem; box-shadow: var(--shadow); }
     .nav-btn:hover { color: var(--text); border-color: var(--accent); }
     .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
     .nav-badge { background: rgba(0, 0, 0, 0.15); color: inherit; padding: 0.1rem 0.4rem; border-radius: 12px; font-size: 0.75rem; }
 
-    /* Control & Filter Layout Styles */
     .controls { max-width: 1000px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; gap: 1rem; width: 100%; }
     .search-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
     input[type="text"] { flex: 2; min-width: 200px; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; box-shadow: var(--shadow); transition: border-color 0.2s ease; }
@@ -102,13 +101,12 @@
     
     select.sort-select { flex: 1; min-width: 150px; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: var(--shadow); }
 
-    .reset-row { display: flex; justify-content: flex-end; margin-top: 0.25rem; }
-    .btn-secondary { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.25rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; box-shadow: var(--shadow); }
+    .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
+    
+    .reset-row { display: flex; justify-content: flex-end; margin-top: -0.25rem; }
+    .btn-secondary { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; box-shadow: var(--shadow); }
     .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
-    .filter-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
-
-    /* Custom Multi-Select Dropdowns */
     .multiselect-container { position: relative; flex: 1; min-width: 150px; }
     .multiselect-btn { width: 100%; padding: 0.75rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
     .multiselect-btn:after { content: '▼'; font-size: 0.7rem; color: var(--muted); }
@@ -125,11 +123,8 @@
     .dropdown-option:hover { background: var(--badge-bg); }
     .dropdown-option input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
 
-    /* Park Favicon / Custom Icon Styling */
     .park-favicon { width: 16px; height: 16px; border-radius: 3px; object-fit: contain; vertical-align: middle; flex-shrink: 0; background: rgba(255,255,255,0.2); }
-    .park-custom-icon { font-size: 0.95rem; line-height: 1; flex-shrink: 0; }
 
-    /* Height Filter */
     .height-filter { flex: 1.5; min-width: 240px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem; height: 48px; box-shadow: var(--shadow); }
     .height-label { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
     .height-label strong { color: var(--accent); font-size: 0.95rem; }
@@ -139,7 +134,6 @@
     .unit-btn { background: none; border: none; color: var(--muted); padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
     .unit-btn.active { background: var(--accent); color: #ffffff; }
 
-    /* Status Bar & Active Filter Pills */
     .status-bar { max-width: 1000px; margin: 0 auto 1.25rem auto; display: flex; flex-direction: column; gap: 0.75rem; width: 100%; }
     .meta-counts { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--muted); }
     .display-toggle { display: flex; gap: 0.5rem; align-items: center; }
@@ -153,20 +147,11 @@
 
     main { flex: 1; width: 100%; }
     
-    /* Grid Mode */
     .grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
     
-    /* Expanded Card */
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; overflow: hidden; position: relative; box-shadow: var(--shadow); }
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
-
-    /* Metadata Column Alignment Grid */
-    .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.35rem; }
-    .meta-item { display: grid; grid-template-columns: 95px 1fr; gap: 0.5rem; align-items: baseline; font-size: 0.85rem; }
-    .meta-label { color: var(--muted); white-space: nowrap; }
-    .meta-item strong { color: var(--text); word-break: break-word; }
     
-    /* Desktop Compact Mode */
     .grid.compact { grid-template-columns: 1fr; gap: 0.75rem; }
     .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.25rem; }
     .grid.compact .card-body { flex: 1.2; min-width: 0; }
@@ -174,63 +159,39 @@
     .grid.compact .card-actions { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
     .grid.compact .ride-thumb { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
     
-    .grid.compact .meta-list { border-top: none; padding-top: 0; gap: 0.3rem; }
+    .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; color: var(--muted); display: flex; flex-direction: column; gap: 0.3rem; }
+    .meta-item { display: grid; grid-template-columns: 95px 1fr; gap: 0.5rem; align-items: baseline; }
+    .meta-label { color: var(--muted); white-space: nowrap; }
+    .meta-item strong { color: var(--text); }
+
+    .grid.compact .meta-list { border-top: none; padding-top: 0; }
     .grid.compact .details { display: block; font-size: 0.85rem; margin-bottom: 0.25rem; line-height: 1.3; }
     .grid.compact .sensory-box { display: block; margin-top: 0.35rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
     .grid.compact .pov-link { width: auto; margin-top: 0; padding: 0.4rem 0.75rem; }
 
-    /* Sensory Box Severity Color Coding */
-    .sensory-box { border-radius: 6px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; font-size: 0.85rem; border-left: 3.5px solid; transition: all 0.2s ease; }
-    .sensory-box.sensory-green { background: var(--sensory-green-bg); border-color: var(--sensory-green-border); color: var(--sensory-green-text); }
-    .sensory-box.sensory-yellow { background: var(--sensory-yellow-bg); border-color: var(--sensory-yellow-border); color: var(--sensory-yellow-text); }
-    .sensory-box.sensory-orange { background: var(--sensory-orange-bg); border-color: var(--sensory-orange-border); color: var(--sensory-orange-text); }
-    .sensory-box.sensory-red { background: var(--sensory-red-bg); border-color: var(--sensory-red-border); color: var(--sensory-red-text); }
-
-    /* Mobile Responsive Tweaks */
     @media (max-width: 640px) {
       body { padding: 1rem 0.75rem; }
       h1 { font-size: 2rem; }
       
       .grid.compact .card { flex-direction: column; align-items: stretch; gap: 0.75rem; padding: 1rem; }
-      .meta-item { grid-template-columns: 90px 1fr; }
+      .grid.compact .meta-item, .meta-item { grid-template-columns: 90px 1fr; }
       .grid.compact .card-actions { flex-direction: row; justify-content: space-between; width: 100%; border-top: 1px solid var(--border); padding-top: 0.75rem; }
       .grid.compact .pov-link { flex: 1; text-align: center; }
       .grid.compact .ride-thumb { display: none; }
       
       .controls { gap: 0.75rem; }
       .search-row { flex-direction: column; align-items: stretch; }
-      select.sort-select { width: 100%; }
-      .reset-row { justify-content: stretch; }
-      .btn-secondary { width: 100%; text-align: center; }
+      select.sort-select, .btn-secondary { width: 100%; }
       .height-filter { width: 100%; }
     }
 
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
     .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     
-    /* Interactive Clickable Park Tag */
-    .tag { 
-      background: var(--badge-bg); 
-      color: var(--accent); 
-      padding: 0.25rem 0.6rem; 
-      border-radius: 6px; 
-      font-size: 0.75rem; 
-      font-weight: 600; 
-      text-transform: uppercase; 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 0.4rem; 
-      cursor: pointer; 
-      border: 1px solid transparent; 
-      transition: all 0.2s ease; 
-      user-select: none;
-    }
-    .tag:hover { 
-      border-color: var(--accent); 
-      transform: translateY(-1px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
+    .tag { background: var(--badge-bg); color: var(--accent); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.35rem; transition: background 0.2s ease, color 0.2s ease; }
+    .tag.clickable { cursor: pointer; }
+    .tag.clickable:hover { background: var(--accent); color: #ffffff; }
+
     .fav-btn { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; transition: color 0.2s ease, transform 0.15s ease; line-height: 1; padding: 0; }
     .fav-btn:hover { transform: scale(1.15); color: var(--star-active); }
     .fav-btn.active { color: var(--star-active); }
@@ -244,29 +205,17 @@
     .type-subtitle { color: var(--accent); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
     .details { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
     
-    /* POV Video Button - Subtle Neutral / Theme Matching Style */
-    .pov-link { 
-      display: inline-flex; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 0.4rem; 
-      margin-top: 0.85rem; 
-      padding: 0.5rem 0.9rem; 
-      background: var(--pov-bg); 
-      color: var(--pov-text); 
-      border: 1px solid var(--pov-border); 
-      border-radius: 6px; 
-      font-size: 0.825rem; 
-      font-weight: 600; 
-      text-decoration: none; 
-      transition: all 0.2s ease; 
-      width: 100%; 
-    }
-    .pov-link:hover { 
-      background: var(--accent); 
-      color: #ffffff; 
-      border-color: var(--accent); 
-    }
+    /* Dynamic Sensory Severity Styling */
+    .sensory-box { border-radius: 6px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; font-size: 0.85rem; border-left: 3px solid var(--accent); color: var(--text); background: var(--badge-bg); }
+    
+    .sensory-box.severity-green { background: var(--sensory-green-bg); border-left-color: var(--sensory-green-border); color: var(--sensory-green-text); }
+    .sensory-box.severity-yellow { background: var(--sensory-yellow-bg); border-left-color: var(--sensory-yellow-border); color: var(--sensory-yellow-text); }
+    .sensory-box.severity-orange { background: var(--sensory-orange-bg); border-left-color: var(--sensory-orange-border); color: var(--sensory-orange-text); }
+    .sensory-box.severity-red { background: var(--sensory-red-bg); border-left-color: var(--sensory-red-border); color: var(--sensory-red-text); }
+
+    /* Neutral POV Button */
+    .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.85rem; padding: 0.45rem 0.85rem; background: var(--yt-bg); color: var(--yt-text); border: 1px solid var(--yt-border); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; width: 100%; }
+    .pov-link:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
     .loading { text-align: center; color: var(--muted); font-size: 1.2rem; grid-column: 1 / -1; padding: 3rem 0; }
 
@@ -292,7 +241,7 @@
       <button class="theme-toggle-btn" id="themeToggleBtn">
         <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
       </button>
-      <div class="version-badge">v24</div>
+      <div class="version-badge">v25</div>
     </div>
     <h1>Theme Park Ride Guide</h1>
     <p class="subtitle">Search, filter, and discover ride height requirements and details.</p>
@@ -385,9 +334,9 @@
       </div>
     </div>
 
-    <!-- Relocated Reset Filters Button (Below Height Slider) -->
+    <!-- Relocated Reset Filters Row -->
     <div class="reset-row">
-      <button class="btn-secondary" id="clearFiltersBtn">Reset All Filters</button>
+      <button class="btn-secondary" id="clearFiltersBtn">↺ Reset All Filters</button>
     </div>
   </div>
 
@@ -415,7 +364,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY_FAVICONS = 'park_favicon_cache_v1';
+    const CACHE_KEY = 'theme_park_rides_cache_v25';
 
     // Standardized Sensory Tag Definitions
     const SENSORY_TAGS = [
@@ -427,9 +376,8 @@
       { id: '3d', label: '3D / Screen / Sim', keywords: ['3d', '4d', 'screen', 'simulator', 'vr', 'projection'] }
     ];
 
-// Distinct SVG/Emoji icons for specific parks and brands
+    // Distinct SVG/Emoji icons for specific parks and brands
     const PARK_ICON_OVERRIDES = {
-      // Disney Parks
       'magic kingdom': '🏰',
       'epcot': '🌐',
       'disney\'s animal kingdom': '🌳',
@@ -442,7 +390,6 @@
       'blizzard beach': '❄️',
       'typhoon lagoon': '🌋',
       
-      // Universal Parks
       'universal epic universe': '⚡',
       'epic universe': '⚡',
       'universal studios florida': '🌍',
@@ -452,14 +399,15 @@
       'universal\'s volcano bay': '🌋',
       'volcano bay': '🌋',
       
-      // Legoland
       'legoland': '🧱',
       'legoland windsor': '🧱',
       'legoland florida': '🧱'
     };
 
     let allRides = [];
-    let parkDomainMap = JSON.parse(localStorage.getItem(CACHE_KEY_FAVICONS) || '{}');
+    let currentFilteredRides = [];
+    let displayedCount = 24;
+    let parkDomainMap = {};
     let selectedCountries = [];
     let selectedParks = [];
     let selectedTypes = [];
@@ -467,8 +415,8 @@
     let currentUnit = 'cm';
     let currentView = 'all';
     let isCompact = false;
-    let renderBatchTimer = null;
 
+    // Theme Management
     let currentTheme = localStorage.getItem('site_theme') || 'dark';
 
     function applyTheme(theme) {
@@ -542,54 +490,55 @@
     }
 
     function buildParkDomainMap(rides) {
-      let updated = false;
+      parkDomainMap = {};
       rides.forEach(r => {
         if (r.park && !parkDomainMap[r.park]) {
           const domain = extractDomain(r.rideUrl) || extractDomain(r.imageUrl);
-          if (domain) {
-            parkDomainMap[r.park] = domain;
-            updated = true;
-          }
+          if (domain) parkDomainMap[r.park] = domain;
         }
       });
-      if (updated) {
-        localStorage.setItem(CACHE_KEY_FAVICONS, JSON.stringify(parkDomainMap));
-      }
     }
 
     function getFaviconHtml(parkName) {
       if (!parkName) return '';
       const normPark = parkName.toLowerCase().trim();
 
-      // 1. Check for specific park override
       for (const [key, icon] of Object.entries(PARK_ICON_OVERRIDES)) {
         if (normPark.includes(key)) {
-          return `<span class="park-custom-icon">${icon}</span>`;
+          return `<span style="font-size: 0.95rem; line-height: 1;">${icon}</span>`;
         }
       }
 
-      // 2. Fall back to domain favicon if mapped
       const domain = parkDomainMap[parkName];
       if (domain) {
         const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
         return `<img src="${faviconUrl}" class="park-favicon" alt="" onerror="this.style.display='none'">`;
       }
 
-      // 3. Fallback generic coaster icon
-      return `<span class="park-custom-icon">🎢</span>`;
+      return `<span style="font-size: 0.85rem;">🎢</span>`;
     }
 
-    function preIndexRides(rides) {
-      rides.forEach(r => {
-        r._normSearch = normalizeText(`${r.ride} ${r.park} ${r.type} ${r.details} ${r.location}`);
-        r._normSensory = String(r.sensory || '').toLowerCase();
-        r._key = getRideKey(r);
+    function calculateSensorySeverityClass(sensoryText) {
+      if (!sensoryText) return 'severity-green';
+      const text = sensoryText.toLowerCase();
+
+      if (text.includes('none') || text.includes('mild') || text.includes('gentle')) return 'severity-green';
+
+      let matchedCount = 0;
+      SENSORY_TAGS.forEach(t => {
+        if (t.keywords.some(kw => text.includes(kw))) matchedCount++;
       });
+
+      if (matchedCount >= 3 || text.includes('strobe') || text.includes('extreme')) return 'severity-red';
+      if (matchedCount === 2 || text.includes('dark') || text.includes('drop')) return 'severity-orange';
+      if (matchedCount === 1) return 'severity-yellow';
+
+      return 'severity-green';
     }
 
     function getActiveDataset() {
       if (currentView === 'favourites') {
-        return allRides.filter(r => favourites.includes(r._key || getRideKey(r)));
+        return allRides.filter(r => favourites.includes(getRideKey(r)));
       }
       return allRides;
     }
@@ -599,19 +548,49 @@
       return `https://www.youtube.com/results?search_query=${query}&safe=active`;
     }
 
+    function preprocessRides(rides) {
+      return rides.map(r => ({
+        ...r,
+        _searchNorm: normalizeText(`${r.ride} ${r.park} ${r.type} ${r.details} ${r.location}`)
+      }));
+    }
+
+    // Fast Data Loading with LocalStorage Caching
     async function fetchRideData() {
+      const cached = localStorage.getItem(CACHE_KEY);
+      
+      // 1. Load instantly from LocalStorage cache if available
+      if (cached) {
+        try {
+          allRides = preprocessRides(JSON.parse(cached));
+          buildParkDomainMap(allRides);
+          updateFavBadge();
+          reinitAllFilters();
+          filterRides();
+        } catch (e) {
+          console.error('Cache parse error:', e);
+        }
+      }
+
+      // 2. Quiet background fetch to keep data up to date
       try {
         const response = await fetch(API_URL);
-        allRides = await response.json();
-
-        preIndexRides(allRides);
+        const freshRides = await response.json();
+        
+        localStorage.setItem(CACHE_KEY, JSON.stringify(freshRides));
+        allRides = preprocessRides(freshRides);
         buildParkDomainMap(allRides);
         updateFavBadge();
-        reinitAllFilters();
+        
+        if (!cached) {
+          reinitAllFilters();
+        }
         filterRides();
       } catch (error) {
         console.error('Error fetching data:', error);
-        document.getElementById('rideGrid').innerHTML = '<div class="loading">Failed to load ride data.</div>';
+        if (!cached) {
+          document.getElementById('rideGrid').innerHTML = '<div class="loading">Failed to load ride data.</div>';
+        }
       }
     }
 
@@ -620,6 +599,17 @@
       initParkFilter();
       initTypeFilter();
       initSensoryFilter();
+    }
+
+    function filterByParkOnly(parkName) {
+      selectedParks = [parkName];
+      document.querySelectorAll('.park-cb').forEach(cb => {
+        cb.checked = (cb.value === parkName);
+      });
+      updateParkBtnLabel();
+      initTypeFilter();
+      filterRides();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function initCountryFilter() {
@@ -722,31 +712,6 @@
       else btn.textContent = `Parks (${selectedParks.length})`;
     }
 
-    function filterBySinglePark(parkName) {
-      if (!parkName) return;
-
-      const targetRide = allRides.find(r => r.park === parkName);
-      if (targetRide && targetRide.country && !selectedCountries.includes(targetRide.country)) {
-        selectedCountries.push(targetRide.country);
-        const countryCb = document.querySelector(`.country-cb[value="${CSS.escape(targetRide.country)}"]`);
-        if (countryCb) countryCb.checked = true;
-        updateCountryBtnLabel();
-      }
-
-      initParkFilter();
-      selectedParks = [parkName];
-
-      document.querySelectorAll('.park-cb').forEach(cb => {
-        cb.checked = (cb.value === parkName);
-      });
-
-      updateParkBtnLabel();
-      initTypeFilter();
-      filterRides();
-
-      document.querySelector('.controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
     function initTypeFilter() {
       const dataset = getActiveDataset();
       const availableRides = dataset.filter(r => selectedCountries.includes(r.country) && selectedParks.includes(r.park));
@@ -822,40 +787,20 @@
       else btn.textContent = `Sensory (${selectedSensory.length})`;
     }
 
-    function rideMatchesSensory(r) {
+    function rideMatchesSensory(rideSensoryText) {
       if (selectedSensory.length === SENSORY_TAGS.length) return true;
-      if (!r._normSensory && selectedSensory.length > 0) return true;
+      if (!rideSensoryText && selectedSensory.length > 0) return true;
 
+      const text = String(rideSensoryText || '').toLowerCase();
+      
       return selectedSensory.some(tagId => {
         const tag = SENSORY_TAGS.find(t => t.id === tagId);
         if (!tag) return false;
-        return tag.keywords.some(kw => r._normSensory.includes(kw));
+        return tag.keywords.some(kw => text.includes(kw));
       });
     }
 
-    function getSensorySeverityClass(sensoryText) {
-      if (!sensoryText) return 'sensory-green';
-      const text = sensoryText.toLowerCase();
-
-      let matchCount = 0;
-      SENSORY_TAGS.forEach(tag => {
-        if (tag.keywords.some(kw => text.includes(kw))) {
-          matchCount++;
-        }
-      });
-
-      const isHighIntensity = text.includes('strobe') || text.includes('drop') || text.includes('launch') || text.includes('g-force') || text.includes('extreme');
-
-      if (matchCount >= 3 || (matchCount >= 2 && isHighIntensity)) {
-        return 'sensory-red';
-      } else if (matchCount === 2 || isHighIntensity) {
-        return 'sensory-orange';
-      } else if (matchCount === 1) {
-        return 'sensory-yellow';
-      }
-      return 'sensory-green';
-    }
-
+    // View Navigation Toggles
     document.getElementById('viewAllBtn').addEventListener('click', () => {
       if (currentView === 'all') return;
       currentView = 'all';
@@ -880,6 +825,7 @@
       window.print();
     });
 
+    // Display Mode Toggles
     document.getElementById('cardViewBtn').addEventListener('click', () => {
       isCompact = false;
       document.getElementById('cardViewBtn').classList.add('active');
@@ -894,6 +840,7 @@
       document.getElementById('rideGrid').classList.add('compact');
     });
 
+    // Reset All Filters
     document.getElementById('clearFiltersBtn').addEventListener('click', () => {
       document.getElementById('searchInput').value = '';
       const slider = document.getElementById('heightSlider');
@@ -903,6 +850,7 @@
       filterRides();
     });
 
+    // Dropdown Visibility Toggles
     function closeDropdowns() {
       document.getElementById('countryDropdown').classList.remove('show');
       document.getElementById('parkDropdown').classList.remove('show');
@@ -931,6 +879,7 @@
     document.getElementById('typeDropdown').addEventListener('click', e => e.stopPropagation());
     document.getElementById('sensoryDropdown').addEventListener('click', e => e.stopPropagation());
 
+    // Select/Deselect Links
     document.getElementById('selectAllCountries').addEventListener('click', () => {
       document.querySelectorAll('.country-cb').forEach(cb => cb.checked = true);
       updateCountrySelections();
@@ -1003,6 +952,7 @@
       filterRides();
     });
 
+    // Height Slider & Unit Toggle
     function updateSliderConfig() {
       const slider = document.getElementById('heightSlider');
       if (currentUnit === 'cm') {
@@ -1033,11 +983,7 @@
 
       const totalParks = document.querySelectorAll('.park-cb').length;
       if (selectedParks.length > 0 && selectedParks.length < totalParks) {
-        if (selectedParks.length === 1) {
-          pills.push({ label: `Park: ${selectedParks[0]}`, clear: () => { document.getElementById('selectAllParks').click(); } });
-        } else {
-          pills.push({ label: `Parks: ${selectedParks.length}`, clear: () => { document.getElementById('selectAllParks').click(); } });
-        }
+        pills.push({ label: `Parks: ${selectedParks.length}`, clear: () => { document.getElementById('selectAllParks').click(); } });
       }
 
       const totalTypes = document.querySelectorAll('.type-cb').length;
@@ -1086,77 +1032,14 @@
       });
     }
 
-    function buildCardHtml(r) {
-      const rideKey = r._key || getRideKey(r);
-      const isFav = favourites.includes(rideKey);
-
-      let heightStr = 'None';
-      if (r.minHeightCm && r.minHeightInch) {
-        heightStr = `${r.minHeightCm} cm (${r.minHeightInch}")`;
-      } else if (r.minHeightCm) {
-        heightStr = `${r.minHeightCm} cm`;
-      }
-
-      const titleHtml = r.rideUrl 
-        ? `<a href="${r.rideUrl}" target="_blank" rel="noopener">${r.ride}</a>` 
-        : r.ride;
-
-      const povUrl = getPovVideoUrl(r.park, r.ride);
-      const faviconHtml = getFaviconHtml(r.park);
-      const sensorySeverityClass = getSensorySeverityClass(r.sensory);
-
-      const safeParkName = String(r.park || '').replace(/'/g, "\\'");
-
-      return `
-        <div class="card">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="tags">
-                <span class="tag" onclick="filterBySinglePark('${safeParkName}')" title="Click to filter by ${r.park}">
-                  ${faviconHtml}<span>${r.park}</span>
-                </span>
-              </div>
-              <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavourite('${rideKey}')" title="${isFav ? 'Remove from Favourites' : 'Add to Favourites'}">
-                ${isFav ? '★' : '☆'}
-              </button>
-            </div>
-            <h2>${titleHtml}</h2>
-            ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
-            ${r.details ? `<p class="details">${r.details}</p>` : ''}
-          </div>
-
-          ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" decoding="async" onerror="this.style.display='none'">` : ''}
-
-          <div class="card-meta">
-            <div class="meta-list">
-              ${r.location ? `<div class="meta-item"><span class="meta-label">Area:</span> <strong>${r.location}</strong></div>` : ''}
-              <div class="meta-item"><span class="meta-label">Min Height:</span> <strong>${heightStr}</strong></div>
-              ${r.heightNotes ? `<div class="meta-item"><span class="meta-label">Height Notes:</span> <strong>${r.heightNotes}</strong></div>` : ''}
-            </div>
-            ${r.sensory ? `<div class="sensory-box ${sensorySeverityClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
-          </div>
-
-          <div class="card-actions">
-            <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link">
-              ▶ Watch POV
-            </a>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderRidesIncremental(rides) {
+    // Infinite-Scroll Chunked Rendering
+    function renderRidesBatch() {
       const grid = document.getElementById('rideGrid');
       const dataset = getActiveDataset();
       
-      document.getElementById('rideCounter').textContent = `Showing ${rides.length} of ${dataset.length} rides`;
+      document.getElementById('rideCounter').textContent = `Showing ${Math.min(displayedCount, currentFilteredRides.length)} of ${currentFilteredRides.length} rides`;
 
-      if (renderBatchTimer) {
-        cancelAnimationFrame(renderBatchTimer);
-        renderBatchTimer = null;
-      }
-
-      if (!rides || rides.length === 0) {
+      if (!currentFilteredRides || currentFilteredRides.length === 0) {
         const msg = currentView === 'favourites' 
           ? 'No saved favourites found. Star a ride card to save it here!' 
           : 'No rides found matching your criteria.';
@@ -1164,31 +1047,75 @@
         return;
       }
 
-      const BATCH_SIZE = 24;
-      const initialBatch = rides.slice(0, BATCH_SIZE);
-      grid.innerHTML = initialBatch.map(buildCardHtml).join('');
+      const ridesToRender = currentFilteredRides.slice(0, displayedCount);
 
-      if (rides.length > BATCH_SIZE) {
-        let currentIndex = BATCH_SIZE;
+      grid.innerHTML = ridesToRender.map(r => {
+        const rideKey = getRideKey(r);
+        const isFav = favourites.includes(rideKey);
 
-        function renderNextChunk() {
-          const nextChunk = rides.slice(currentIndex, currentIndex + BATCH_SIZE);
-          if (nextChunk.length > 0) {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = nextChunk.map(buildCardHtml).join('');
-            while (tempDiv.firstChild) {
-              grid.appendChild(tempDiv.firstChild);
-            }
-            currentIndex += BATCH_SIZE;
-            if (currentIndex < rides.length) {
-              renderBatchTimer = requestAnimationFrame(renderNextChunk);
-            }
-          }
+        let heightStr = 'None';
+        if (r.minHeightCm && r.minHeightInch) {
+          heightStr = `${r.minHeightCm} cm (${r.minHeightInch}")`;
+        } else if (r.minHeightCm) {
+          heightStr = `${r.minHeightCm} cm`;
         }
 
-        renderBatchTimer = requestAnimationFrame(renderNextChunk);
-      }
+        const titleHtml = r.rideUrl 
+          ? `<a href="${r.rideUrl}" target="_blank" rel="noopener">${r.ride}</a>` 
+          : r.ride;
+
+        const povUrl = getPovVideoUrl(r.park, r.ride);
+        const faviconHtml = getFaviconHtml(r.park);
+        const sensoryClass = calculateSensorySeverityClass(r.sensory);
+
+        return `
+          <div class="card">
+            <div class="card-body">
+              <div class="card-top">
+                <div class="tags">
+                  <span class="tag clickable" onclick="filterByParkOnly('${r.park.replace(/'/g, "\\'")}')" title="Show only ${r.park}">
+                    ${faviconHtml}<span>${r.park}</span>
+                  </span>
+                </div>
+                <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavourite('${rideKey}')" title="${isFav ? 'Remove from Favourites' : 'Add to Favourites'}">
+                  ${isFav ? '★' : '☆'}
+                </button>
+              </div>
+              <h2>${titleHtml}</h2>
+              ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
+              ${r.details ? `<p class="details">${r.details}</p>` : ''}
+            </div>
+
+            ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" decoding="async" onerror="this.style.display='none'">` : ''}
+
+            <div class="card-meta">
+              <div class="meta-list">
+                ${r.location ? `<div class="meta-item"><span class="meta-label">Area:</span> <strong>${r.location}</strong></div>` : ''}
+                <div class="meta-item"><span class="meta-label">Min Height:</span> <strong>${heightStr}</strong></div>
+                ${r.heightNotes ? `<div class="meta-item"><span class="meta-label">Height Notes:</span> <strong>${r.heightNotes}</strong></div>` : ''}
+              </div>
+              ${r.sensory ? `<div class="sensory-box ${sensoryClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
+            </div>
+
+            <div class="card-actions">
+              <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link">
+                ▶ Watch POV
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
+
+    // Scroll trigger for Next Batch
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
+        if (displayedCount < currentFilteredRides.length) {
+          displayedCount += 24;
+          renderRidesBatch();
+        }
+      }
+    });
 
     function filterRides() {
       const rawSearch = document.getElementById('searchInput').value;
@@ -1198,11 +1125,11 @@
       const dataset = getActiveDataset();
 
       const filtered = dataset.filter(r => {
-        const matchesSearch = !searchNormalized || r._normSearch.includes(searchNormalized);
+        const matchesSearch = !searchNormalized || r._searchNorm.includes(searchNormalized);
         const matchesCountry = selectedCountries.includes(r.country);
         const matchesPark = selectedParks.includes(r.park);
         const matchesType = selectedTypes.includes(r.type);
-        const matchesSensory = rideMatchesSensory(r);
+        const matchesSensory = rideMatchesSensory(r.sensory);
         
         const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
         const matchesHeight = rideHeight <= maxHeight;
@@ -1210,12 +1137,13 @@
         return matchesSearch && matchesCountry && matchesPark && matchesType && matchesSensory && matchesHeight;
       });
 
-      const sorted = sortRides(filtered);
+      currentFilteredRides = sortRides(filtered);
+      displayedCount = 24; // Reset chunking window
       renderActivePills();
-      renderRidesIncremental(sorted);
+      renderRidesBatch();
     }
 
-    // Input Event Listeners
+    // Input Listeners
     document.getElementById('searchInput').addEventListener('input', filterRides);
     document.getElementById('sortSelect').addEventListener('change', filterRides);
 
@@ -1242,7 +1170,6 @@
       filterRides();
     });
 
-    // Bootstrapping App Data
     fetchRideData();
   </script>
 
