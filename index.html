@@ -93,15 +93,15 @@
     </div>
     
     <div class="filter-row">
-      <!-- County Multi-Select -->
+      <!-- Country Multi-Select -->
       <div class="multiselect-container">
-        <button class="multiselect-btn" id="countyBtn">Counties (All)</button>
-        <div class="multiselect-dropdown" id="countyDropdown">
+        <button class="multiselect-btn" id="countryBtn">Countries (All)</button>
+        <div class="multiselect-dropdown" id="countryDropdown">
           <div class="multiselect-actions">
-            <span class="action-link" id="selectAllCounties">Select All</span>
-            <span class="action-link" id="deselectAllCounties">Deselect All</span>
+            <span class="action-link" id="selectAllCountries">Select All</span>
+            <span class="action-link" id="deselectAllCountries">Deselect All</span>
           </div>
-          <div id="countyOptions"></div>
+          <div id="countryOptions"></div>
         </div>
       </div>
 
@@ -144,7 +144,7 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
 
     let allRides = [];
-    let selectedCounties = [];
+    let selectedCountries = [];
     let selectedParks = [];
     let currentUnit = 'cm';
 
@@ -153,8 +153,7 @@
         const response = await fetch(API_URL);
         allRides = await response.json();
 
-        // Populate initial options
-        initCountyFilter();
+        initCountryFilter();
         initParkFilter();
         filterRides();
       } catch (error) {
@@ -163,49 +162,47 @@
       }
     }
 
-    function initCountyFilter() {
-      const counties = [...new Set(allRides.map(r => r.county || r.country).filter(Boolean))].sort();
-      selectedCounties = [...counties]; // Default: all selected
+    function initCountryFilter() {
+      const countries = [...new Set(allRides.map(r => r.country).filter(Boolean))].sort();
+      selectedCountries = [...countries];
 
-      const container = document.getElementById('countyOptions');
-      container.innerHTML = counties.map(c => `
+      const container = document.getElementById('countryOptions');
+      container.innerHTML = countries.map(c => `
         <label class="dropdown-option">
-          <input type="checkbox" value="${c}" checked class="county-cb">
+          <input type="checkbox" value="${c}" checked class="country-cb">
           <span>${c}</span>
         </label>
       `).join('');
 
-      updateCountyBtnLabel();
+      updateCountryBtnLabel();
 
-      document.querySelectorAll('.county-cb').forEach(cb => {
+      document.querySelectorAll('.country-cb').forEach(cb => {
         cb.addEventListener('change', () => {
-          updateCountySelections();
-          initParkFilter(); // Refresh park options based on selected counties
+          updateCountrySelections();
+          initParkFilter();
           filterRides();
         });
       });
     }
 
-    function updateCountySelections() {
-      const cbs = document.querySelectorAll('.county-cb');
-      selectedCounties = Array.from(cbs).filter(cb => cb.checked).map(cb => cb.value);
-      updateCountyBtnLabel();
+    function updateCountrySelections() {
+      const cbs = document.querySelectorAll('.country-cb');
+      selectedCountries = Array.from(cbs).filter(cb => cb.checked).map(cb => cb.value);
+      updateCountryBtnLabel();
     }
 
-    function updateCountyBtnLabel() {
-      const total = document.querySelectorAll('.county-cb').length;
-      const btn = document.getElementById('countyBtn');
-      if (selectedCounties.length === total) btn.textContent = 'Counties (All)';
-      else if (selectedCounties.length === 0) btn.textContent = 'Counties (None)';
-      else btn.textContent = `Counties (${selectedCounties.length})`;
+    function updateCountryBtnLabel() {
+      const total = document.querySelectorAll('.country-cb').length;
+      const btn = document.getElementById('countryBtn');
+      if (selectedCountries.length === total) btn.textContent = 'Countries (All)';
+      else if (selectedCountries.length === 0) btn.textContent = 'Countries (None)';
+      else btn.textContent = `Countries (${selectedCountries.length})`;
     }
 
     function initParkFilter() {
-      // Filter parks by currently selected counties
-      const availableRides = allRides.filter(r => selectedCounties.includes(r.county || r.country));
+      const availableRides = allRides.filter(r => selectedCountries.includes(r.country));
       const parks = [...new Set(availableRides.map(r => r.park).filter(Boolean))].sort();
       
-      // Preserve existing selections where still available
       selectedParks = selectedParks.filter(p => parks.includes(p));
       if (selectedParks.length === 0) selectedParks = [...parks];
 
@@ -241,38 +238,38 @@
       else btn.textContent = `Parks (${selectedParks.length})`;
     }
 
-    // Toggle Dropdown Visibility
-    document.getElementById('countyBtn').addEventListener('click', (e) => {
+    // Dropdown Toggles
+    document.getElementById('countryBtn').addEventListener('click', (e) => {
       e.stopPropagation();
-      document.getElementById('countyDropdown').classList.toggle('show');
+      document.getElementById('countryDropdown').classList.toggle('show');
       document.getElementById('parkDropdown').classList.remove('show');
     });
 
     document.getElementById('parkBtn').addEventListener('click', (e) => {
       e.stopPropagation();
       document.getElementById('parkDropdown').classList.toggle('show');
-      document.getElementById('countyDropdown').classList.remove('show');
+      document.getElementById('countryDropdown').classList.remove('show');
     });
 
     document.addEventListener('click', () => {
-      document.getElementById('countyDropdown').classList.remove('show');
+      document.getElementById('countryDropdown').classList.remove('show');
       document.getElementById('parkDropdown').classList.remove('show');
     });
 
-    document.getElementById('countyDropdown').addEventListener('click', e => e.stopPropagation());
+    document.getElementById('countryDropdown').addEventListener('click', e => e.stopPropagation());
     document.getElementById('parkDropdown').addEventListener('click', e => e.stopPropagation());
 
-    // Action Links (Select All / Deselect All)
-    document.getElementById('selectAllCounties').addEventListener('click', () => {
-      document.querySelectorAll('.county-cb').forEach(cb => cb.checked = true);
-      updateCountySelections();
+    // Select/Deselect Links
+    document.getElementById('selectAllCountries').addEventListener('click', () => {
+      document.querySelectorAll('.country-cb').forEach(cb => cb.checked = true);
+      updateCountrySelections();
       initParkFilter();
       filterRides();
     });
 
-    document.getElementById('deselectAllCounties').addEventListener('click', () => {
-      document.querySelectorAll('.county-cb').forEach(cb => cb.checked = false);
-      updateCountySelections();
+    document.getElementById('deselectAllCountries').addEventListener('click', () => {
+      document.querySelectorAll('.country-cb').forEach(cb => cb.checked = false);
+      updateCountrySelections();
       initParkFilter();
       filterRides();
     });
@@ -289,7 +286,7 @@
       filterRides();
     });
 
-    // Slider & Unit Toggle
+    // Height Slider & Unit Toggle
     function updateSliderConfig() {
       const slider = document.getElementById('heightSlider');
       if (currentUnit === 'cm') {
@@ -325,7 +322,7 @@
             <div>
               <div class="tags">
                 <span class="tag">${r.park}</span>
-                ${(r.county || r.country) ? `<span class="tag location">${r.county || r.country}</span>` : ''}
+                ${r.country ? `<span class="tag location">${r.country}</span>` : ''}
               </div>
               <h2>${r.ride}</h2>
               ${r.type ? `<div class="type-subtitle">${r.type}</div>` : ''}
@@ -357,13 +354,13 @@
           (r.details && r.details.toLowerCase().includes(search)) ||
           (r.location && r.location.toLowerCase().includes(search));
           
-        const matchesCounty = selectedCounties.includes(r.county || r.country);
+        const matchesCountry = selectedCountries.includes(r.country);
         const matchesPark = selectedParks.includes(r.park);
         
         const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
         const matchesHeight = rideHeight <= maxHeight;
 
-        return matchesSearch && matchesCounty && matchesPark && matchesHeight;
+        return matchesSearch && matchesCountry && matchesPark && matchesHeight;
       });
 
       renderRides(filtered);
