@@ -29,10 +29,14 @@
       --border: #334155;
       --badge-bg: rgba(56, 189, 248, 0.1);
       --star-active: #f59e0b;
-      --yt-red: #ef4444;
-      --yt-bg: rgba(239, 68, 68, 0.12);
-      --yt-border: rgba(239, 68, 68, 0.3);
-      --yt-text: #fca5a5;
+      
+      /* Gentle Neutral POV Button Styling */
+      --pov-bg: rgba(255, 255, 255, 0.06);
+      --pov-border: rgba(255, 255, 255, 0.15);
+      --pov-text: #cbd5e1;
+      --pov-hover-bg: #ef4444;
+      --pov-hover-text: #ffffff;
+
       --queue-bg: rgba(245, 158, 11, 0.12);
       --queue-border: rgba(245, 158, 11, 0.35);
       --queue-text: #fde047;
@@ -67,10 +71,13 @@
       --border: #e2e8f0;
       --badge-bg: rgba(2, 132, 199, 0.1);
       --star-active: #d97706;
-      --yt-red: #dc2626;
-      --yt-bg: rgba(220, 38, 38, 0.08);
-      --yt-border: rgba(220, 38, 38, 0.25);
-      --yt-text: #b91c1c;
+      
+      --pov-bg: rgba(15, 23, 42, 0.05);
+      --pov-border: rgba(15, 23, 42, 0.15);
+      --pov-text: #475569;
+      --pov-hover-bg: #dc2626;
+      --pov-hover-text: #ffffff;
+
       --queue-bg: rgba(217, 119, 6, 0.1);
       --queue-border: rgba(217, 119, 6, 0.3);
       --queue-text: #92400e;
@@ -224,19 +231,23 @@
     .slim-ride-name { font-weight: 600; font-size: 0.95rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .slim-ride-meta-tags { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; font-size: 0.85rem; color: var(--muted); }
 
-    /* Country Grouped Park Info View Styles */
-    .park-info-view { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; width: 100%; }
-    .country-group-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); transition: border-color 0.2s ease; }
+    /* Country Grouped Park Info View Styles with Enhanced Padding & Collapsible States */
+    .park-info-view { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; width: 100%; }
+    .country-group-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); transition: border-color 0.2s ease, margin 0.2s ease; margin-bottom: 0.5rem; }
     .country-group-container:hover { border-color: var(--accent); }
-    .country-group-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: var(--badge-bg); cursor: pointer; font-weight: 700; font-size: 1.1rem; }
-    .country-group-header .country-info { display: flex; align-items: center; gap: 0.6rem; }
-    .country-group-content { display: flex; flex-direction: column; gap: 1rem; padding: 1.25rem; border-top: 1px solid var(--border); }
+    .country-group-header { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 1.35rem; background: var(--badge-bg); cursor: pointer; font-weight: 700; font-size: 1.15rem; user-select: none; }
+    .country-group-header .country-info { display: flex; align-items: center; gap: 0.75rem; }
+    .country-group-header .country-arrow { font-size: 0.85rem; color: var(--accent); transition: transform 0.2s ease; }
     
-    .park-info-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.85rem; scroll-margin-top: 2rem; transition: border-color 0.2s ease; }
+    .country-group-content { display: none; flex-direction: column; gap: 1.25rem; padding: 1.5rem; border-top: 1px solid var(--border); }
+    .country-group-container.expanded .country-group-content { display: flex; }
+    .country-group-container.expanded .country-arrow { transform: rotate(180deg); }
+
+    .park-info-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.35rem; display: flex; flex-direction: column; gap: 0.95rem; scroll-margin-top: 2rem; transition: border-color 0.2s ease; }
     .park-info-card:hover { border-color: var(--accent); }
     .park-info-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; flex-wrap: wrap; }
     .park-info-title-group { display: flex; align-items: center; gap: 0.75rem; }
-    .park-info-title-group h2 { font-size: 1.3rem; color: var(--text); font-weight: 700; }
+    .park-info-title-group h2 { font-size: 1.35rem; color: var(--text); font-weight: 700; }
     .park-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.85rem; font-size: 0.88rem; }
     .park-info-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 0.9rem; display: flex; flex-direction: column; gap: 0.2rem; }
     .park-info-item-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.03em; }
@@ -246,9 +257,11 @@
     .park-action-btn:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
     /* 7-Day Hours Calendar Grid */
-    .hours-calendar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)); gap: 0.5rem; margin-top: 0.35rem; }
+    .hours-calendar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.5rem; margin-top: 0.35rem; }
     .hours-day-box { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.5rem; text-align: center; display: flex; flex-direction: column; gap: 0.15rem; }
     .hours-day-box.is-today { border-color: var(--accent); background: var(--badge-bg); }
+    .hours-day-box.view-more-box { justify-content: center; align-items: center; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease; text-decoration: none; }
+    .hours-day-box.view-more-box:hover { border-color: var(--accent); background: var(--badge-bg); }
     .hours-day-name { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
     .hours-day-date { font-size: 0.75rem; font-weight: 600; color: var(--text); }
     .hours-day-time { font-size: 0.72rem; font-weight: 700; color: var(--accent); }
@@ -274,14 +287,14 @@
     .grid.compact .details { display: block; font-size: 0.85rem; margin-bottom: 0.25rem; line-height: 1.3; }
     .grid.compact .sensory-box { display: block; margin-top: 0.35rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
     
-    /* Card Action Bar Layout (Watch POV + Queue Pass) */
+    /* Card Action Bar Layout (Gentle Neutral POV + Interactive Queue Pass Link) */
     .card-actions { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.85rem; }
-    .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.45rem 0.85rem; background: var(--yt-bg); color: var(--yt-text); border: 1px solid var(--yt-border); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; flex: 1; text-align: center; }
-    .pov-link:hover { background: #ef4444; color: #ffffff; border-color: #ef4444; }
+    .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.45rem 0.85rem; background: var(--pov-bg); color: var(--pov-text); border: 1px solid var(--pov-border); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; flex: 1; text-align: center; }
+    .pov-link:hover { background: var(--pov-hover-bg); color: var(--pov-hover-text); border-color: var(--pov-hover-bg); }
     
-    /* Queue Pass Tooltip Badge */
-    .queue-pass-badge { position: relative; display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.45rem 0.75rem; background: var(--queue-bg); border: 1px solid var(--queue-border); border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--queue-text); cursor: help; white-space: nowrap; transition: all 0.2s ease; }
-    .queue-pass-badge:hover { background: var(--queue-border); }
+    /* Priority Queue Pass Link Badge with Hover Tooltip */
+    .queue-pass-badge { position: relative; display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.45rem 0.75rem; background: var(--queue-bg); border: 1px solid var(--queue-border); border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--queue-text); cursor: pointer; text-decoration: none; white-space: nowrap; transition: all 0.2s ease; }
+    .queue-pass-badge:hover { background: var(--queue-border); transform: translateY(-1px); }
     
     .queue-pass-badge:hover::after {
       content: attr(data-pass);
@@ -379,7 +392,10 @@
     .card h2 a { color: inherit; text-decoration: none; }
     .card h2 a:hover { color: var(--accent); text-decoration: underline; }
 
-    .ride-thumb { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin: 0.5rem 0 0.75rem 0; border: 1px solid var(--border); background-color: var(--bg); }
+    /* Clickable Ride Thumbnail Styling */
+    .ride-thumb-link { display: block; overflow: hidden; border-radius: 8px; margin: 0.5rem 0 0.75rem 0; border: 1px solid var(--border); }
+    .ride-thumb { width: 100%; height: 160px; object-fit: cover; display: block; background-color: var(--bg); transition: transform 0.25s ease, filter 0.25s ease; }
+    .ride-thumb-link:hover .ride-thumb { transform: scale(1.04); filter: brightness(1.08); }
 
     .type-subtitle { color: var(--accent); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
     .details { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
@@ -423,7 +439,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v68</div>
+    <div class="version-badge" id="versionBadgeBtn">v70</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -571,7 +587,7 @@
 
     <!-- Country-Grouped Park Info View -->
     <div class="park-info-view" id="parkInfoGrid" style="display: none;">
-      <div style="margin-bottom: 1rem; width: 100%;">
+      <div style="margin-bottom: 0.5rem; width: 100%;">
         <input type="text" id="parkSearchInput" placeholder="Filter parks by name, country, or location..." style="width: 100%; max-width: 500px;">
       </div>
       <div id="parkInfoCardsContainer"></div>
@@ -585,7 +601,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v68';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v70';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -636,6 +652,8 @@
       'islands of adventure': '🦖',
       'universal\'s volcano bay': '🌋',
       'volcano bay': '🌋',
+      'universal orlando': '🌍',
+      'universal': '🌍',
       'legoland': '🧱',
       'legoland windsor': '🧱',
       'legoland florida': '🧱'
@@ -668,6 +686,59 @@
       'chessington world of adventures': 'Leatherhead Road, Chessington, Surrey, KT9 2NE, United Kingdom',
       'legoland windsor': 'Winkfield Road, Windsor, Berkshire, SL4 4AY, United Kingdom'
     };
+
+    const PRIORITY_PASS_URLS = {
+      'alton towers': 'https://www.altontowers.com/tickets-passes/extras/fastrack/',
+      'thorpe park': 'https://www.thorpepark.com/tickets-passes/extras/fastrack/',
+      'chessington world of adventures': 'https://www.chessington.com/tickets-passes/extras/reserve-and-ride/',
+      'magic kingdom': 'https://disneyworld.disney.go.com/lightning-lane-passes/',
+      'epcot': 'https://disneyworld.disney.go.com/lightning-lane-passes/',
+      'disney\'s animal kingdom': 'https://disneyworld.disney.go.com/lightning-lane-passes/',
+      'animal kingdom': 'https://disneyworld.disney.go.com/lightning-lane-passes/',
+      'disney\'s hollywood studios': 'https://disneyworld.disney.go.com/lightning-lane-passes/',
+      'hollywood studios': 'https://disneyworld.disney.go.com/lightning-lane-passes/',
+      'disneyland park': 'https://disneyland.disney.go.com/lightning-lane-passes/',
+      'disney california adventure': 'https://disneyland.disney.go.com/lightning-lane-passes/',
+      'universal studios florida': 'https://www.universalorlando.com/web/en/us/tickets-packages/express-passes',
+      'universal\'s islands of adventure': 'https://www.universalorlando.com/web/en/us/tickets-packages/express-passes',
+      'islands of adventure': 'https://www.universalorlando.com/web/en/us/tickets-packages/express-passes',
+      'universal\'s volcano bay': 'https://www.universalorlando.com/web/en/us/tickets-packages/express-passes'
+    };
+
+    const PARK_HOURS_URLS = {
+      'alton towers': 'https://www.altontowers.com/plan-your-visit/before-you-visit/opening-times/',
+      'thorpe park': 'https://www.thorpepark.com/plan-your-visit/before-you-visit/opening-times/',
+      'chessington world of adventures': 'https://www.chessington.com/plan-your-visit/before-you-visit/opening-hours/',
+      'magic kingdom': 'https://disneyworld.disney.go.com/calendars/day/',
+      'epcot': 'https://disneyworld.disney.go.com/calendars/day/',
+      'disney\'s animal kingdom': 'https://disneyworld.disney.go.com/calendars/day/',
+      'animal kingdom': 'https://disneyworld.disney.go.com/calendars/day/',
+      'disney\'s hollywood studios': 'https://disneyworld.disney.go.com/calendars/day/',
+      'hollywood studios': 'https://disneyworld.disney.go.com/calendars/day/',
+      'disneyland park': 'https://disneyland.disney.go.com/calendars/day/',
+      'disney california adventure': 'https://disneyland.disney.go.com/calendars/day/',
+      'universal studios florida': 'https://www.universalorlando.com/web/en/us/plan-your-visit/hours-information/park-hours',
+      'universal\'s islands of adventure': 'https://www.universalorlando.com/web/en/us/plan-your-visit/hours-information/park-hours',
+      'islands of adventure': 'https://www.universalorlando.com/web/en/us/plan-your-visit/hours-information/park-hours'
+    };
+
+    function getPriorityPassUrl(parkName) {
+      if (!parkName) return '#';
+      const norm = parkName.toLowerCase().trim();
+      for (const [key, url] of Object.entries(PRIORITY_PASS_URLS)) {
+        if (norm.includes(key)) return url;
+      }
+      return '#';
+    }
+
+    function getParkHoursUrl(parkName) {
+      if (!parkName) return '#';
+      const norm = parkName.toLowerCase().trim();
+      for (const [key, url] of Object.entries(PARK_HOURS_URLS)) {
+        if (norm.includes(key)) return url;
+      }
+      return '#';
+    }
 
     const COUNTRY_FLAG_MAP = {
       'united kingdom': '🇬🇧',
@@ -860,7 +931,7 @@
     }
 
     function getFaviconHtml(parkName) {
-      if (!parkName) return '';
+      if (!parkName) return '<span style="font-size: 0.85rem;">🎢</span>';
       const normPark = parkName.toLowerCase().trim();
 
       for (const [key, icon] of Object.entries(PARK_ICON_OVERRIDES)) {
@@ -869,14 +940,11 @@
         }
       }
 
-      let domain = PARK_DOMAIN_OVERRIDES[normPark];
-      if (!domain) {
-        domain = parkDomainMap[parkName];
-      }
+      let domain = PARK_DOMAIN_OVERRIDES[normPark] || parkDomainMap[parkName];
 
       if (domain) {
         const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-        return `<img src="${faviconUrl}" class="park-favicon" alt="" onerror="this.style.display='none'">`;
+        return `<img src="${faviconUrl}" class="park-favicon" alt="" onerror="this.onerror=null; this.outerHTML='<span style=\\'font-size: 0.85rem;\\'>🎢</span>';">`;
       }
 
       return `<span style="font-size: 0.85rem;">🎢</span>`;
@@ -1427,11 +1495,14 @@
 
       if (targetParkName) {
         setTimeout(() => {
-          const cardId = `park-card-${normalizeText(targetParkName)}`;
-          const el = document.getElementById(cardId);
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            el.style.borderColor = 'var(--accent)';
+          // Expand target park's country container automatically
+          const targetCard = document.getElementById(`park-card-${normalizeText(targetParkName)}`);
+          if (targetCard) {
+            const countryContainer = targetCard.closest('.country-group-container');
+            if (countryContainer) countryContainer.classList.add('expanded');
+            
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            targetCard.style.borderColor = 'var(--accent)';
           }
         }, 100);
       } else {
@@ -1497,7 +1568,7 @@
       return result;
     }
 
-    // Render Country-Grouped Park Info View (Auto-renders on load)
+    // Render Country-Grouped Park Info View (Collapsed by Default)
     function renderParkInfoCards() {
       const container = document.getElementById('parkInfoCardsContainer');
       const searchInputEl = document.getElementById('parkSearchInput');
@@ -1549,6 +1620,8 @@
 
           const locationStr = PARK_LOCATION_DETAILS[normName] || `${p.name}, ${p.country}`;
           const next7Days = getNext7DaysHours(p.name);
+          const passUrl = getPriorityPassUrl(p.name);
+          const hoursUrl = getParkHoursUrl(p.name);
 
           let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
           const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
@@ -1560,7 +1633,12 @@
               <span class="hours-day-date">${d.dateStr}</span>
               <span class="hours-day-time ${d.isClosed ? 'closed' : ''}">${d.timeStr}</span>
             </div>
-          `).join('');
+          `).join('') + `
+            <a href="${hoursUrl}" target="_blank" rel="noopener" class="hours-day-box view-more-box" title="View Official Park Hours Calendar">
+              <span class="hours-day-name" style="color: var(--accent);">Calendar</span>
+              <span class="hours-day-date" style="font-size: 0.8rem; color: var(--accent);">View More ↗</span>
+            </a>
+          `;
 
           return `
             <div class="park-info-card" id="${cardId}">
@@ -1582,16 +1660,20 @@
                 <div class="park-info-item">
                   <span class="park-info-item-label">📍 Location & Address</span>
                   <span class="park-info-item-value">${locationStr}</span>
+                  <a href="${mapsUrl}" target="_blank" rel="noopener" class="action-link" style="margin-top: 0.2rem;">Open Google Maps ↗</a>
                 </div>
                 
                 <div class="park-info-item">
                   <span class="park-info-item-label">🎢 Catalogued Attractions</span>
                   <span class="park-info-item-value">${p.ridesCount} Rides Available</span>
+                  <button class="action-link" style="background:none; border:none; padding:0; text-align:left; font-size: 0.78rem;" onclick="filterByParkOnly('${p.name.replace(/'/g, "\\'")}'); switchToRideView('all');">View All ${p.name} Rides ↗</button>
                 </div>
+
                 ${p.sampleQueuePass ? `
                   <div class="park-info-item">
                     <span class="park-info-item-label">⏩ Priority Pass System</span>
                     <span class="park-info-item-value">${p.sampleQueuePass}</span>
+                    <a href="${passUrl}" target="_blank" rel="noopener" class="action-link" style="margin-top: 0.2rem;">Pass Details & Pricing ↗</a>
                   </div>
                 ` : ''}
               </div>
@@ -1605,14 +1687,20 @@
           `;
         }).join('');
 
+        // Expand country automatically if searching
+        const isExpandedClass = searchVal ? 'expanded' : '';
+
         return `
-          <div class="country-group-container">
-            <div class="country-group-header">
+          <div class="country-group-container ${isExpandedClass}">
+            <div class="country-group-header" onclick="this.parentElement.classList.toggle('expanded')">
               <div class="country-info">
                 <span class="flag-emoji">${flag}</span>
                 <span>${country}</span>
               </div>
-              <span class="park-group-count">${countryParks.length} Parks</span>
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span class="park-group-count">${countryParks.length} Parks</span>
+                <span class="country-arrow">▼</span>
+              </div>
             </div>
             <div class="country-group-content">
               ${parkCardsHtml}
@@ -1936,13 +2024,14 @@
             const showPassIcon = hasQueuePass(r);
             const heightStr = r.minHeightCm ? `${r.minHeightCm}cm` : 'All';
             const povUrl = getPovVideoUrl(r.park, r.ride);
+            const passUrl = getPriorityPassUrl(r.park);
 
             let liveBadgeHtml = '';
             if (showLiveWaitTimes) {
               const liveInfo = getLiveInfoForRide(r);
               if (liveInfo) {
                 if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱️ ${liveInfo.waitTime}m</span>`;
+                  liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱️️ ${liveInfo.waitTime}m</span>`;
                 } else if (liveInfo.status === 'REFURBISHMENT') {
                   liveBadgeHtml = `<span style="font-size:0.8rem; color:#f59e0b; cursor:pointer;" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔧 Maintenance</span>`;
                 } else {
@@ -1960,7 +2049,7 @@
                     ${isFav ? '★' : '☆'}
                   </button>
                   <span class="slim-ride-name">${r.ride}</span>
-                  ${showPassIcon ? `<span title="Queue Pass: ${queuePassVal}">⏩</span>` : ''}
+                  ${showPassIcon ? `<a href="${passUrl}" target="_blank" rel="noopener" style="text-decoration:none;" title="Queue Pass: ${queuePassVal}">⏩</a>` : ''}
                   ${liveBadgeHtml}
                 </div>
                 <div class="slim-ride-meta-tags">
@@ -1999,6 +2088,7 @@
         const displayPark = getDisplayParkName(r.park);
         const queuePassVal = getQueuePass(r);
         const showPassIcon = hasQueuePass(r);
+        const passUrl = getPriorityPassUrl(r.park);
 
         let heightStr = 'None';
         if (r.minHeightCm && r.minHeightInch) {
@@ -2011,6 +2101,7 @@
           ? `<a href="${r.rideUrl}" target="_blank" rel="noopener">${r.ride}</a>` 
           : r.ride;
 
+        const rideTargetUrl = r.rideUrl || '#';
         const povUrl = getPovVideoUrl(r.park, r.ride);
         const faviconHtml = getFaviconHtml(r.park);
         const sensoryClass = calculateSensorySeverityClass(r.sensory);
@@ -2056,7 +2147,11 @@
               ${r.details ? `<p class="details">${r.details}</p>` : ''}
             </div>
 
-            ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" decoding="async" onerror="this.style.display='none'">` : ''}
+            ${r.imageUrl ? `
+              <a href="${rideTargetUrl}" target="_blank" rel="noopener" class="ride-thumb-link" title="Open ${r.ride} official page">
+                <img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" decoding="async" onerror="this.parentElement.style.display='none'">
+              </a>
+            ` : ''}
 
             <div class="card-meta">
               <div class="meta-list">
@@ -2069,9 +2164,13 @@
 
             <div class="card-actions">
               <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link">
-                ▶ Watch POV
+                ▶ POV
               </a>
-              ${showPassIcon ? `<div class="queue-pass-badge" data-pass="${queuePassVal}">⏩ Pass</div>` : ''}
+              ${showPassIcon ? `
+                <a href="${passUrl}" target="_blank" rel="noopener" class="queue-pass-badge" data-pass="${queuePassVal}">
+                  ⏩ Pass
+                </a>
+              ` : ''}
             </div>
           </div>
         `;
