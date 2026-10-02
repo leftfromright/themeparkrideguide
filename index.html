@@ -156,7 +156,7 @@
     .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 0.5rem; min-width: 200px; }
     .multiselect-dropdown.show { display: block; }
     
-    .multiselect-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: space-between; padding: 0.25rem 0.5rem 0.5rem 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; }
+    .multiselect-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-space-between; padding: 0.25rem 0.5rem 0.5rem 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; }
     .action-group { display: flex; gap: 0.75rem; flex-wrap: wrap; }
     .action-link { font-size: 0.75rem; color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
     .action-link:hover { text-decoration: underline; }
@@ -474,7 +474,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v76</div>
+    <div class="version-badge" id="versionBadgeBtn">v77</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -600,7 +600,7 @@
         
         <div class="display-toggle">
           <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
-            <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
+            <span id="themeIcon">☀️️</span> <span id="themeLabel">Light Mode</span>
           </button>
           <button class="toggle-icon-btn active" id="cardViewBtn" title="Grid View">田 Grid</button>
           <button class="toggle-icon-btn" id="compactViewBtn" title="Compact List">≡ Compact</button>
@@ -636,7 +636,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v76';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v77';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -1255,12 +1255,33 @@
 
     function filterByParkOnly(parkName) {
       isGuidedActive = false;
+      document.getElementById('searchInput').value = '';
+      
+      const matchingRide = allRides.find(r => r.park === parkName);
+      if (matchingRide && matchingRide.country) {
+        selectedCountries = [matchingRide.country];
+        document.querySelectorAll('.country-cb').forEach(cb => {
+          cb.checked = (cb.value === matchingRide.country);
+        });
+        updateCountryBtnLabel();
+      } else {
+        document.querySelectorAll('.country-cb').forEach(cb => cb.checked = true);
+        updateCountrySelections();
+      }
+
+      initParkFilter();
+
       selectedParks = [parkName];
       document.querySelectorAll('.park-cb').forEach(cb => {
         cb.checked = (cb.value === parkName);
       });
       updateParkBtnLabel();
+
       initTypeFilter();
+
+      document.querySelectorAll('.type-cb').forEach(cb => cb.checked = true);
+      updateTypeSelections();
+
       filterRides();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1569,7 +1590,6 @@
         document.getElementById('shareFavsBtn').style.display = 'none';
       }
 
-      reinitAllFilters();
       filterRides();
     }
 
