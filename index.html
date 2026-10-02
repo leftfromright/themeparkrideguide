@@ -152,6 +152,8 @@
     .action-link { font-size: 0.75rem; color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
     .action-link:hover { text-decoration: underline; }
 
+    .dropdown-group-header { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); padding: 0.4rem 0.5rem 0.2rem 0.5rem; border-bottom: 1px solid var(--border); margin-top: 0.4rem; margin-bottom: 0.2rem; }
+
     .dropdown-category-picker { display: flex; gap: 0.35rem; padding: 0 0.5rem 0.5rem 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; }
     .park-cat-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; flex: 1; text-align: center; transition: all 0.2s ease; }
     .park-cat-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
@@ -242,6 +244,15 @@
     .park-info-actions { display: flex; gap: 0.65rem; flex-wrap: wrap; margin-top: 0.25rem; }
     .park-action-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.85rem; background: var(--badge-bg); border: 1px solid var(--border); color: var(--accent); border-radius: 8px; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease; }
     .park-action-btn:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+
+    /* 7-Day Hours Calendar Grid */
+    .hours-calendar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)); gap: 0.5rem; margin-top: 0.35rem; }
+    .hours-day-box { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.5rem; text-align: center; display: flex; flex-direction: column; gap: 0.15rem; }
+    .hours-day-box.is-today { border-color: var(--accent); background: var(--badge-bg); }
+    .hours-day-name { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .hours-day-date { font-size: 0.75rem; font-weight: 600; color: var(--text); }
+    .hours-day-time { font-size: 0.72rem; font-weight: 700; color: var(--accent); }
+    .hours-day-time.closed { color: #ef4444; }
 
     /* Guided Onboarding Banner */
     .guided-container { background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 16px; padding: 2.5rem 2rem; text-align: center; max-width: 600px; margin: 2rem auto; box-shadow: var(--shadow); }
@@ -412,7 +423,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v66</div>
+    <div class="version-badge" id="versionBadgeBtn">v67</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -574,7 +585,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v66';
+    const CACHE_KEY = 'theme_park_rides_cache_v67';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -615,7 +626,7 @@
       'disneyland park': '🏰',
       'disney california adventure': '🎡',
       'disneyland paris': '🏰',
-      'blizzard beach': '❄️️',
+      'blizzard beach': '❄',
       'typhoon lagoon': '🌋',
       'universal epic universe': '⚡',
       'epic universe': '⚡',
@@ -656,23 +667,6 @@
       'thorpe park': 'Staines Road, Chertsey, Surrey, KT16 8PN, United Kingdom',
       'chessington world of adventures': 'Leatherhead Road, Chessington, Surrey, KT9 2NE, United Kingdom',
       'legoland windsor': 'Winkfield Road, Windsor, Berkshire, SL4 4AY, United Kingdom'
-    };
-
-    const PARK_OPERATING_HOURS_DEFAULT = {
-      'magic kingdom': '09:00 - 22:00 (Early Entry 08:30)',
-      'epcot': '09:00 - 21:00',
-      'disney\'s animal kingdom': '08:00 - 18:00',
-      'animal kingdom': '08:00 - 18:00',
-      'disney\'s hollywood studios': '08:30 - 21:00',
-      'hollywood studios': '08:30 - 21:00',
-      'disneyland park': '08:00 - 23:00',
-      'disney california adventure': '08:00 - 22:00',
-      'universal studios florida': '09:00 - 21:00',
-      'universal\'s islands of adventure': '09:00 - 21:00',
-      'islands of adventure': '09:00 - 21:00',
-      'alton towers': '10:00 - 17:00 (Seasonal Variation)',
-      'thorpe park': '10:00 - 17:00 (Fright Nights until 21:00)',
-      'chessington world of adventures': '10:00 - 17:00'
     };
 
     const COUNTRY_FLAG_MAP = {
@@ -1093,6 +1087,7 @@
     }
 
     function filterByParkOnly(parkName) {
+      isGuidedActive = false; // Directly bypass selection box
       selectedParks = [parkName];
       document.querySelectorAll('.park-cb').forEach(cb => {
         cb.checked = (cb.value === parkName);
@@ -1156,22 +1151,58 @@
     function initParkFilter() {
       const dataset = getActiveDataset();
       const availableRides = dataset.filter(r => selectedCountries.includes(r.country));
-      const parks = [...new Set(availableRides.map(r => r.park).filter(Boolean))].sort();
       
-      selectedParks = [...parks];
+      const totalCountries = document.querySelectorAll('.country-cb').length;
+      const shouldGroup = (selectedCountries.length === 0 || selectedCountries.length === totalCountries);
 
       const container = document.getElementById('parkOptions');
-      container.innerHTML = parks.map(p => `
-        <label class="dropdown-option">
-          <input type="checkbox" value="${p}" checked class="park-cb">
-          ${getFaviconHtml(p)}
-          <span>${p}</span>
-        </label>
-      `).join('');
 
+      if (shouldGroup) {
+        const parksByCountry = {};
+        availableRides.forEach(r => {
+          if (!r.park) return;
+          const country = r.country || 'Other';
+          if (!parksByCountry[country]) parksByCountry[country] = new Set();
+          parksByCountry[country].add(r.park);
+        });
+
+        const sortedCountries = Object.keys(parksByCountry).sort();
+        let html = '';
+
+        sortedCountries.forEach(country => {
+          const countryParks = [...parksByCountry[country]].sort();
+          const flag = getCountryFlag(country);
+          html += `<div class="dropdown-group-header"><span class="flag-emoji">${flag}</span> ${country}</div>`;
+          countryParks.forEach(p => {
+            html += `
+              <label class="dropdown-option">
+                <input type="checkbox" value="${p}" checked class="park-cb">
+                ${getFaviconHtml(p)}
+                <span>${p}</span>
+              </label>
+            `;
+          });
+        });
+
+        container.innerHTML = html;
+        selectedParks = [...new Set(availableRides.map(r => r.park).filter(Boolean))];
+      } else {
+        const parks = [...new Set(availableRides.map(r => r.park).filter(Boolean))].sort();
+        selectedParks = [...parks];
+
+        container.innerHTML = parks.map(p => `
+          <label class="dropdown-option">
+            <input type="checkbox" value="${p}" checked class="park-cb">
+            ${getFaviconHtml(p)}
+            <span>${p}</span>
+          </label>
+        `).join('');
+      }
+
+      const allParksList = [...new Set(availableRides.map(r => r.park).filter(Boolean))];
       const brandContainer = document.getElementById('brandActions');
-      const hasDisney = parks.some(isDisneyPark);
-      const hasUniversal = parks.some(isUniversalPark);
+      const hasDisney = allParksList.some(isDisneyPark);
+      const hasUniversal = allParksList.some(isUniversalPark);
       brandContainer.style.display = (hasDisney || hasUniversal) ? 'flex' : 'none';
       document.getElementById('selectDisneyParks').style.display = hasDisney ? 'inline' : 'none';
       document.getElementById('selectUniversalParks').style.display = hasUniversal ? 'inline' : 'none';
@@ -1374,6 +1405,60 @@
     document.getElementById('viewFavsBtn').addEventListener('click', () => switchToRideView('favourites'));
     document.getElementById('viewParkInfoBtn').addEventListener('click', () => navigateToParkInfo());
 
+    // Next 7 Days Operating Hours Generator
+    function getNext7DaysHours(parkName) {
+      const norm = parkName.toLowerCase().trim();
+      const result = [];
+      const now = new Date(); // Anchor: Oct 2, 2026
+
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + i);
+
+        const dayName = d.toLocaleDateString('en-GB', { weekday: 'short' });
+        const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        const dayOfWeek = d.getDay(); // 0 = Sun, 5 = Fri, 6 = Sat
+
+        let timeStr = '10:00 - 18:00';
+        let isClosed = false;
+
+        if (norm.includes('alton towers')) {
+          if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) {
+            timeStr = '10:00 - 21:00 (Scarefest)';
+          } else {
+            timeStr = '10:00 - 16:00';
+          }
+        } else if (norm.includes('thorpe park')) {
+          if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) {
+            timeStr = '10:00 - 21:00 (Fright Nights)';
+          } else if (dayOfWeek === 1 || dayOfWeek === 2 || dayOfWeek === 3) {
+            isClosed = true;
+            timeStr = 'Closed';
+          } else {
+            timeStr = '10:00 - 17:00';
+          }
+        } else if (norm.includes('chessington')) {
+          timeStr = (dayOfWeek === 6 || dayOfWeek === 0) ? '10:00 - 18:00' : '10:00 - 17:00';
+        } else if (norm.includes('magic kingdom')) {
+          timeStr = '09:00 - 22:00';
+        } else if (norm.includes('epcot')) {
+          timeStr = '09:00 - 21:00';
+        } else if (norm.includes('universal') || norm.includes('islands of adventure')) {
+          timeStr = '09:00 - 21:00';
+        }
+
+        result.push({
+          dayName,
+          dateStr,
+          timeStr,
+          isToday: (i === 0),
+          isClosed
+        });
+      }
+
+      return result;
+    }
+
     // Render Country-Grouped Park Info View
     function renderParkInfoCards() {
       const container = document.getElementById('parkInfoCardsContainer');
@@ -1405,7 +1490,6 @@
         return;
       }
 
-      // Group parks by Country
       const parksByCountry = {};
       filtered.forEach(p => {
         if (!parksByCountry[p.country]) parksByCountry[p.country] = [];
@@ -1425,11 +1509,19 @@
           const cardId = `park-card-${normalizeText(p.name)}`;
 
           const locationStr = PARK_LOCATION_DETAILS[normName] || `${p.name}, ${p.country}`;
-          const hoursStr = PARK_OPERATING_HOURS_DEFAULT[normName] || '10:00 - 18:00 (Standard Operational Hours)';
+          const next7Days = getNext7DaysHours(p.name);
 
           let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
           const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
           const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}${locationStr}`)}`;
+
+          const calendarHtml = next7Days.map(d => `
+            <div class="hours-day-box ${d.isToday ? 'is-today' : ''}">
+              <span class="hours-day-name">${d.isToday ? 'Today' : d.dayName}</span>
+              <span class="hours-day-date">${d.dateStr}</span>
+              <span class="hours-day-time ${d.isClosed ? 'closed' : ''}">${d.timeStr}</span>
+            </div>
+          `).join('');
 
           return `
             <div class="park-info-card" id="${cardId}">
@@ -1441,14 +1533,18 @@
               </div>
 
               <div class="park-info-grid">
+                <div class="park-info-item" style="grid-column: 1 / -1;">
+                  <span class="park-info-item-label">📅 Upcoming 7-Day Operating Hours</span>
+                  <div class="hours-calendar-grid">
+                    ${calendarHtml}
+                  </div>
+                </div>
+
                 <div class="park-info-item">
                   <span class="park-info-item-label">📍 Location & Address</span>
                   <span class="park-info-item-value">${locationStr}</span>
                 </div>
-                <div class="park-info-item">
-                  <span class="park-info-item-label">🕒 Operating Hours</span>
-                  <span class="park-info-item-value">${hoursStr}</span>
-                </div>
+                
                 <div class="park-info-item">
                   <span class="park-info-item-label">🎢 Catalogued Attractions</span>
                   <span class="park-info-item-value">${p.ridesCount} Rides Available</span>
