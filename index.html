@@ -8,8 +8,8 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎢</text></svg>">
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Comprehensive theme park ride guide featuring height requirements, sensory notes, and details for rides at Disney, Universal, Alton Towers, and more.">
-  <meta name="keywords" content="theme park ride guide, height requirements, roller coasters, family days out, Disney rides, Universal rides">
+  <meta name="description" content="Comprehensive theme park ride guide featuring height requirements, sensory notes, opening hours, and park locations for Disney, Universal, Alton Towers, and more.">
+  <meta name="keywords" content="theme park ride guide, park info, park hours, height requirements, roller coasters, family days out">
   <meta name="author" content="Theme Park Ride Guide">
 
   <!-- Flag Emoji Polyfill for Desktop Windows Chrome / Edge -->
@@ -222,6 +222,21 @@
     .slim-ride-name { font-weight: 600; font-size: 0.95rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .slim-ride-meta-tags { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; font-size: 0.85rem; color: var(--muted); }
 
+    /* Park Info Dedicated View Styles */
+    .park-info-view { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; width: 100%; }
+    .park-info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; box-shadow: var(--shadow); transition: border-color 0.2s ease; display: flex; flex-direction: column; gap: 1rem; scroll-margin-top: 2rem; }
+    .park-info-card:hover { border-color: var(--accent); }
+    .park-info-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.85rem; flex-wrap: wrap; }
+    .park-info-title-group { display: flex; align-items: center; gap: 0.75rem; }
+    .park-info-title-group h2 { font-size: 1.5rem; color: var(--text); font-weight: 700; }
+    .park-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; font-size: 0.9rem; }
+    .park-info-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+    .park-info-item-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.03em; }
+    .park-info-item-value { font-weight: 600; color: var(--text); }
+    .park-info-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.25rem; }
+    .park-action-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; background: var(--badge-bg); border: 1px solid var(--border); color: var(--accent); border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; }
+    .park-action-btn:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+
     /* Guided Onboarding Banner */
     .guided-container { background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 16px; padding: 2.5rem 2rem; text-align: center; max-width: 600px; margin: 2rem auto; box-shadow: var(--shadow); }
     .guided-container h2 { font-size: 1.8rem; color: var(--accent); margin-bottom: 0.5rem; }
@@ -269,15 +284,13 @@
       pointer-events: none;
     }
 
-    /* Live Wait Badge */
-    .live-wait-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 6px; margin-bottom: 0.5rem; }
+    /* Live Wait Badge (Clickable Link to Park Info) */
+    .live-wait-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 6px; margin-bottom: 0.5rem; cursor: pointer; transition: transform 0.15s ease, opacity 0.15s ease; }
+    .live-wait-badge:hover { transform: scale(1.03); opacity: 0.9; }
     .live-wait-badge.wait-short { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
     .live-wait-badge.wait-medium { background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
     .live-wait-badge.wait-long { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
     .live-wait-badge.wait-down { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
-
-    /* Showtimes Badge */
-    .showtime-badge { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid var(--accent); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 6px; margin-bottom: 0.5rem; display: inline-block; }
 
     /* About Modal Styles */
     .modal-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); z-index: 300; align-items: center; justify-content: center; padding: 1rem; }
@@ -369,9 +382,9 @@
     @media print {
       body { background: #ffffff !important; color: #000000 !important; padding: 0 !important; }
       header, .controls, .status-bar, footer, .pov-link, .fav-btn, .version-badge, .hero-banner, .modal-backdrop { display: none !important; }
-      .grid { display: block !important; }
-      .card { page-break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 1rem !important; padding: 1rem !important; color: #000 !important; background: #fff !important; }
-      .card h2 { color: #000 !important; }
+      .grid, .park-info-view { display: block !important; }
+      .card, .park-info-card { page-break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 1rem !important; padding: 1rem !important; color: #000 !important; background: #fff !important; }
+      .card h2, .park-info-title-group h2 { color: #000 !important; }
       .tag { border: 1px solid #999 !important; color: #000 !important; background: none !important; }
       .ride-thumb { display: none !important; }
     }
@@ -393,7 +406,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v64</div>
+    <div class="version-badge" id="versionBadgeBtn">v65</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -407,19 +420,19 @@
       <button class="nav-btn" id="viewFavsBtn">
         ★ Favourites <span class="nav-badge" id="favCountBadge">0</span>
       </button>
-      <button class="nav-btn" id="viewParkInfoBtn" onclick="showToast('Park Info tab coming soon!')">
+      <button class="nav-btn" id="viewParkInfoBtn">
         🗺️ Park Info
       </button>
       <button class="action-nav-btn" id="shareFavsBtn" style="display: none;">
         🔗 Share
       </button>
       <button class="action-nav-btn" id="printFavsBtn" style="display: none;">
-        🖨️️ Print
+        🖨 Print
       </button>
     </div>
   </header>
 
-  <div class="controls">
+  <div class="controls" id="rideControlsSection">
     <!-- Top Row: Search, Sort, Height Slider -->
     <div class="top-controls-row">
       <input type="text" id="searchInput" placeholder="Search ride, park, type, or details...">
@@ -508,7 +521,7 @@
     </div>
   </div>
 
-  <div class="status-bar">
+  <div class="status-bar" id="statusBarSection">
     <div class="meta-counts">
       <span id="rideCounter">Showing 0 rides</span>
       
@@ -530,13 +543,21 @@
     <div class="pills-container" id="pillsContainer"></div>
   </div>
 
-  <main>
+  <main id="mainContainer">
     <div class="grid" id="rideGrid">
       <div class="guided-container" style="grid-column: 1 / -1;">
         <h2>👋 Where are you planning your day out?</h2>
         <p>Select your destination country and park to get started.</p>
         <div style="text-align: center; color: var(--muted); font-size: 0.9rem;">Loading parks...</div>
       </div>
+    </div>
+
+    <!-- Park Info View (Hidden by default) -->
+    <div class="park-info-view" id="parkInfoGrid" style="display: none;">
+      <div style="margin-bottom: 1rem; width: 100%;">
+        <input type="text" id="parkSearchInput" placeholder="Filter parks by name, country, or location..." style="width: 100%; max-width: 500px;">
+      </div>
+      <div id="parkInfoCardsContainer"></div>
     </div>
   </main>
 
@@ -547,7 +568,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v64';
+    const CACHE_KEY = 'theme_park_rides_cache_v65';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -607,6 +628,45 @@
       'alton towers': 'altontowers.com',
       'chessington world of adventures': 'chessington.com',
       'thorpe park': 'thorpepark.com'
+    };
+
+    const PARK_LOCATION_DETAILS = {
+      'magic kingdom': 'Walt Disney World, Bay Lake, Florida, USA',
+      'epcot': 'Walt Disney World, Lake Buena Vista, Florida, USA',
+      'disney\'s animal kingdom': 'Walt Disney World, Lake Buena Vista, Florida, USA',
+      'animal kingdom': 'Walt Disney World, Lake Buena Vista, Florida, USA',
+      'disney\'s hollywood studios': 'Walt Disney World, Bay Lake, Florida, USA',
+      'hollywood studios': 'Walt Disney World, Bay Lake, Florida, USA',
+      'disneyland park': 'Disneyland Resort, Anaheim, California, USA',
+      'disney california adventure': 'Disneyland Resort, Anaheim, California, USA',
+      'disneyland paris': 'Marne-la-Vallée, France',
+      'universal studios florida': 'Universal Orlando Resort, Orlando, Florida, USA',
+      'universal\'s islands of adventure': 'Universal Orlando Resort, Orlando, Florida, USA',
+      'islands of adventure': 'Universal Orlando Resort, Orlando, Florida, USA',
+      'universal\'s volcano bay': 'Universal Orlando Resort, Orlando, Florida, USA',
+      'volcano bay': 'Universal Orlando Resort, Orlando, Florida, USA',
+      'universal epic universe': 'Universal Orlando Resort, Orlando, Florida, USA',
+      'alton towers': 'Alton, Staffordshire, ST10 4DB, United Kingdom',
+      'thorpe park': 'Staines Road, Chertsey, Surrey, KT16 8PN, United Kingdom',
+      'chessington world of adventures': 'Leatherhead Road, Chessington, Surrey, KT9 2NE, United Kingdom',
+      'legoland windsor': 'Winkfield Road, Windsor, Berkshire, SL4 4AY, United Kingdom'
+    };
+
+    const PARK_OPERATING_HOURS_DEFAULT = {
+      'magic kingdom': '09:00 - 22:00 (Early Entry 08:30)',
+      'epcot': '09:00 - 21:00',
+      'disney\'s animal kingdom': '08:00 - 18:00',
+      'animal kingdom': '08:00 - 18:00',
+      'disney\'s hollywood studios': '08:30 - 21:00',
+      'hollywood studios': '08:30 - 21:00',
+      'disneyland park': '08:00 - 23:00',
+      'disney california adventure': '08:00 - 22:00',
+      'universal studios florida': '09:00 - 21:00',
+      'universal\'s islands of adventure': '09:00 - 21:00',
+      'islands of adventure': '09:00 - 21:00',
+      'alton towers': '10:00 - 17:00 (Seasonal Variation)',
+      'thorpe park': '10:00 - 17:00 (Fright Nights until 21:00)',
+      'chessington world of adventures': '10:00 - 17:00'
     };
 
     const COUNTRY_FLAG_MAP = {
@@ -1249,27 +1309,152 @@
       });
     }
 
-    document.getElementById('viewAllBtn').addEventListener('click', () => {
-      if (currentView === 'all') return;
-      currentView = 'all';
-      document.getElementById('viewAllBtn').classList.add('active');
+    // Navigation Switcher Logic
+    function switchToRideView(viewType) {
+      currentView = viewType;
+      document.getElementById('viewParkInfoBtn').classList.remove('active');
+      document.getElementById('parkInfoGrid').style.display = 'none';
+      document.getElementById('rideGrid').style.display = 'grid';
+      document.getElementById('rideControlsSection').style.display = 'flex';
+      document.getElementById('statusBarSection').style.display = 'flex';
+
+      if (viewType === 'all') {
+        document.getElementById('viewAllBtn').classList.add('active');
+        document.getElementById('viewFavsBtn').classList.remove('active');
+        document.getElementById('printFavsBtn').style.display = 'none';
+        document.getElementById('shareFavsBtn').style.display = 'none';
+      } else {
+        document.getElementById('viewFavsBtn').classList.add('active');
+        document.getElementById('viewAllBtn').classList.remove('active');
+        document.getElementById('printFavsBtn').style.display = 'inline-flex';
+        document.getElementById('shareFavsBtn').style.display = 'inline-flex';
+      }
+
+      reinitAllFilters();
+      filterRides();
+    }
+
+    function navigateToParkInfo(targetParkName) {
+      currentView = 'park-info';
+      document.getElementById('viewAllBtn').classList.remove('active');
       document.getElementById('viewFavsBtn').classList.remove('active');
+      document.getElementById('viewParkInfoBtn').classList.add('active');
+
+      document.getElementById('rideGrid').style.display = 'none';
+      document.getElementById('rideControlsSection').style.display = 'none';
+      document.getElementById('statusBarSection').style.display = 'none';
       document.getElementById('printFavsBtn').style.display = 'none';
       document.getElementById('shareFavsBtn').style.display = 'none';
-      reinitAllFilters();
-      filterRides();
-    });
 
-    document.getElementById('viewFavsBtn').addEventListener('click', () => {
-      if (currentView === 'favourites') return;
-      currentView = 'favourites';
-      document.getElementById('viewFavsBtn').classList.add('active');
-      document.getElementById('viewAllBtn').classList.remove('active');
-      document.getElementById('printFavsBtn').style.display = 'inline-flex';
-      document.getElementById('shareFavsBtn').style.display = 'inline-flex';
-      reinitAllFilters();
-      filterRides();
-    });
+      document.getElementById('parkInfoGrid').style.display = 'flex';
+      renderParkInfoCards();
+
+      if (targetParkName) {
+        setTimeout(() => {
+          const cardId = `park-card-${normalizeText(targetParkName)}`;
+          const el = document.getElementById(cardId);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            el.style.borderColor = 'var(--accent)';
+          }
+        }, 100);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    document.getElementById('viewAllBtn').addEventListener('click', () => switchToRideView('all'));
+    document.getElementById('viewFavsBtn').addEventListener('click', () => switchToRideView('favourites'));
+    document.getElementById('viewParkInfoBtn').addEventListener('click', () => navigateToParkInfo());
+
+    // Render Dedicated Park Info View
+    function renderParkInfoCards() {
+      const container = document.getElementById('parkInfoCardsContainer');
+      const searchVal = normalizeText(document.getElementById('parkSearchInput').value || '');
+
+      // Group unique parks from dataset
+      const uniqueParksMap = {};
+      allRides.forEach(r => {
+        if (r.park && !uniqueParksMap[r.park]) {
+          uniqueParksMap[r.park] = {
+            name: r.park,
+            country: r.country,
+            ridesCount: 0,
+            sampleRideUrl: r.rideUrl,
+            sampleQueuePass: getQueuePass(r)
+          };
+        }
+        if (r.park) uniqueParksMap[r.park].ridesCount++;
+      });
+
+      const sortedParks = Object.values(uniqueParksMap).sort((a, b) => a.name.localeCompare(b.name));
+
+      const filtered = sortedParks.filter(p => {
+        if (!searchVal) return true;
+        return normalizeText(`${p.name} ${p.country} ${PARK_LOCATION_DETAILS[p.name.toLowerCase().trim()] || ''}`).includes(searchVal);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="loading">No park information matches your search.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(p => {
+        const normName = p.name.toLowerCase().trim();
+        const displayPark = getDisplayParkName(p.name);
+        const faviconHtml = getFaviconHtml(p.name);
+        const cardId = `park-card-${normalizeText(p.name)}`;
+        const flag = getCountryFlag(p.country);
+
+        const locationStr = PARK_LOCATION_DETAILS[normName] || `${p.name}, ${p.country}`;
+        const hoursStr = PARK_OPERATING_HOURS_DEFAULT[normName] || '10:00 - 18:00 (Standard Operational Hours)';
+
+        let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
+        const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}${locationStr}`)}`;
+
+        return `
+          <div class="park-info-card" id="${cardId}">
+            <div class="park-info-header">
+              <div class="park-info-title-group">
+                ${faviconHtml}
+                <h2>${displayPark}</h2>
+              </div>
+              <span class="tag"><span class="flag-emoji">${flag}</span> ${p.country}</span>
+            </div>
+
+            <div class="park-info-grid">
+              <div class="park-info-item">
+                <span class="park-info-item-label">📍 Location & Address</span>
+                <span class="park-info-item-value">${locationStr}</span>
+              </div>
+              <div class="park-info-item">
+                <span class="park-info-item-label">🕒 Operating Hours</span>
+                <span class="park-info-item-value">${hoursStr}</span>
+              </div>
+              <div class="park-info-item">
+                <span class="park-info-item-label">🎢 Attractions Available</span>
+                <span class="park-info-item-value">${p.ridesCount} Rides Catalogued</span>
+              </div>
+              ${p.sampleQueuePass ? `
+                <div class="park-info-item">
+                  <span class="park-info-item-label">⏩ Priority Pass System</span>
+                  <span class="park-info-item-value">${p.sampleQueuePass}</span>
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="park-info-actions">
+              ${officialUrl ? `<a href="${officialUrl}" target="_blank" rel="noopener" class="park-action-btn">🌐 Official Website</a>` : ''}
+              <a href="${mapsUrl}" target="_blank" rel="noopener" class="park-action-btn">🗺️ Google Maps Directions</a>
+              <button class="park-action-btn" onclick="filterByParkOnly('${p.name.replace(/'/g, "\\'")}'); switchToRideView('all');">🎢 View Park Rides (${p.ridesCount})</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('parkSearchInput').addEventListener('input', renderParkInfoCards);
 
     document.getElementById('printFavsBtn').addEventListener('click', () => {
       window.print();
@@ -1591,12 +1776,12 @@
                 if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
                   liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱️ ${liveInfo.waitTime}m</span>`;
                 } else if (liveInfo.status === 'REFURBISHMENT') {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#f59e0b;">🔧 Maintenance</span>`;
+                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#f59e0b; cursor:pointer;" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔧 Maintenance</span>`;
                 } else {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;">🌙 Park Closed</span>`;
+                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8; cursor:pointer;" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</span>`;
                 }
               } else {
-                liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;">🌙 Park Closed</span>`;
+                liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8; cursor:pointer;" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</span>`;
               }
             }
 
@@ -1671,16 +1856,16 @@
               let badgeClass = 'wait-short';
               if (liveInfo.waitTime >= 30 && liveInfo.waitTime < 60) badgeClass = 'wait-medium';
               else if (liveInfo.waitTime >= 60) badgeClass = 'wait-long';
-              liveBadgeHtml = `<div class="live-wait-badge ${badgeClass}">⏱️ ${liveInfo.waitTime} min wait</div>`;
+              liveBadgeHtml = `<div class="live-wait-badge ${badgeClass}" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">⏱️ ${liveInfo.waitTime} min wait</div>`;
             } else if (liveInfo.status === 'REFURBISHMENT') {
-              liveBadgeHtml = `<div class="live-wait-badge wait-down">🔧 Under Maintenance</div>`;
+              liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔧 Under Maintenance</div>`;
             } else if (liveInfo.status === 'DOWN') {
-              liveBadgeHtml = `<div class="live-wait-badge wait-down">🔴 Temporarily Down</div>`;
+              liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔴 Temporarily Down</div>`;
             } else {
-              liveBadgeHtml = `<div class="live-wait-badge wait-down">🌙 Park Closed</div>`;
+              liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</div>`;
             }
           } else {
-            liveBadgeHtml = `<div class="live-wait-badge wait-down">🌙 Park Closed</div>`;
+            liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</div>`;
           }
         }
 
@@ -1726,7 +1911,7 @@
     }
 
     window.addEventListener('scroll', () => {
-      if (isGuidedActive) return;
+      if (isGuidedActive || currentView === 'park-info') return;
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
         if (displayedCount < currentFilteredRides.length) {
           displayedCount += 24;
@@ -1736,7 +1921,7 @@
     });
 
     function filterRides() {
-      if (isGuidedActive) return;
+      if (isGuidedActive || currentView === 'park-info') return;
 
       const rawSearch = document.getElementById('searchInput').value;
       const searchNormalized = normalizeText(rawSearch);
