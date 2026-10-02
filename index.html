@@ -222,19 +222,25 @@
     .slim-ride-name { font-weight: 600; font-size: 0.95rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .slim-ride-meta-tags { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; font-size: 0.85rem; color: var(--muted); }
 
-    /* Park Info Dedicated View Styles */
+    /* Country Grouped Park Info View Styles */
     .park-info-view { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; width: 100%; }
-    .park-info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; box-shadow: var(--shadow); transition: border-color 0.2s ease; display: flex; flex-direction: column; gap: 1rem; scroll-margin-top: 2rem; }
+    .country-group-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); transition: border-color 0.2s ease; }
+    .country-group-container:hover { border-color: var(--accent); }
+    .country-group-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: var(--badge-bg); cursor: pointer; font-weight: 700; font-size: 1.1rem; }
+    .country-group-header .country-info { display: flex; align-items: center; gap: 0.6rem; }
+    .country-group-content { display: flex; flex-direction: column; gap: 1rem; padding: 1.25rem; border-top: 1px solid var(--border); }
+    
+    .park-info-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.85rem; scroll-margin-top: 2rem; transition: border-color 0.2s ease; }
     .park-info-card:hover { border-color: var(--accent); }
-    .park-info-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.85rem; flex-wrap: wrap; }
+    .park-info-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; flex-wrap: wrap; }
     .park-info-title-group { display: flex; align-items: center; gap: 0.75rem; }
-    .park-info-title-group h2 { font-size: 1.5rem; color: var(--text); font-weight: 700; }
-    .park-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; font-size: 0.9rem; }
-    .park-info-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
-    .park-info-item-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.03em; }
+    .park-info-title-group h2 { font-size: 1.3rem; color: var(--text); font-weight: 700; }
+    .park-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.85rem; font-size: 0.88rem; }
+    .park-info-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 0.9rem; display: flex; flex-direction: column; gap: 0.2rem; }
+    .park-info-item-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.03em; }
     .park-info-item-value { font-weight: 600; color: var(--text); }
-    .park-info-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.25rem; }
-    .park-action-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; background: var(--badge-bg); border: 1px solid var(--border); color: var(--accent); border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; }
+    .park-info-actions { display: flex; gap: 0.65rem; flex-wrap: wrap; margin-top: 0.25rem; }
+    .park-action-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.85rem; background: var(--badge-bg); border: 1px solid var(--border); color: var(--accent); border-radius: 8px; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease; }
     .park-action-btn:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
     /* Guided Onboarding Banner */
@@ -406,7 +412,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v65</div>
+    <div class="version-badge" id="versionBadgeBtn">v66</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -552,7 +558,7 @@
       </div>
     </div>
 
-    <!-- Park Info View (Hidden by default) -->
+    <!-- Country-Grouped Park Info View -->
     <div class="park-info-view" id="parkInfoGrid" style="display: none;">
       <div style="margin-bottom: 1rem; width: 100%;">
         <input type="text" id="parkSearchInput" placeholder="Filter parks by name, country, or location..." style="width: 100%; max-width: 500px;">
@@ -568,7 +574,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v65';
+    const CACHE_KEY = 'theme_park_rides_cache_v66';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -609,7 +615,7 @@
       'disneyland park': '🏰',
       'disney california adventure': '🎡',
       'disneyland paris': '🏰',
-      'blizzard beach': '❄️',
+      'blizzard beach': '❄️️',
       'typhoon lagoon': '🌋',
       'universal epic universe': '⚡',
       'epic universe': '⚡',
@@ -1318,16 +1324,17 @@
       document.getElementById('rideControlsSection').style.display = 'flex';
       document.getElementById('statusBarSection').style.display = 'flex';
 
-      if (viewType === 'all') {
-        document.getElementById('viewAllBtn').classList.add('active');
-        document.getElementById('viewFavsBtn').classList.remove('active');
-        document.getElementById('printFavsBtn').style.display = 'none';
-        document.getElementById('shareFavsBtn').style.display = 'none';
-      } else {
+      if (viewType === 'favourites') {
+        isGuidedActive = false; // Bypass guided setup for direct favourites viewing
         document.getElementById('viewFavsBtn').classList.add('active');
         document.getElementById('viewAllBtn').classList.remove('active');
         document.getElementById('printFavsBtn').style.display = 'inline-flex';
         document.getElementById('shareFavsBtn').style.display = 'inline-flex';
+      } else {
+        document.getElementById('viewAllBtn').classList.add('active');
+        document.getElementById('viewFavsBtn').classList.remove('active');
+        document.getElementById('printFavsBtn').style.display = 'none';
+        document.getElementById('shareFavsBtn').style.display = 'none';
       }
 
       reinitAllFilters();
@@ -1367,18 +1374,17 @@
     document.getElementById('viewFavsBtn').addEventListener('click', () => switchToRideView('favourites'));
     document.getElementById('viewParkInfoBtn').addEventListener('click', () => navigateToParkInfo());
 
-    // Render Dedicated Park Info View
+    // Render Country-Grouped Park Info View
     function renderParkInfoCards() {
       const container = document.getElementById('parkInfoCardsContainer');
       const searchVal = normalizeText(document.getElementById('parkSearchInput').value || '');
 
-      // Group unique parks from dataset
       const uniqueParksMap = {};
       allRides.forEach(r => {
         if (r.park && !uniqueParksMap[r.park]) {
           uniqueParksMap[r.park] = {
             name: r.park,
-            country: r.country,
+            country: r.country || 'Other',
             ridesCount: 0,
             sampleRideUrl: r.rideUrl,
             sampleQueuePass: getQueuePass(r)
@@ -1387,9 +1393,9 @@
         if (r.park) uniqueParksMap[r.park].ridesCount++;
       });
 
-      const sortedParks = Object.values(uniqueParksMap).sort((a, b) => a.name.localeCompare(b.name));
+      const allParks = Object.values(uniqueParksMap);
 
-      const filtered = sortedParks.filter(p => {
+      const filtered = allParks.filter(p => {
         if (!searchVal) return true;
         return normalizeText(`${p.name} ${p.country} ${PARK_LOCATION_DETAILS[p.name.toLowerCase().trim()] || ''}`).includes(searchVal);
       });
@@ -1399,55 +1405,82 @@
         return;
       }
 
-      container.innerHTML = filtered.map(p => {
-        const normName = p.name.toLowerCase().trim();
-        const displayPark = getDisplayParkName(p.name);
-        const faviconHtml = getFaviconHtml(p.name);
-        const cardId = `park-card-${normalizeText(p.name)}`;
-        const flag = getCountryFlag(p.country);
+      // Group parks by Country
+      const parksByCountry = {};
+      filtered.forEach(p => {
+        if (!parksByCountry[p.country]) parksByCountry[p.country] = [];
+        parksByCountry[p.country].push(p);
+      });
 
-        const locationStr = PARK_LOCATION_DETAILS[normName] || `${p.name}, ${p.country}`;
-        const hoursStr = PARK_OPERATING_HOURS_DEFAULT[normName] || '10:00 - 18:00 (Standard Operational Hours)';
+      const sortedCountries = Object.keys(parksByCountry).sort();
 
-        let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
-        const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
-        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}${locationStr}`)}`;
+      container.innerHTML = sortedCountries.map(country => {
+        const countryParks = parksByCountry[country].sort((a, b) => a.name.localeCompare(b.name));
+        const flag = getCountryFlag(country);
+
+        const parkCardsHtml = countryParks.map(p => {
+          const normName = p.name.toLowerCase().trim();
+          const displayPark = getDisplayParkName(p.name);
+          const faviconHtml = getFaviconHtml(p.name);
+          const cardId = `park-card-${normalizeText(p.name)}`;
+
+          const locationStr = PARK_LOCATION_DETAILS[normName] || `${p.name}, ${p.country}`;
+          const hoursStr = PARK_OPERATING_HOURS_DEFAULT[normName] || '10:00 - 18:00 (Standard Operational Hours)';
+
+          let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
+          const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
+          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}${locationStr}`)}`;
+
+          return `
+            <div class="park-info-card" id="${cardId}">
+              <div class="park-info-header">
+                <div class="park-info-title-group">
+                  ${faviconHtml}
+                  <h2>${displayPark}</h2>
+                </div>
+              </div>
+
+              <div class="park-info-grid">
+                <div class="park-info-item">
+                  <span class="park-info-item-label">📍 Location & Address</span>
+                  <span class="park-info-item-value">${locationStr}</span>
+                </div>
+                <div class="park-info-item">
+                  <span class="park-info-item-label">🕒 Operating Hours</span>
+                  <span class="park-info-item-value">${hoursStr}</span>
+                </div>
+                <div class="park-info-item">
+                  <span class="park-info-item-label">🎢 Catalogued Attractions</span>
+                  <span class="park-info-item-value">${p.ridesCount} Rides Available</span>
+                </div>
+                ${p.sampleQueuePass ? `
+                  <div class="park-info-item">
+                    <span class="park-info-item-label">⏩ Priority Pass System</span>
+                    <span class="park-info-item-value">${p.sampleQueuePass}</span>
+                  </div>
+                ` : ''}
+              </div>
+
+              <div class="park-info-actions">
+                ${officialUrl ? `<a href="${officialUrl}" target="_blank" rel="noopener" class="park-action-btn">🌐 Official Website</a>` : ''}
+                <a href="${mapsUrl}" target="_blank" rel="noopener" class="park-action-btn">🗺️ Google Maps Directions</a>
+                <button class="park-action-btn" onclick="filterByParkOnly('${p.name.replace(/'/g, "\\'")}'); switchToRideView('all');">🎢 View Park Rides (${p.ridesCount})</button>
+              </div>
+            </div>
+          `;
+        }).join('');
 
         return `
-          <div class="park-info-card" id="${cardId}">
-            <div class="park-info-header">
-              <div class="park-info-title-group">
-                ${faviconHtml}
-                <h2>${displayPark}</h2>
+          <div class="country-group-container">
+            <div class="country-group-header">
+              <div class="country-info">
+                <span class="flag-emoji">${flag}</span>
+                <span>${country}</span>
               </div>
-              <span class="tag"><span class="flag-emoji">${flag}</span> ${p.country}</span>
+              <span class="park-group-count">${countryParks.length} Parks</span>
             </div>
-
-            <div class="park-info-grid">
-              <div class="park-info-item">
-                <span class="park-info-item-label">📍 Location & Address</span>
-                <span class="park-info-item-value">${locationStr}</span>
-              </div>
-              <div class="park-info-item">
-                <span class="park-info-item-label">🕒 Operating Hours</span>
-                <span class="park-info-item-value">${hoursStr}</span>
-              </div>
-              <div class="park-info-item">
-                <span class="park-info-item-label">🎢 Attractions Available</span>
-                <span class="park-info-item-value">${p.ridesCount} Rides Catalogued</span>
-              </div>
-              ${p.sampleQueuePass ? `
-                <div class="park-info-item">
-                  <span class="park-info-item-label">⏩ Priority Pass System</span>
-                  <span class="park-info-item-value">${p.sampleQueuePass}</span>
-                </div>
-              ` : ''}
-            </div>
-
-            <div class="park-info-actions">
-              ${officialUrl ? `<a href="${officialUrl}" target="_blank" rel="noopener" class="park-action-btn">🌐 Official Website</a>` : ''}
-              <a href="${mapsUrl}" target="_blank" rel="noopener" class="park-action-btn">🗺️ Google Maps Directions</a>
-              <button class="park-action-btn" onclick="filterByParkOnly('${p.name.replace(/'/g, "\\'")}'); switchToRideView('all');">🎢 View Park Rides (${p.ridesCount})</button>
+            <div class="country-group-content">
+              ${parkCardsHtml}
             </div>
           </div>
         `;
@@ -1921,7 +1954,8 @@
     });
 
     function filterRides() {
-      if (isGuidedActive || currentView === 'park-info') return;
+      if (currentView === 'park-info') return;
+      if (isGuidedActive && currentView !== 'favourites') return;
 
       const rawSearch = document.getElementById('searchInput').value;
       const searchNormalized = normalizeText(rawSearch);
