@@ -622,7 +622,7 @@
         
         <div class="display-toggle">
           <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
-            <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
+            <span id="themeIcon">☀️️</span> <span id="themeLabel">Light Mode</span>
           </button>
           <button class="toggle-icon-btn active" id="cardViewBtn" title="Grid View">田 Grid</button>
           <button class="toggle-icon-btn" id="compactViewBtn" title="Compact List">≡ Compact</button>
@@ -1800,7 +1800,7 @@
 
           let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
           const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
-          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}${locationStr}`)}`;
+          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name} ${locationStr}`)}`;
 
           const calendarHtml = next7Days.map(d => `
             <div class="hours-day-box ${d.isToday ? 'is-today' : ''}">
@@ -2448,7 +2448,14 @@
       renderRidesBatch();
     }
 
-    document.getElementById('searchInput').addEventListener('input', filterRides);
+    document.getElementById('searchInput').addEventListener('input', () => {
+      if (isGuidedActive) {
+        isGuidedActive = false;
+        reinitAllFilters();
+      }
+      filterRides();
+    });
+
     document.getElementById('sortSelect').addEventListener('change', filterRides);
 
     document.getElementById('heightSlider').addEventListener('input', (e) => {
