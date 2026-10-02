@@ -492,7 +492,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v87</div>
+    <div class="version-badge" id="versionBadgeBtn">v89</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -654,7 +654,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v87';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v89';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -924,6 +924,19 @@
       updateFavBadge();
     }
 
+    function normalizeText(text) {
+      return String(text || '')
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201c\u201d]/g, '"')
+        .replace(/[^a-z0-9]/g, "");
+    }
+
+    function getRideKey(r) {
+      return normalizeText(`${r.park}_${r.ride}`);
+    }
+
     function toggleFavourite(event, rideKey) {
       if (event) {
         event.preventDefault();
@@ -943,19 +956,8 @@
       filterRides();
     }
 
-    function getRideKey(r) {
-      return `${r.park}_${r.ride}`.toLowerCase().replace(/\s+/g, '-');
-    }
-
     function updateFavBadge() {
       document.getElementById('favCountBadge').textContent = favourites.length;
-    }
-
-    function normalizeText(text) {
-      return String(text || '')
-        .toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]/g, "");
     }
 
     function getQueuePass(r) {
