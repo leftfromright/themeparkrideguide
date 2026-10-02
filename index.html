@@ -12,6 +12,12 @@
   <meta name="keywords" content="theme park ride guide, height requirements, roller coasters, family days out, Disney rides, Universal rides">
   <meta name="author" content="Theme Park Ride Guide">
 
+  <!-- Flag Emoji Polyfill for Desktop Windows Chrome / Edge -->
+  <script type="module">
+    import { polyfillCountryFlagEmojis } from 'https://cdn.skypack.dev/country-flag-emoji-polyfill';
+    polyfillCountryFlagEmojis();
+  </script>
+
   <style>
     /* Dark Theme (Default) */
     [data-theme="dark"] {
@@ -89,7 +95,7 @@
       --sensory-red-text: #b91c1c;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Twemoji Country Flags', system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding-bottom: 2rem; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; transition: background-color 0.3s ease, color 0.3s ease; }
     
     /* Full-Width Edge-to-Edge Hero Banner with Absolute Version Badge Overlay */
@@ -159,8 +165,8 @@
     .dropdown-option:hover { background: var(--badge-bg); }
     .dropdown-option input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
 
-    /* Cross-Platform Flag Styling to fix Windows rendering */
-    .flag-emoji { font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif; font-size: 1rem; line-height: 1; }
+    /* Cross-Platform Flag Styling */
+    .flag-emoji { font-size: 1.1rem; line-height: 1; display: inline-block; vertical-align: middle; }
 
     .park-favicon { width: 16px; height: 16px; border-radius: 3px; object-fit: contain; vertical-align: middle; flex-shrink: 0; background: rgba(255,255,255,0.2); }
 
@@ -252,7 +258,6 @@
     .queue-pass-badge { position: relative; display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.45rem 0.75rem; background: var(--queue-bg); border: 1px solid var(--queue-border); border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--queue-text); cursor: help; white-space: nowrap; transition: all 0.2s ease; }
     .queue-pass-badge:hover { background: var(--queue-border); }
     
-    /* Clean CSS Tooltip popup on hover */
     .queue-pass-badge:hover::after {
       content: attr(data-pass);
       position: absolute;
@@ -272,7 +277,7 @@
     }
 
     /* Live Wait Badge */
-    .live-wait-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px; margin-bottom: 0.5rem; }
+    .live-wait-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 6px; margin-bottom: 0.5rem; }
     .live-wait-badge.wait-short { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
     .live-wait-badge.wait-medium { background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
     .live-wait-badge.wait-long { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
@@ -386,7 +391,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v62</div>
+    <div class="version-badge" id="versionBadgeBtn">v63</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -542,7 +547,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v62';
+    const CACHE_KEY = 'theme_park_rides_cache_v63';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -642,6 +647,7 @@
     let isGuidedActive = true;
     let showLiveWaitTimes = false;
     let liveWaitData = {};
+    let liveWaitNameMap = {};
     let isFetchingLive = false;
 
     const aboutModal = document.getElementById('aboutModal');
@@ -926,11 +932,12 @@
       document.getElementById('rideCounter').textContent = 'Guided Setup Active';
     }
 
-    // Direct Live Wait Time Fetcher with Robust Object Parsing
+    // Direct Live Wait Time Fetcher with Robust Object Parsing & Name Matching
     async function fetchLiveWaitTimes() {
       if (isFetchingLive) return;
       isFetchingLive = true;
       liveWaitData = {};
+      liveWaitNameMap = {};
 
       const toggleText = document.getElementById('liveToggleText');
       toggleText.textContent = 'Fetching Live Times...';
@@ -957,7 +964,13 @@
                   }
                 }
                 const status = item.status || 'OPERATING';
-                liveWaitData[cleanId] = { waitTime: wait, status: status };
+                const liveObj = { waitTime: wait, status: status };
+
+                liveWaitData[cleanId] = liveObj;
+                if (item.name) {
+                  const normName = normalizeText(item.name);
+                  liveWaitNameMap[`${parkName}_${normName}`] = liveObj;
+                }
               }
             });
           }
@@ -969,6 +982,20 @@
       isFetchingLive = false;
       toggleText.textContent = 'Live Wait Times: ON';
       renderRidesBatch();
+    }
+
+    function getLiveInfoForRide(r) {
+      const rideUuid = getRideUuid(r);
+      if (rideUuid && liveWaitData[rideUuid]) {
+        return liveWaitData[rideUuid];
+      }
+      
+      const nameKey = `${r.park.toLowerCase().trim()}_${normalizeText(r.ride)}`;
+      if (liveWaitNameMap[nameKey]) {
+        return liveWaitNameMap[nameKey];
+      }
+
+      return null;
     }
 
     document.getElementById('liveWaitToggleBtn').addEventListener('click', () => {
@@ -1554,14 +1581,15 @@
 
             let liveBadgeHtml = '';
             if (showLiveWaitTimes) {
-              const rideUuid = getRideUuid(r);
-              const liveInfo = rideUuid ? liveWaitData[rideUuid] : null;
+              const liveInfo = getLiveInfoForRide(r);
               if (liveInfo) {
                 if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
                   liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱️ ${liveInfo.waitTime}m</span>`;
                 } else {
                   liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;">⚪ ${liveInfo.status}</span>`;
                 }
+              } else {
+                liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;">⚪ N/A</span>`;
               }
             }
 
@@ -1629,8 +1657,7 @@
 
         let liveBadgeHtml = '';
         if (showLiveWaitTimes) {
-          const rideUuid = getRideUuid(r);
-          const liveInfo = rideUuid ? liveWaitData[rideUuid] : null;
+          const liveInfo = getLiveInfoForRide(r);
           
           if (liveInfo) {
             if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
@@ -1643,6 +1670,8 @@
             } else {
               liveBadgeHtml = `<div class="live-wait-badge wait-down">⚪ ${liveInfo.status}</div>`;
             }
+          } else {
+            liveBadgeHtml = `<div class="live-wait-badge wait-down">⚪ Live Data N/A</div>`;
           }
         }
 
