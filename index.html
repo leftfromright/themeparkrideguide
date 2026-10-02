@@ -156,7 +156,7 @@
     .multiselect-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 0.5rem; min-width: 200px; }
     .multiselect-dropdown.show { display: block; }
     
-    .multiselect-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-space-between; padding: 0.25rem 0.5rem 0.5rem 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; }
+    .multiselect-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: space-between; padding: 0.25rem 0.5rem 0.5rem 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; }
     .action-group { display: flex; gap: 0.75rem; flex-wrap: wrap; }
     .action-link { font-size: 0.75rem; color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
     .action-link:hover { text-decoration: underline; }
@@ -474,7 +474,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v77</div>
+    <div class="version-badge" id="versionBadgeBtn">v79</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -600,7 +600,7 @@
         
         <div class="display-toggle">
           <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
-            <span id="themeIcon">☀️️</span> <span id="themeLabel">Light Mode</span>
+            <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
           </button>
           <button class="toggle-icon-btn active" id="cardViewBtn" title="Grid View">田 Grid</button>
           <button class="toggle-icon-btn" id="compactViewBtn" title="Compact List">≡ Compact</button>
@@ -636,7 +636,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v77';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v79';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -650,7 +650,17 @@
 
     const WATER_PARK_NAMES = ['blizzard beach', 'typhoon lagoon', 'volcano bay'];
 
+    // Verified ThemeParks.wiki Entity Directory UUID Mappings
     const THEME_PARKS_WIKI_IDS = {
+      'alton towers': '8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7',
+      'blackpool pleasure beach': '66fbd0d1-14dd-4f1a-bb18-5e0b7447f07d',
+      'chessington world of adventures': 'c4307928-fc3c-47df-b976-305026751727',
+      'chessington': 'c4307928-fc3c-47df-b976-305026751727',
+      'disneyland paris': 'e8d0207f-da8a-4048-bec8-117aa946b2c2',
+      'europa-park': '85e3b542-af91-4f8a-8d28-445868a7c8fd',
+      'flamingo land': '172d77cb-6341-4b3b-8a66-e145dad8dda9',
+      'legoland windsor': '7c48a21b-221c-42f8-8339-6334c5f2fb12',
+      'thorpe park': '6f9c3c13-8b74-4b47-b73a-4efb7189a05b',
       'magic kingdom': '73405151-0fd0-4d7f-b44e-909d432379b3',
       'epcot': '438d0111-adc6-4d04-b9c1-8b01267b1407',
       'disney\'s animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
@@ -661,10 +671,7 @@
       'disney california adventure': 'eb2d56a4-44bc-4475-b040-4273570624d6',
       'universal studios florida': 'f516a56e-69f8-44da-bf50-c81215b3992b',
       'universal\'s islands of adventure': '2105156a-9359-43c7-b76e-48f8bc5b1f63',
-      'islands of adventure': '2105156a-9359-43c7-b76e-48f8bc5b1f63',
-      'alton towers': 'd69e4697-3f36-4cce-9ff1-24fb6a188365',
-      'thorpe park': '6f9c3c13-8b74-4b47-b73a-4efb7189a05b',
-      'chessington world of adventures': 'b0a886f4-c5a4-42ea-9e73-d6c5614eb581'
+      'islands of adventure': '2105156a-9359-43c7-b76e-48f8bc5b1f63'
     };
 
     const PARK_ICON_OVERRIDES = {
@@ -1171,7 +1178,15 @@
       const uniqueParks = [...new Set(allRides.map(r => r.park.toLowerCase().trim()))];
 
       for (const parkName of uniqueParks) {
-        const wikiId = THEME_PARKS_WIKI_IDS[parkName];
+        let wikiId = THEME_PARKS_WIKI_IDS[parkName];
+        if (!wikiId) {
+          for (const [key, id] of Object.entries(THEME_PARKS_WIKI_IDS)) {
+            if (parkName.includes(key)) {
+              wikiId = id;
+              break;
+            }
+          }
+        }
         if (!wikiId) continue;
 
         try {
@@ -1222,7 +1237,8 @@
         return liveWaitData[rideUuid];
       }
       
-      const nameKey = `${r.park.toLowerCase().trim()}_${normalizeText(r.ride)}`;
+      const normPark = r.park.toLowerCase().trim();
+      const nameKey = `${normPark}_${normalizeText(r.ride)}`;
       if (liveWaitNameMap[nameKey]) {
         return liveWaitNameMap[nameKey];
       }
@@ -2158,10 +2174,10 @@
                 } else if (liveInfo.status === 'REFURBISHMENT') {
                   liveBadgeHtml = `<span style="font-size:0.8rem; color:#f59e0b;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔧 Maintenance</span>`;
                 } else {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</span>`;
+                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">ℹ️ Hours / Info</span>`;
                 }
               } else {
-                liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</span>`;
+                liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">ℹ️ Hours / Info</span>`;
               }
             }
 
@@ -2271,10 +2287,10 @@
             } else if (liveInfo.status === 'DOWN') {
               liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔴 Temporarily Down</div>`;
             } else {
-              liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</div>`;
+              liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">ℹ️ Opening Hours / Info</div>`;
             }
           } else {
-            liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</div>`;
+            liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">ℹ️️ Opening Hours / Info</div>`;
           }
         }
 
