@@ -218,7 +218,7 @@
     .slim-ride-meta-tags { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; font-size: 0.85rem; color: var(--muted); }
 
     /* Guided Onboarding Banner */
-    .guided-container { background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 16px; padding: 2.5rem 2rem; text-align: center; max-width: 600px; margin: 3rem auto; box-shadow: var(--shadow); }
+    .guided-container { background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 16px; padding: 2.5rem 2rem; text-align: center; max-width: 600px; margin: 2rem auto; box-shadow: var(--shadow); }
     .guided-container h2 { font-size: 1.8rem; color: var(--accent); margin-bottom: 0.5rem; }
     .guided-container p { color: var(--muted); margin-bottom: 1.5rem; font-size: 1rem; }
     .guided-step-group { display: flex; flex-direction: column; gap: 1rem; text-align: left; max-width: 400px; margin: 0 auto 1.5rem auto; }
@@ -365,7 +365,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v58</div>
+    <div class="version-badge" id="versionBadgeBtn">v59</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -506,52 +506,11 @@
 
   <main>
     <div class="grid" id="rideGrid">
-      <!-- Initial Skeleton Placeholder Loader -->
-      <div class="skeleton-grid">
-        <div class="skeleton-card">
-          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div class="skeleton-line short"></div>
-            <div class="skeleton-line title"></div>
-            <div class="skeleton-line long"></div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
-            <div class="skeleton-line short"></div>
-            <div class="skeleton-line short"></div>
-          </div>
-        </div>
-        <div class="skeleton-card">
-          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div class="skeleton-line short"></div>
-            <div class="skeleton-line title"></div>
-            <div class="skeleton-line long"></div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
-            <div class="skeleton-line short"></div>
-            <div class="skeleton-line short"></div>
-          </div>
-        </div>
-        <div class="skeleton-card">
-          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div class="skeleton-line short"></div>
-            <div class="skeleton-line title"></div>
-            <div class="skeleton-line long"></div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
-            <div class="skeleton-line short"></div>
-            <div class="skeleton-line short"></div>
-          </div>
-        </div>
-        <div class="skeleton-card">
-          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div class="skeleton-line short"></div>
-            <div class="skeleton-line title"></div>
-            <div class="skeleton-line long"></div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
-            <div class="skeleton-line short"></div>
-            <div class="skeleton-line short"></div>
-          </div>
-        </div>
+      <!-- Instant Guided Onboarding Placeholder (No Skeleton Flash) -->
+      <div class="guided-container" style="grid-column: 1 / -1;">
+        <h2>👋 Where are you planning your day out?</h2>
+        <p>Select your destination country and park to get started.</p>
+        <div style="text-align: center; color: var(--muted); font-size: 0.9rem;">Loading parks...</div>
       </div>
     </div>
   </main>
@@ -563,7 +522,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v58';
+    const CACHE_KEY = 'theme_park_rides_cache_v59';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -633,7 +592,7 @@
       'france': '🇫🇷',
       'germany': '🇩🇪',
       'spain': '🇪🇸',
-      'italy': '🇹',
+      'italy': '🇮🇹',
       'japan': '🇯🇵',
       'uae': '🇦🇪',
       'united arab emirates': '🇦🇪',
@@ -873,7 +832,7 @@
       }
     }
 
-    // Guided Onboarding View (First Load)
+    // Guided Onboarding View (First Load) with Country & Park Selectors
     function renderGuidedOnboarding() {
       if (!isGuidedActive) {
         filterRides();
@@ -881,12 +840,15 @@
       }
 
       const countries = [...new Set(allRides.map(r => r.country).filter(Boolean))].sort();
+      const defaultCountry = countries[0] || '';
+      const parksForDefault = [...new Set(allRides.filter(r => r.country === defaultCountry).map(r => r.park).filter(Boolean))].sort();
+
       const grid = document.getElementById('rideGrid');
 
       grid.innerHTML = `
         <div class="guided-container" style="grid-column: 1 / -1;">
           <h2>👋 Where are you planning your day out?</h2>
-          <p>Select your destination country to get started instantly.</p>
+          <p>Select your destination country and park to get started.</p>
           
           <div class="guided-step-group">
             <div>
@@ -897,13 +859,10 @@
             </div>
             
             <div>
-              <label class="guided-label">Maximum Height Filter</label>
-              <select id="guidedHeightSelect" class="guided-select">
-                <option value="200">200 cm (Any Height / Full Access)</option>
-                <option value="140">140 cm (Most Thrill Rides)</option>
-                <option value="120" selected>120 cm (Great Family Access)</option>
-                <option value="100">100 cm (Toddler / Gentle Rides)</option>
-                <option value="90">90 cm (Small Children)</option>
+              <label class="guided-label">Destination Park</label>
+              <select id="guidedParkSelect" class="guided-select">
+                <option value="ALL">All Parks in Country</option>
+                ${parksForDefault.map(p => `<option value="${p}">${p}</option>`).join('')}
               </select>
             </div>
           </div>
@@ -912,11 +871,19 @@
         </div>
       `;
 
+      // Update parks list when country changes in guided modal
+      document.getElementById('guidedCountrySelect').addEventListener('change', (e) => {
+        const selectedC = e.target.value;
+        const availableParks = [...new Set(allRides.filter(r => r.country === selectedC).map(r => r.park).filter(Boolean))].sort();
+        const parkSelect = document.getElementById('guidedParkSelect');
+        parkSelect.innerHTML = `<option value="ALL">All Parks in Country</option>` + availableParks.map(p => `<option value="${p}">${p}</option>`).join('');
+      });
+
       document.getElementById('startGuidedBtn').addEventListener('click', () => {
         const chosenCountry = document.getElementById('guidedCountrySelect').value;
-        const chosenHeight = document.getElementById('guidedHeightSelect').value;
+        const chosenPark = document.getElementById('guidedParkSelect').value;
 
-        // Set selections
+        // Set country selections
         selectedCountries = [chosenCountry];
         document.querySelectorAll('.country-cb').forEach(cb => {
           cb.checked = (cb.value === chosenCountry);
@@ -924,10 +891,17 @@
         updateCountryBtnLabel();
 
         initParkFilter();
-        initTypeFilter();
 
-        document.getElementById('heightSlider').value = chosenHeight;
-        document.getElementById('heightValue').textContent = `${chosenHeight} cm`;
+        // Set park selections
+        if (chosenPark !== 'ALL') {
+          selectedParks = [chosenPark];
+          document.querySelectorAll('.park-cb').forEach(cb => {
+            cb.checked = (cb.value === chosenPark);
+          });
+          updateParkBtnLabel();
+        }
+
+        initTypeFilter();
 
         isGuidedActive = false;
         filterRides();
