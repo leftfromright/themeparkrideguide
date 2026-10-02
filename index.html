@@ -211,11 +211,20 @@
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; overflow: hidden; position: relative; box-shadow: var(--shadow); }
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
     
+    /* Favourited Card Indicator Styling (Combined Options A & B) */
+    .card.favourited { border: 2px solid var(--star-active); box-shadow: 0 6px 15px rgba(245, 158, 11, 0.2); }
+    .card-fav-ribbon { display: none; }
+    .card.favourited .card-fav-ribbon { display: flex; position: absolute; top: 0; right: 0; background: var(--star-active); color: #0f172a; font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-bottom-left-radius: 10px; z-index: 5; align-items: center; gap: 0.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+
     .grid.compact { grid-template-columns: 1fr; gap: 0.75rem; }
     .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.25rem; position: relative; }
     .grid.compact .card-body { flex: 1.2; min-width: 0; padding-right: 2rem; }
     .grid.compact .card-meta { flex: 1.4; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
-    .grid.compact .card-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; margin-top: 0; }
+    
+    /* Compact View Action Column Stacked (POV & Pass) */
+    .grid.compact .card-actions { display: flex; flex-direction: column; align-items: stretch; gap: 0.4rem; flex-shrink: 0; margin-top: 0; width: 90px; }
+    .grid.compact .pov-link, .grid.compact .queue-pass-badge { width: 100%; flex: none; text-align: center; }
+
     .grid.compact .ride-thumb-link { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
     .grid.compact .ride-thumb { height: 100%; }
     .grid.compact .fav-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.6rem; line-height: 1; }
@@ -235,6 +244,7 @@
     /* Expandable Ride Tile in Slim View */
     .slim-ride-wrapper { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--card-bg); transition: border-color 0.2s ease; }
     .slim-ride-wrapper:hover { border-color: var(--accent); }
+    .slim-ride-wrapper.favourited { border-left: 4px solid var(--star-active); background: rgba(245, 158, 11, 0.03); }
     
     .slim-ride-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; cursor: pointer; gap: 1rem; user-select: none; }
     .slim-ride-details { display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1; }
@@ -294,20 +304,6 @@
     .hours-day-time { font-size: 0.72rem; font-weight: 700; color: var(--accent); }
     .hours-day-time.closed { color: #ef4444; }
 
-    /* Debug Console Styling */
-    .debug-container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; width: 100%; }
-    .debug-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow); }
-    .debug-card h2 { color: var(--accent); font-size: 1.3rem; margin-bottom: 0.5rem; }
-    .debug-card p { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; }
-    .debug-controls { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.75rem; align-items: center; margin-bottom: 1rem; }
-    .debug-btn { background: var(--accent); color: #ffffff; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-weight: 700; cursor: pointer; height: 42px; transition: opacity 0.2s; }
-    .debug-btn:hover { opacity: 0.9; }
-    .debug-output { background: #090d16; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.85rem; color: #38bdf8; overflow-x: auto; max-height: 400px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; }
-    .debug-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
-    .debug-stat-box { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; text-align: center; }
-    .debug-stat-val { font-size: 1.4rem; font-weight: bold; color: var(--text); }
-    .debug-stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; }
-
     /* Guided Onboarding Banner */
     .guided-container { background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 16px; padding: 2.5rem 2rem; text-align: center; max-width: 600px; margin: 2rem auto; box-shadow: var(--shadow); }
     .guided-container h2 { font-size: 1.8rem; color: var(--accent); margin-bottom: 0.5rem; }
@@ -363,6 +359,8 @@
     .live-wait-badge.wait-short { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
     .live-wait-badge.wait-medium { background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
     .live-wait-badge.wait-long { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .live-wait-badge.wait-unknown { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .live-wait-badge.wait-closed { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
     .live-wait-badge.wait-down { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
 
     /* About Modal Styles */
@@ -388,7 +386,6 @@
       .height-filter input[type="range"] { height: 6px; }
       .multiselect-btn, .btn-secondary { height: 46px; font-size: 0.9rem; }
       .hours-calendar-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
-      .debug-controls { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
@@ -405,7 +402,7 @@
       .grid.compact .card-body { padding-right: 0; }
       .grid.compact .fav-btn { position: static; }
       .grid.compact .meta-item, .meta-item { grid-template-columns: 90px 1fr; }
-      .grid.compact .card-actions { flex-direction: row; justify-content: space-between; width: 100%; border-top: 1px solid var(--border); padding-top: 0.75rem; }
+      .grid.compact .card-actions { width: 100%; flex-direction: row; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 0.75rem; }
       .grid.compact .pov-link { flex: 1; text-align: center; }
       .grid.compact .ride-thumb-link { display: none; }
       
@@ -489,7 +486,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v83 Debug</div>
+    <div class="version-badge" id="versionBadgeBtn">v84</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -505,9 +502,6 @@
       </button>
       <button class="nav-btn" id="viewParkInfoBtn">
         🗺 Park Info
-      </button>
-      <button class="nav-btn" id="viewDebugBtn" style="border-color: #f59e0b; color: #fde047;">
-        🧪 Debug API
       </button>
       <button class="action-nav-btn" id="shareFavsBtn" style="display: none;">
         🔗 Share
@@ -645,62 +639,6 @@
       </div>
       <div id="parkInfoCardsContainer"></div>
     </div>
-
-    <!-- API Debug & Diagnostic Tool Panel -->
-    <div class="debug-container" id="debugSection" style="display: none;">
-      <div class="debug-card">
-        <h2>🧪 Live ThemeParks.wiki Queue API Diagnostic Console</h2>
-        <p>Use this testing suite to test live queue fetching against specific park UUIDs. You can copy the results output and share it directly with Gemini for feedback.</p>
-        
-        <div class="debug-controls">
-          <div>
-            <label style="font-size: 0.8rem; font-weight: bold; color: var(--muted); display: block; margin-bottom: 0.2rem;">Select Park UUID to Test:</label>
-            <select id="debugParkPresetSelect" class="guided-select">
-              <option value="75ea578a-adc8-4116-a54d-dccb60765ef9">Magic Kingdom (75ea578a...)</option>
-              <option value="8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7">Alton Towers (8e6bf2ae...)</option>
-              <option value="66fbd0d1-14dd-4f1a-bb18-5e0b7447f07d">Blackpool Pleasure Beach (66fbd0d1...)</option>
-              <option value="e8d0207f-da8a-4048-bec8-117aa946b2c2">Disneyland Paris (e8d0207f...)</option>
-              <option value="172d77cb-6341-4b3b-8a66-e145dad8dda9">Flamingo Land (172d77cb...)</option>
-              <option value="85e3b542-af91-4f8a-8d28-445868a7c8fd">Europa-Park (85e3b542...)</option>
-              <option value="7c48a21b-221c-42f8-8339-6334c5f2fb12">LEGOLAND Windsor (7c48a21b...)</option>
-              <option value="c4307928-fc3c-47df-b976-305026751727">Chessington (c4307928...)</option>
-              <option value="6f9c3c13-8b74-4b47-b73a-4efb7189a05b">Thorpe Park (6f9c3c13...)</option>
-            </select>
-          </div>
-
-          <div>
-            <label style="font-size: 0.8rem; font-weight: bold; color: var(--muted); display: block; margin-bottom: 0.2rem;">Or Custom Entity UUID:</label>
-            <input type="text" id="debugCustomUuidInput" placeholder="Paste custom UUID...">
-          </div>
-
-          <div style="display: flex; gap: 0.5rem; align-self: flex-end;">
-            <button class="debug-btn" id="runDebugFetchBtn">⚡ Test Fetch Live Queue</button>
-            <button class="btn-secondary" id="copyDebugOutputBtn" style="height: 42px;">📋 Copy Diagnostic</button>
-          </div>
-        </div>
-
-        <div class="debug-summary-grid">
-          <div class="debug-stat-box">
-            <div class="debug-stat-val" id="debugStatStatus">-</div>
-            <div class="debug-stat-label">HTTP Status</div>
-          </div>
-          <div class="debug-stat-box">
-            <div class="debug-stat-val" id="debugStatCount">0</div>
-            <div class="debug-stat-label">Live Entities Returned</div>
-          </div>
-          <div class="debug-stat-box">
-            <div class="debug-stat-val" id="debugStatQueues">0</div>
-            <div class="debug-stat-label">Entities With Queue Data</div>
-          </div>
-          <div class="debug-stat-box">
-            <div class="debug-stat-val" id="debugStatMatches">0</div>
-            <div class="debug-stat-label">App Ride Name Matches</div>
-          </div>
-        </div>
-
-        <div class="debug-output" id="debugConsoleOutput">Select a park above and click "Test Fetch Live Queue" to start diagnostics...</div>
-      </div>
-    </div>
   </main>
 
   <footer>
@@ -710,7 +648,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v83';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v84';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -724,7 +662,6 @@
 
     const WATER_PARK_NAMES = ['blizzard beach', 'typhoon lagoon', 'volcano bay'];
 
-    // Verified ThemeParks.wiki Entity Directory UUID Mappings
     const THEME_PARKS_WIKI_IDS = {
       'alton towers': '8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7',
       'blackpool pleasure beach': '66fbd0d1-14dd-4f1a-bb18-5e0b7447f07d',
@@ -927,6 +864,7 @@
     let liveWaitData = {};
     let liveWaitNameMap = {};
     let isFetchingLive = false;
+    let liveLastCheckedTime = null;
 
     const aboutModal = document.getElementById('aboutModal');
     document.getElementById('versionBadgeBtn').addEventListener('click', () => {
@@ -1266,7 +1204,6 @@
         try {
           const res = await fetch(`https://api.themeparks.wiki/v1/entity/${wikiId}/live`);
           const data = await res.json();
-          // ThemeParks.wiki returns live data under data.liveData
           const liveArray = data.liveData || data.live || [];
           if (Array.isArray(liveArray)) {
             liveArray.forEach(item => {
@@ -1303,7 +1240,8 @@
       }
 
       isFetchingLive = false;
-      toggleText.textContent = 'Live Times: ON';
+      liveLastCheckedTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      toggleText.textContent = `Live Times: ON (${liveLastCheckedTime})`;
       renderRidesBatch();
     }
 
@@ -1335,82 +1273,6 @@
         btn.classList.remove('active');
         toggleText.textContent = 'Show Live Times';
         renderRidesBatch();
-      }
-    });
-
-    // Dedicated Debug Console Diagnostics Logic
-    async function runDebugDiagnostic() {
-      const presetUuid = document.getElementById('debugParkPresetSelect').value;
-      const customUuid = document.getElementById('debugCustomUuidInput').value.trim();
-      const targetUuid = customUuid || presetUuid;
-
-      const consoleEl = document.getElementById('debugConsoleOutput');
-      consoleEl.textContent = `[${new Date().toLocaleTimeString()}] Initiating fetch to ThemeParks.wiki API...\nEndpoint: https://api.themeparks.wiki/v1/entity/${targetUuid}/live\n`;
-
-      document.getElementById('debugStatStatus').textContent = '...';
-      document.getElementById('debugStatCount').textContent = '0';
-      document.getElementById('debugStatQueues').textContent = '0';
-      document.getElementById('debugStatMatches').textContent = '0';
-
-      try {
-        const res = await fetch(`https://api.themeparks.wiki/v1/entity/${targetUuid}/live`);
-        document.getElementById('debugStatStatus').textContent = `${res.status} ${res.statusText}`;
-
-        if (!res.ok) {
-          consoleEl.textContent += `\n❌ HTTP Error Response: ${res.status} ${res.statusText}\n`;
-          return;
-        }
-
-        const data = await res.json();
-        const liveArray = data.liveData || data.live || [];
-        document.getElementById('debugStatCount').textContent = liveArray.length;
-
-        let queueCount = 0;
-        let sampleItems = [];
-
-        liveArray.forEach(item => {
-          if (item.queue || item.status) {
-            queueCount++;
-            if (sampleItems.length < 10) {
-              sampleItems.push({
-                id: item.id,
-                name: item.name,
-                entityType: item.entityType,
-                status: item.status,
-                queue: item.queue
-              });
-            }
-          }
-        });
-
-        document.getElementById('debugStatQueues').textContent = queueCount;
-
-        let matchesCount = 0;
-        allRides.forEach(r => {
-          const u = getRideUuid(r);
-          if (u && liveArray.some(x => String(x.id).toLowerCase() === u)) {
-            matchesCount++;
-          }
-        });
-        document.getElementById('debugStatMatches').textContent = matchesCount;
-
-        consoleEl.textContent = `=== API Diagnostic Summary ===\nTarget UUID: ${targetUuid}\nHTTP Status: ${res.status} OK\nTotal Live Entities Returned: ${liveArray.length}\nEntities with Queue/Status: ${queueCount}\nApp DB UUID Matches: ${matchesCount}\n\n=== Sample Entity Payloads (First 10) ===\n` + JSON.stringify(sampleItems, null, 2);
-
-      } catch (err) {
-        document.getElementById('debugStatStatus').textContent = 'ERR';
-        consoleEl.textContent += `\n❌ Diagnostic Error / Network Failure:\n${err.stack || err.message || err}`;
-      }
-    }
-
-    document.getElementById('runDebugFetchBtn').addEventListener('click', runDebugDiagnostic);
-    
-    document.getElementById('copyDebugOutputBtn').addEventListener('click', async () => {
-      const consoleEl = document.getElementById('debugConsoleOutput');
-      try {
-        await navigator.clipboard.writeText(consoleEl.textContent);
-        showToast('Diagnostic output copied to clipboard!');
-      } catch (e) {
-        showToast('Failed to copy to clipboard.');
       }
     });
 
@@ -1735,13 +1597,10 @@
       });
     }
 
-    // Navigation Switcher Logic
     function switchToRideView(viewType) {
       currentView = viewType;
       document.getElementById('viewParkInfoBtn').classList.remove('active');
-      document.getElementById('viewDebugBtn').classList.remove('active');
       document.getElementById('parkInfoGrid').style.display = 'none';
-      document.getElementById('debugSection').style.display = 'none';
       document.getElementById('rideGrid').style.display = 'grid';
       document.getElementById('rideControlsSection').style.display = 'flex';
       document.getElementById('statusBarSection').style.display = 'flex';
@@ -1766,11 +1625,9 @@
       currentView = 'park-info';
       document.getElementById('viewAllBtn').classList.remove('active');
       document.getElementById('viewFavsBtn').classList.remove('active');
-      document.getElementById('viewDebugBtn').classList.remove('active');
       document.getElementById('viewParkInfoBtn').classList.add('active');
 
       document.getElementById('rideGrid').style.display = 'none';
-      document.getElementById('debugSection').style.display = 'none';
       document.getElementById('rideControlsSection').style.display = 'none';
       document.getElementById('statusBarSection').style.display = 'none';
       document.getElementById('printFavsBtn').style.display = 'none';
@@ -1795,30 +1652,10 @@
       }
     }
 
-    function navigateToDebug() {
-      currentView = 'debug';
-      document.getElementById('viewAllBtn').classList.remove('active');
-      document.getElementById('viewFavsBtn').classList.remove('active');
-      document.getElementById('viewParkInfoBtn').classList.remove('active');
-      document.getElementById('viewDebugBtn').classList.add('active');
-
-      document.getElementById('rideGrid').style.display = 'none';
-      document.getElementById('parkInfoGrid').style.display = 'none';
-      document.getElementById('rideControlsSection').style.display = 'none';
-      document.getElementById('statusBarSection').style.display = 'none';
-      document.getElementById('printFavsBtn').style.display = 'none';
-      document.getElementById('shareFavsBtn').style.display = 'none';
-
-      document.getElementById('debugSection').style.display = 'flex';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
     document.getElementById('viewAllBtn').addEventListener('click', () => switchToRideView('all'));
     document.getElementById('viewFavsBtn').addEventListener('click', () => switchToRideView('favourites'));
     document.getElementById('viewParkInfoBtn').addEventListener('click', () => navigateToParkInfo());
-    document.getElementById('viewDebugBtn').addEventListener('click', () => navigateToDebug());
 
-    // Next 7 Days Operating Hours Generator
     function getNext7DaysHours(parkName) {
       const norm = parkName.toLowerCase().trim();
       const result = [];
@@ -1872,7 +1709,6 @@
       return result;
     }
 
-    // Render Country-Grouped Park Info View
     function renderParkInfoCards() {
       const container = document.getElementById('parkInfoCardsContainer');
       const searchInputEl = document.getElementById('parkSearchInput');
@@ -1930,7 +1766,7 @@
 
           let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
           const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
-          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name} ${locationStr}`)}`;
+          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}${locationStr}`)}`;
 
           const calendarHtml = next7Days.map(d => `
             <div class="hours-day-box ${d.isToday ? 'is-today' : ''}">
@@ -1983,7 +1819,7 @@
 
               <div class="park-info-actions">
                 ${officialUrl ? `<a href="${officialUrl}" target="_blank" rel="noopener" class="park-action-btn">🌐 Official Website</a>` : ''}
-                <a href="${mapsUrl}" target="_blank" rel="noopener" class="park-action-btn">🗺️ Google Maps Directions</a>
+                <a href="${mapsUrl}" target="_blank" rel="noopener" class="park-action-btn">🗺️️ Google Maps Directions</a>
                 <button class="park-action-btn" onclick="filterByParkOnly('${p.name.replace(/'/g, "\\'")}'); switchToRideView('all');">🎢 View Park Rides (${p.ridesCount})</button>
               </div>
             </div>
@@ -2345,18 +2181,18 @@
               if (liveInfo) {
                 if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
                   liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱ ${liveInfo.waitTime}m</span>`;
-                } else if (liveInfo.status === 'REFURBISHMENT') {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#f59e0b;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔧 Maintenance</span>`;
+                } else if (liveInfo.status === 'REFURBISHMENT' || liveInfo.status === 'CLOSED') {
+                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#ef4444;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔴 Closed</span>`;
                 } else {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">ℹ️ Hours / Info</span>`;
+                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#fb923c;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">? Unknown</span>`;
                 }
               } else {
-                liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">ℹ️ Hours / Info</span>`;
+                liveBadgeHtml = `<span style="font-size:0.8rem; color:#fb923c;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">? Unknown</span>`;
               }
             }
 
             return `
-              <div class="slim-ride-wrapper">
+              <div class="slim-ride-wrapper ${isFav ? 'favourited' : ''}">
                 <div class="slim-ride-row" onclick="toggleTileExpansion(this.parentElement)">
                   <div class="slim-ride-details">
                     <button class="fav-btn ${isFav ? 'active' : ''}" type="button" onclick="toggleFavourite(event, '${rideKey}')" style="font-size: 1.2rem;" title="Favourite">
@@ -2456,20 +2292,19 @@
               if (liveInfo.waitTime >= 30 && liveInfo.waitTime < 60) badgeClass = 'wait-medium';
               else if (liveInfo.waitTime >= 60) badgeClass = 'wait-long';
               liveBadgeHtml = `<div class="live-wait-badge ${badgeClass}" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">⏱️ ${liveInfo.waitTime} min wait</div>`;
-            } else if (liveInfo.status === 'REFURBISHMENT') {
-              liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔧 Under Maintenance</div>`;
-            } else if (liveInfo.status === 'DOWN') {
-              liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔴 Temporarily Down</div>`;
+            } else if (liveInfo.status === 'REFURBISHMENT' || liveInfo.status === 'CLOSED') {
+              liveBadgeHtml = `<div class="live-wait-badge wait-closed" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔴 Closed</div>`;
             } else {
-              liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">ℹ️ Opening Hours / Info</div>`;
+              liveBadgeHtml = `<div class="live-wait-badge wait-unknown" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">? Unknown</div>`;
             }
           } else {
-            liveBadgeHtml = `<div class="live-wait-badge wait-down" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">ℹ Opening Hours / Info</div>`;
+            liveBadgeHtml = `<div class="live-wait-badge wait-unknown" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">? Unknown</div>`;
           }
         }
 
         return `
-          <div class="card">
+          <div class="card ${isFav ? 'favourited' : ''}">
+            <div class="card-fav-ribbon">★ Favourited</div>
             <div class="card-body">
               <div class="card-top">
                 <div class="tags">
@@ -2518,7 +2353,7 @@
     }
 
     window.addEventListener('scroll', () => {
-      if (isGuidedActive || currentView === 'park-info' || currentView === 'debug') return;
+      if (isGuidedActive || currentView === 'park-info') return;
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
         if (displayedCount < currentFilteredRides.length) {
           displayedCount += 24;
@@ -2528,7 +2363,7 @@
     });
 
     function filterRides() {
-      if (currentView === 'park-info' || currentView === 'debug') return;
+      if (currentView === 'park-info') return;
       if (isGuidedActive && currentView !== 'favourites') return;
 
       const rawSearch = document.getElementById('searchInput').value;
