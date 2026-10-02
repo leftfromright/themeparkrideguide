@@ -216,9 +216,9 @@
     .grid.compact .ride-thumb { height: 100%; }
     .grid.compact .fav-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.6rem; line-height: 1; }
 
-    /* Slim Collapsible Grouped View Styles */
-    .grid.slim-view { display: flex; flex-direction: column; gap: 1rem; }
-    .park-group-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: border-color 0.2s ease; }
+    /* Single-Column Slim Grouped View (Desktop & Mobile) */
+    .grid.slim-view { display: flex; flex-direction: column; gap: 1rem; grid-template-columns: 1fr !important; width: 100%; }
+    .park-group-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: border-color 0.2s ease; width: 100%; }
     .park-group-container:hover { border-color: var(--accent); }
     .park-group-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: var(--badge-bg); cursor: pointer; font-weight: 700; font-size: 1.05rem; }
     .park-group-header .park-group-info { display: flex; align-items: center; gap: 0.6rem; }
@@ -251,6 +251,13 @@
     .park-info-title-group h2 { font-size: 1.35rem; color: var(--text); font-weight: 700; }
     .park-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.85rem; font-size: 0.88rem; }
     .park-info-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 0.9rem; display: flex; flex-direction: column; gap: 0.2rem; }
+    
+    /* Header Row Layout for Hours Item (Inline Title + View More) */
+    .hours-item-header { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; width: 100%; margin-bottom: 0.25rem; }
+    .hours-item-header .park-info-item-label { margin-bottom: 0; }
+    .hours-view-more-link { font-size: 0.78rem; font-weight: 700; color: var(--accent); text-decoration: none; white-space: nowrap; }
+    .hours-view-more-link:hover { text-decoration: underline; }
+
     .park-info-item-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.03em; }
     .park-info-item-value { font-weight: 600; color: var(--text); }
     .park-info-actions { display: flex; gap: 0.65rem; flex-wrap: wrap; margin-top: 0.25rem; }
@@ -258,11 +265,9 @@
     .park-action-btn:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
     /* 7-Day Hours Calendar Grid */
-    .hours-calendar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.5rem; margin-top: 0.35rem; }
+    .hours-calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-top: 0.35rem; }
     .hours-day-box { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.5rem; text-align: center; display: flex; flex-direction: column; gap: 0.15rem; }
     .hours-day-box.is-today { border-color: var(--accent); background: var(--badge-bg); }
-    .hours-day-box.view-more-box { justify-content: center; align-items: center; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease; text-decoration: none; }
-    .hours-day-box.view-more-box:hover { border-color: var(--accent); background: var(--badge-bg); }
     .hours-day-name { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
     .hours-day-date { font-size: 0.75rem; font-weight: 600; color: var(--text); }
     .hours-day-time { font-size: 0.72rem; font-weight: 700; color: var(--accent); }
@@ -294,7 +299,7 @@
     .pov-link:hover { background: var(--pov-hover-bg); color: var(--pov-hover-text); border-color: var(--pov-hover-bg); }
     
     /* Priority Queue Pass Link Badge with Hover Tooltip */
-    .queue-pass-badge { position: relative; display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.45rem 0.75rem; background: var(--queue-bg); border: 1px solid var(--queue-border); border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--queue-text); cursor: pointer; text-decoration: none; white-space: nowrap; transition: all 0.2s ease; }
+    .queue-pass-badge { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem; padding: 0.45rem 0.75rem; background: var(--queue-bg); border: 1px solid var(--queue-border); border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--queue-text); cursor: pointer; text-decoration: none; white-space: nowrap; transition: all 0.2s ease; flex: 1; text-align: center; }
     .queue-pass-badge:hover { background: var(--queue-border); transform: translateY(-1px); }
     
     .queue-pass-badge:hover::after {
@@ -338,13 +343,14 @@
     .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); border: 1px solid var(--accent); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 200; transition: transform 0.3s ease; }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* Responsive Adjustments & Mobile Slim View Stacking */
+    /* Responsive Adjustments & Mobile Hours Stacking */
     @media (max-width: 850px) {
       .top-controls-row { grid-template-columns: 1fr; }
       .filter-row { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
       .height-filter { grid-column: span 2; height: 48px; padding: 0.5rem 1rem; gap: 0.35rem; }
       .height-filter input[type="range"] { height: 6px; }
       .multiselect-btn, .btn-secondary { height: 46px; font-size: 0.9rem; }
+      .hours-calendar-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
     }
 
     @media (max-width: 640px) {
@@ -365,6 +371,8 @@
       .grid.compact .pov-link { flex: 1; text-align: center; }
       .grid.compact .ride-thumb-link { display: none; }
       
+      .hours-item-header { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+
       .controls { gap: 0.75rem; }
       .meta-counts { align-items: flex-start; }
       #rideCounter { display: block; line-height: 1.3; }
@@ -441,7 +449,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v71</div>
+    <div class="version-badge" id="versionBadgeBtn">v72</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -603,7 +611,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v71';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v72';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -693,6 +701,10 @@
       'alton towers': 'https://www.altontowers.com/tickets-passes/extras/fastrack/',
       'thorpe park': 'https://www.thorpepark.com/tickets-passes/extras/fastrack/',
       'chessington world of adventures': 'https://www.chessington.com/tickets-passes/extras/reserve-and-ride/',
+      'legoland windsor': 'https://www.legoland.co.uk/tickets-passes/extras/reserve-and-ride/',
+      'paultons park': 'https://paultonspark.co.uk/',
+      'blackpool pleasure beach': 'https://www.blackpoolpleasurebeach.com/speedyship/',
+      'drayton manor': 'https://www.draytonmanor.co.uk/fast-pass',
       'magic kingdom': 'https://disneyworld.disney.go.com/lightning-lane-passes/',
       'epcot': 'https://disneyworld.disney.go.com/lightning-lane-passes/',
       'disney\'s animal kingdom': 'https://disneyworld.disney.go.com/lightning-lane-passes/',
@@ -724,13 +736,20 @@
       'islands of adventure': 'https://www.universalorlando.com/web/en/us/plan-your-visit/hours-information/park-hours'
     };
 
-    function getPriorityPassUrl(parkName) {
+    // Dynamic Fallback URL Generator for Priority Passes
+    function getPriorityPassUrl(parkName, explicitPassUrl) {
+      if (explicitPassUrl && explicitPassUrl.startsWith('http')) {
+        return explicitPassUrl;
+      }
       if (!parkName) return '#';
+      
       const norm = parkName.toLowerCase().trim();
       for (const [key, url] of Object.entries(PRIORITY_PASS_URLS)) {
         if (norm.includes(key)) return url;
       }
-      return '#';
+
+      // Dynamic Fallback Search for any unmapped park name
+      return `https://www.google.com/search?q=${encodeURIComponent(`${parkName} fastpass express priority pass tickets pricing`)}`;
     }
 
     function getParkHoursUrl(parkName) {
@@ -739,7 +758,7 @@
       for (const [key, url] of Object.entries(PARK_HOURS_URLS)) {
         if (norm.includes(key)) return url;
       }
-      return '#';
+      return `https://www.google.com/search?q=${encodeURIComponent(`${parkName} official opening times calendar hours`)}`;
     }
 
     const COUNTRY_FLAG_MAP = {
@@ -833,7 +852,7 @@
         icon.textContent = '🌙';
         label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀️️';
+        icon.textContent = '☀️';
         label.textContent = 'Light Mode';
       }
     }
@@ -1005,7 +1024,6 @@
       try {
         const response = await fetch(API_URL, { redirect: 'follow' });
         
-        // Guard against HTML error / 404 responses from Google Apps Script
         const contentType = response.headers.get('content-type') || '';
         if (!response.ok || contentType.includes('text/html')) {
           throw new Error(`Server returned HTML/HTTP ${response.status} instead of JSON.`);
@@ -1597,7 +1615,8 @@
             country: r.country || 'Other',
             ridesCount: 0,
             sampleRideUrl: r.rideUrl,
-            sampleQueuePass: getQueuePass(r)
+            sampleQueuePass: getQueuePass(r),
+            explicitPassUrl: r.passUrl || r.queuePassUrl
           };
         }
         if (r.park) uniqueParksMap[r.park].ridesCount++;
@@ -1635,12 +1654,12 @@
 
           const locationStr = PARK_LOCATION_DETAILS[normName] || `${p.name}, ${p.country}`;
           const next7Days = getNext7DaysHours(p.name);
-          const passUrl = getPriorityPassUrl(p.name);
+          const passUrl = getPriorityPassUrl(p.name, p.explicitPassUrl);
           const hoursUrl = getParkHoursUrl(p.name);
 
           let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
           const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
-          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}${locationStr}`)}`;
+          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name} ${locationStr}`)}`;
 
           const calendarHtml = next7Days.map(d => `
             <div class="hours-day-box ${d.isToday ? 'is-today' : ''}">
@@ -1648,12 +1667,7 @@
               <span class="hours-day-date">${d.dateStr}</span>
               <span class="hours-day-time ${d.isClosed ? 'closed' : ''}">${d.timeStr}</span>
             </div>
-          `).join('') + `
-            <a href="${hoursUrl}" target="_blank" rel="noopener" class="hours-day-box view-more-box" title="View Official Park Hours Calendar">
-              <span class="hours-day-name" style="color: var(--accent);">Calendar</span>
-              <span class="hours-day-date" style="font-size: 0.8rem; color: var(--accent);">View More ↗</span>
-            </a>
-          `;
+          `).join('');
 
           return `
             <div class="park-info-card" id="${cardId}">
@@ -1666,7 +1680,10 @@
 
               <div class="park-info-grid">
                 <div class="park-info-item" style="grid-column: 1 / -1;">
-                  <span class="park-info-item-label">📅 Upcoming 7-Day Operating Hours</span>
+                  <div class="hours-item-header">
+                    <span class="park-info-item-label">📅 Upcoming 7-Day Operating Hours</span>
+                    <a href="${hoursUrl}" target="_blank" rel="noopener" class="hours-view-more-link">View More Hours ↗</a>
+                  </div>
                   <div class="hours-calendar-grid">
                     ${calendarHtml}
                   </div>
@@ -2019,7 +2036,7 @@
         return;
       }
 
-      // Render Slim Collapsible View
+      // Render Single-Column Slim View
       if (viewMode === 'slim') {
         const grouped = {};
         currentFilteredRides.forEach(r => {
@@ -2038,7 +2055,7 @@
             const showPassIcon = hasQueuePass(r);
             const heightStr = r.minHeightCm ? `${r.minHeightCm}cm` : 'All';
             const povUrl = getPovVideoUrl(r.park, r.ride);
-            const passUrl = getPriorityPassUrl(r.park);
+            const passUrl = getPriorityPassUrl(r.park, r.passUrl || r.queuePassUrl);
 
             let liveBadgeHtml = '';
             if (showLiveWaitTimes) {
@@ -2102,7 +2119,7 @@
         const displayPark = getDisplayParkName(r.park);
         const queuePassVal = getQueuePass(r);
         const showPassIcon = hasQueuePass(r);
-        const passUrl = getPriorityPassUrl(r.park);
+        const passUrl = getPriorityPassUrl(r.park, r.passUrl || r.queuePassUrl);
 
         let heightStr = 'None';
         if (r.minHeightCm && r.minHeightInch) {
