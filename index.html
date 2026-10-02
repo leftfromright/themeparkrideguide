@@ -216,21 +216,45 @@
     .grid.compact .ride-thumb { height: 100%; }
     .grid.compact .fav-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.6rem; line-height: 1; }
 
-    /* Single-Column Slim Grouped View (Desktop & Mobile) */
-    .grid.slim-view { display: flex; flex-direction: column; gap: 1rem; grid-template-columns: 1fr !important; width: 100%; }
-    .park-group-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: border-color 0.2s ease; width: 100%; }
+    /* Single-Column Slim Grouped View with Collapsible Countries and Expandable Tiles */
+    .grid.slim-view { display: flex; flex-direction: column; gap: 1.25rem; grid-template-columns: 1fr !important; width: 100%; }
+    
+    /* Country Container in Slim View */
+    .slim-country-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); transition: border-color 0.2s ease; width: 100%; }
+    .slim-country-container:hover { border-color: var(--accent); }
+    .slim-country-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: var(--badge-bg); cursor: pointer; font-weight: 700; font-size: 1.1rem; user-select: none; }
+    .slim-country-header .country-info { display: flex; align-items: center; gap: 0.65rem; }
+    .slim-country-arrow { font-size: 0.85rem; color: var(--accent); transition: transform 0.2s ease; }
+    
+    .slim-country-content { display: none; padding: 1.25rem; border-top: 1px solid var(--border); flex-direction: column; gap: 1rem; }
+    .slim-country-container.expanded .slim-country-content { display: flex; }
+    .slim-country-container.expanded .slim-country-arrow { transform: rotate(180deg); }
+
+    /* Park Container in Slim View */
+    .park-group-container { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color 0.2s ease; width: 100%; }
     .park-group-container:hover { border-color: var(--accent); }
-    .park-group-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: var(--badge-bg); cursor: pointer; font-weight: 700; font-size: 1.05rem; }
+    .park-group-header { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.1rem; background: var(--card-bg); cursor: pointer; font-weight: 700; font-size: 1rem; }
     .park-group-header .park-group-info { display: flex; align-items: center; gap: 0.6rem; }
-    .park-group-header .park-group-count { background: var(--card-bg); border: 1px solid var(--border); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem; }
-    .park-group-content { display: none; padding: 1rem 1.25rem; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.75rem; }
+    .park-group-header .park-group-count { background: var(--bg); border: 1px solid var(--border); color: var(--accent); padding: 0.15rem 0.55rem; border-radius: 20px; font-size: 0.78rem; }
+    .park-group-content { display: none; padding: 0.85rem 1rem; border-top: 1px solid var(--border); flex-direction: column; gap: 0.65rem; }
     .park-group-container.expanded .park-group-content { display: flex; }
     
-    .slim-ride-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; gap: 1rem; transition: transform 0.15s ease; }
-    .slim-ride-row:hover { transform: translateX(4px); border-color: var(--accent); }
+    /* Expandable Ride Tile in Slim View */
+    .slim-ride-wrapper { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--card-bg); transition: border-color 0.2s ease; }
+    .slim-ride-wrapper:hover { border-color: var(--accent); }
+    
+    .slim-ride-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; cursor: pointer; gap: 1rem; user-select: none; }
     .slim-ride-details { display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1; }
     .slim-ride-name { font-weight: 600; font-size: 0.95rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .slim-ride-meta-tags { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; font-size: 0.85rem; color: var(--muted); }
+    .slim-expand-icon { font-size: 0.8rem; color: var(--accent); font-weight: bold; transition: transform 0.2s ease; }
+
+    /* Expanded Drawer Content */
+    .slim-ride-drawer { display: none; padding: 0.85rem 1rem; background: var(--bg); border-top: 1px dashed var(--border); flex-direction: column; gap: 0.65rem; font-size: 0.88rem; animation: drawerOpen 0.2s ease; }
+    @keyframes drawerOpen { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .slim-ride-wrapper.tile-expanded .slim-ride-drawer { display: flex; }
+    .slim-ride-wrapper.tile-expanded .slim-expand-icon { transform: rotate(180deg); }
 
     /* Country Grouped Park Info View Styles */
     .park-info-view { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; width: 100%; }
@@ -449,7 +473,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v72</div>
+    <div class="version-badge" id="versionBadgeBtn">v73</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -611,7 +635,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v72';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v73';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -736,7 +760,6 @@
       'islands of adventure': 'https://www.universalorlando.com/web/en/us/plan-your-visit/hours-information/park-hours'
     };
 
-    // Dynamic Fallback URL Generator for Priority Passes
     function getPriorityPassUrl(parkName, explicitPassUrl) {
       if (explicitPassUrl && explicitPassUrl.startsWith('http')) {
         return explicitPassUrl;
@@ -748,7 +771,6 @@
         if (norm.includes(key)) return url;
       }
 
-      // Dynamic Fallback Search for any unmapped park name
       return `https://www.google.com/search?q=${encodeURIComponent(`${parkName} fastpass express priority pass tickets pricing`)}`;
     }
 
@@ -783,7 +805,6 @@
       return COUNTRY_FLAG_MAP[norm] || '🌍';
     }
 
-    // Automated LocalStorage Quota Management
     function clearOldCaches() {
       try {
         for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -2016,6 +2037,10 @@
       });
     }
 
+    function toggleTileExpansion(wrapperEl) {
+      wrapperEl.classList.toggle('tile-expanded');
+    }
+
     function renderRidesBatch() {
       const grid = document.getElementById('rideGrid');
       const shownCount = Math.min(displayedCount, currentFilteredRides.length);
@@ -2036,73 +2061,126 @@
         return;
       }
 
-      // Render Single-Column Slim View
+      // Render Single-Column Slim View with Collapsible Countries & Expandable Ride Tiles
       if (viewMode === 'slim') {
-        const grouped = {};
+        const ridesByCountry = {};
         currentFilteredRides.forEach(r => {
-          if (!grouped[r.park]) grouped[r.park] = [];
-          grouped[r.park].push(r);
+          const c = r.country || 'Other';
+          if (!ridesByCountry[c]) ridesByCountry[c] = {};
+          if (!ridesByCountry[c][r.park]) ridesByCountry[c][r.park] = [];
+          ridesByCountry[c][r.park].push(r);
         });
 
-        grid.innerHTML = Object.entries(grouped).map(([parkName, parkRides]) => {
-          const displayPark = getDisplayParkName(parkName);
-          const faviconHtml = getFaviconHtml(parkName);
+        const sortedCountries = Object.keys(ridesByCountry).sort();
 
-          const rowsHtml = parkRides.map(r => {
-            const rideKey = getRideKey(r);
-            const isFav = favourites.includes(rideKey);
-            const queuePassVal = getQueuePass(r);
-            const showPassIcon = hasQueuePass(r);
-            const heightStr = r.minHeightCm ? `${r.minHeightCm}cm` : 'All';
-            const povUrl = getPovVideoUrl(r.park, r.ride);
-            const passUrl = getPriorityPassUrl(r.park, r.passUrl || r.queuePassUrl);
+        grid.innerHTML = sortedCountries.map(country => {
+          const flag = getCountryFlag(country);
+          const parksMap = ridesByCountry[country];
+          const sortedParkNames = Object.keys(parksMap).sort();
 
-            let liveBadgeHtml = '';
-            if (showLiveWaitTimes) {
-              const liveInfo = getLiveInfoForRide(r);
-              if (liveInfo) {
-                if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱ ${liveInfo.waitTime}m</span>`;
-                } else if (liveInfo.status === 'REFURBISHMENT') {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#f59e0b; cursor:pointer;" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔧 Maintenance</span>`;
+          const totalCountryRides = Object.values(parksMap).reduce((sum, arr) => sum + arr.length, 0);
+
+          const parkGroupsHtml = sortedParkNames.map(parkName => {
+            const parkRides = parksMap[parkName];
+            const displayPark = getDisplayParkName(parkName);
+            const faviconHtml = getFaviconHtml(parkName);
+
+            const rideRowsHtml = parkRides.map(r => {
+              const rideKey = getRideKey(r);
+              const isFav = favourites.includes(rideKey);
+              const queuePassVal = getQueuePass(r);
+              const showPassIcon = hasQueuePass(r);
+              const heightStr = r.minHeightCm ? `${r.minHeightCm}cm` : 'All';
+              const povUrl = getPovVideoUrl(r.park, r.ride);
+              const passUrl = getPriorityPassUrl(r.park, r.passUrl || r.queuePassUrl);
+              const sensoryClass = calculateSensorySeverityClass(r.sensory);
+
+              let liveBadgeHtml = '';
+              if (showLiveWaitTimes) {
+                const liveInfo = getLiveInfoForRide(r);
+                if (liveInfo) {
+                  if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
+                    liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱ ${liveInfo.waitTime}m</span>`;
+                  } else if (liveInfo.status === 'REFURBISHMENT') {
+                    liveBadgeHtml = `<span style="font-size:0.8rem; color:#f59e0b;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔧 Maintenance</span>`;
+                  } else {
+                    liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</span>`;
+                  }
                 } else {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8; cursor:pointer;" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</span>`;
+                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</span>`;
                 }
-              } else {
-                liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8; cursor:pointer;" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🌙 Park Closed</span>`;
               }
-            }
+
+              return `
+                <div class="slim-ride-wrapper">
+                  <div class="slim-ride-row" onclick="toggleTileExpansion(this.parentElement)">
+                    <div class="slim-ride-details">
+                      <button class="fav-btn ${isFav ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavourite('${rideKey}')" style="font-size: 1.2rem;" title="Favourite">
+                        ${isFav ? '★' : '☆'}
+                      </button>
+                      <span class="slim-ride-name">${r.ride}</span>
+                      ${showPassIcon ? `<a href="${passUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="text-decoration:none;" title="Queue Pass: ${queuePassVal}">⏩</a>` : ''}
+                      ${liveBadgeHtml}
+                    </div>
+                    <div class="slim-ride-meta-tags">
+                      <span class="tag">${r.type || 'Ride'}</span>
+                      <span><strong>${heightStr}</strong></span>
+                      <span class="slim-expand-icon">▼</span>
+                    </div>
+                  </div>
+
+                  <!-- Expandable Details Drawer -->
+                  <div class="slim-ride-drawer">
+                    ${r.details ? `<div><strong>Details:</strong> ${r.details}</div>` : ''}
+                    ${r.location ? `<div><strong>Area:</strong> ${r.location}</div>` : ''}
+                    <div><strong>Min Height Requirement:</strong> ${heightStr} ${r.heightNotes ? `(${r.heightNotes})` : ''}</div>
+                    ${r.sensory ? `<div class="sensory-box ${sensoryClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
+                    
+                    <div class="card-actions" style="margin-top: 0.5rem;">
+                      <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link" onclick="event.stopPropagation();">
+                        ▶ POV
+                      </a>
+                      ${showPassIcon ? `
+                        <a href="${passUrl}" target="_blank" rel="noopener" class="queue-pass-badge" data-pass="${queuePassVal}" onclick="event.stopPropagation();">
+                          ⏩ Pass
+                        </a>
+                      ` : ''}
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('');
 
             return `
-              <div class="slim-ride-row">
-                <div class="slim-ride-details">
-                  <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavourite('${rideKey}')" style="font-size: 1.2rem;" title="Favourite">
-                    ${isFav ? '★' : '☆'}
-                  </button>
-                  <span class="slim-ride-name">${r.ride}</span>
-                  ${showPassIcon ? `<a href="${passUrl}" target="_blank" rel="noopener" style="text-decoration:none;" title="Queue Pass: ${queuePassVal}">⏩</a>` : ''}
-                  ${liveBadgeHtml}
+              <div class="park-group-container expanded">
+                <div class="park-group-header" onclick="this.parentElement.classList.toggle('expanded')">
+                  <div class="park-group-info">
+                    ${faviconHtml}
+                    <span>${displayPark}</span>
+                  </div>
+                  <span class="park-group-count">${parkRides.length} rides ▼</span>
                 </div>
-                <div class="slim-ride-meta-tags">
-                  <span class="tag">${r.type || 'Ride'}</span>
-                  <span><strong>${heightStr}</strong></span>
-                  <a href="${povUrl}" target="_blank" rel="noopener" class="action-link" style="font-size: 0.8rem;">▶ POV</a>
+                <div class="park-group-content">
+                  ${rideRowsHtml}
                 </div>
               </div>
             `;
           }).join('');
 
           return `
-            <div class="park-group-container expanded">
-              <div class="park-group-header" onclick="this.parentElement.classList.toggle('expanded')">
-                <div class="park-group-info">
-                  ${faviconHtml}
-                  <span>${displayPark}</span>
+            <div class="slim-country-container expanded">
+              <div class="slim-country-header" onclick="this.parentElement.classList.toggle('expanded')">
+                <div class="country-info">
+                  <span class="flag-emoji">${flag}</span>
+                  <span>${country}</span>
                 </div>
-                <span class="park-group-count">${parkRides.length} rides ▼</span>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <span class="park-group-count">${totalCountryRides} Rides</span>
+                  <span class="slim-country-arrow">▼</span>
+                </div>
               </div>
-              <div class="park-group-content">
-                ${rowsHtml}
+              <div class="slim-country-content">
+                ${parkGroupsHtml}
               </div>
             </div>
           `;
