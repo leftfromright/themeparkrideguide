@@ -211,13 +211,13 @@
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; overflow: hidden; position: relative; box-shadow: var(--shadow); }
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
     
-    /* Favourited Card Indicator Styling (Combined Options A & B) */
+    /* Favourited Card Indicator Styling */
     .card.favourited { border: 2px solid var(--star-active); box-shadow: 0 6px 15px rgba(245, 158, 11, 0.2); }
-    .card-fav-ribbon { display: none; }
-    .card.favourited .card-fav-ribbon { display: flex; position: absolute; top: 0; right: 0; background: var(--star-active); color: #0f172a; font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-bottom-left-radius: 10px; z-index: 5; align-items: center; gap: 0.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+    .card-fav-ribbon { display: flex; position: absolute; top: 0; right: 0; background: var(--star-active); color: #ffffff; text-shadow: 0 1px 1px rgba(0,0,0,0.4); font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-bottom-left-radius: 10px; z-index: 5; align-items: center; gap: 0.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
 
     .grid.compact { grid-template-columns: 1fr; gap: 0.75rem; }
     .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.25rem; position: relative; }
+    .grid.compact .card-fav-ribbon { display: none !important; } /* Omit ribbon in compact mode to prevent overlap */
     .grid.compact .card-body { flex: 1.2; min-width: 0; padding-right: 2rem; }
     .grid.compact .card-meta { flex: 1.4; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
     
@@ -486,7 +486,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v84</div>
+    <div class="version-badge" id="versionBadgeBtn">v85</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -648,7 +648,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v84';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v85';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -842,7 +842,7 @@
       try {
         localStorage.setItem(CURRENT_CACHE_KEY, JSON.stringify(data));
       } catch (e) {
-        console.warn('LocalStorage quota exceeded or disabled. Operating in-memory mode.', e);
+        console.warn('LocalStorage quota exceeded or disabled.', e);
       }
     }
 
@@ -893,7 +893,7 @@
         icon.textContent = '🌙';
         label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀️';
+        icon.textContent = '☀️️';
         label.textContent = 'Light Mode';
       }
     }
@@ -1054,6 +1054,7 @@
       }));
     }
 
+    // Fast Bootstrap: Check local cache first for instant load, then fetch fresh data asynchronously
     async function fetchRideData() {
       clearOldCaches();
       
@@ -1067,33 +1068,35 @@
         console.warn('LocalStorage read unavailable:', e);
       }
 
+      if (cachedRides && Array.isArray(cachedRides) && cachedRides.length > 0) {
+        allRides = preprocessRides(cachedRides);
+        buildParkDomainMap(allRides);
+        updateFavBadge();
+        reinitAllFilters();
+        renderGuidedOnboarding();
+      }
+
       try {
         const response = await fetch(API_URL, { redirect: 'follow' });
-        
         const contentType = response.headers.get('content-type') || '';
         if (!response.ok || contentType.includes('text/html')) {
           throw new Error(`Server returned HTML/HTTP ${response.status} instead of JSON.`);
         }
 
         const freshRides = await response.json();
-        
         safeSaveCache(freshRides);
         allRides = preprocessRides(freshRides);
         buildParkDomainMap(allRides);
         updateFavBadge();
         reinitAllFilters();
-        renderGuidedOnboarding();
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        
-        if (cachedRides && Array.isArray(cachedRides) && cachedRides.length > 0) {
-          allRides = preprocessRides(cachedRides);
-          buildParkDomainMap(allRides);
-          updateFavBadge();
-          reinitAllFilters();
+        if (isGuidedActive && document.getElementById('rideGrid').innerHTML.includes('Loading parks...')) {
           renderGuidedOnboarding();
-          showToast('Loaded offline cached data.');
-        } else {
+        } else if (!isGuidedActive) {
+          filterRides();
+        }
+      } catch (error) {
+        console.error('Error fetching fresh data:', error);
+        if (!cachedRides || cachedRides.length === 0) {
           document.getElementById('rideGrid').innerHTML = `
             <div class="loading">
               <p>Unable to load live ride data right now.</p>
@@ -1766,7 +1769,7 @@
 
           let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
           const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
-          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}${locationStr}`)}`;
+          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name} ${locationStr}`)}`;
 
           const calendarHtml = next7Days.map(d => `
             <div class="hours-day-box ${d.isToday ? 'is-today' : ''}">
@@ -1819,7 +1822,7 @@
 
               <div class="park-info-actions">
                 ${officialUrl ? `<a href="${officialUrl}" target="_blank" rel="noopener" class="park-action-btn">🌐 Official Website</a>` : ''}
-                <a href="${mapsUrl}" target="_blank" rel="noopener" class="park-action-btn">🗺️️ Google Maps Directions</a>
+                <a href="${mapsUrl}" target="_blank" rel="noopener" class="park-action-btn">🗺 Google Maps Directions</a>
                 <button class="park-action-btn" onclick="filterByParkOnly('${p.name.replace(/'/g, "\\'")}'); switchToRideView('all');">🎢 View Park Rides (${p.ridesCount})</button>
               </div>
             </div>
