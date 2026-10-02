@@ -509,6 +509,9 @@
       <button class="nav-btn" id="viewParkInfoBtn">
         🗺 Park Info
       </button>
+      <button class="action-nav-btn" id="clearFavsBtn" style="display: none;" title="Clear all favourites">
+        🗑 Clear Favourites
+      </button>
       <button class="action-nav-btn" id="shareFavsBtn" style="display: none;">
         🔗 Share
       </button>
@@ -523,13 +526,13 @@
     <div class="top-controls-row">
       <input type="text" id="searchInput" placeholder="Search ride, park, type, or details...">
       
-  <select id="sortSelect" class="sort-select">
-    <option value="favs-first">Sort: Favourites First</option>
-    <option value="name-asc">Sort: Name (A-Z)</option>
-    <option value="park-asc">Sort: Park Name</option>
-    <option value="height-asc">Sort: Height (Low to High)</option>
-    <option value="height-desc">Sort: Height (High to Low)</option>
-  </select>
+      <select id="sortSelect" class="sort-select">
+        <option value="favs-first">Sort: Favourites First</option>
+        <option value="name-asc">Sort: Name (A-Z)</option>
+        <option value="park-asc">Sort: Park Name</option>
+        <option value="height-asc">Sort: Height (Low to High)</option>
+        <option value="height-desc">Sort: Height (High to Low)</option>
+      </select>
 
       <!-- Height Slider -->
       <div class="height-filter">
@@ -1637,11 +1640,13 @@
         isGuidedActive = false;
         document.getElementById('viewFavsBtn').classList.add('active');
         document.getElementById('viewAllBtn').classList.remove('active');
+        document.getElementById('clearFavsBtn').style.display = 'inline-flex';
         document.getElementById('printFavsBtn').style.display = 'inline-flex';
         document.getElementById('shareFavsBtn').style.display = 'inline-flex';
       } else {
         document.getElementById('viewAllBtn').classList.add('active');
         document.getElementById('viewFavsBtn').classList.remove('active');
+        document.getElementById('clearFavsBtn').style.display = 'none';
         document.getElementById('printFavsBtn').style.display = 'none';
         document.getElementById('shareFavsBtn').style.display = 'none';
       }
@@ -1658,6 +1663,7 @@
       document.getElementById('rideGrid').style.display = 'none';
       document.getElementById('rideControlsSection').style.display = 'none';
       document.getElementById('statusBarSection').style.display = 'none';
+      document.getElementById('clearFavsBtn').style.display = 'none';
       document.getElementById('printFavsBtn').style.display = 'none';
       document.getElementById('shareFavsBtn').style.display = 'none';
 
@@ -1794,7 +1800,7 @@
 
           let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
           const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
-          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name} ${locationStr}`)}`;
+          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}${locationStr}`)}`;
 
           const calendarHtml = next7Days.map(d => `
             <div class="hours-day-box ${d.isToday ? 'is-today' : ''}">
@@ -1890,6 +1896,17 @@
         toast.classList.remove('show');
       }, 3000);
     }
+
+    document.getElementById('clearFavsBtn').addEventListener('click', () => {
+      if (favourites.length === 0) return;
+      if (confirm('Are you sure you want to clear all your favourites?')) {
+        favourites = [];
+        saveFavourites();
+        reinitAllFilters();
+        filterRides();
+        showToast('All favourites cleared!');
+      }
+    });
 
     document.getElementById('shareFavsBtn').addEventListener('click', async () => {
       const favRides = allRides.filter(r => favourites.includes(getRideKey(r)));
@@ -2131,35 +2148,34 @@
       });
     }
 
-function sortRides(rides) {
-  const sortVal = document.getElementById('sortSelect').value;
-  return rides.sort((a, b) => {
-    const keyA = getRideKey(a);
-    const keyB = getRideKey(b);
-    const isFavA = favourites.includes(keyA);
-    const isFavB = favourites.includes(keyB);
+    function sortRides(rides) {
+      const sortVal = document.getElementById('sortSelect').value;
+      return rides.sort((a, b) => {
+        const keyA = getRideKey(a);
+        const keyB = getRideKey(b);
+        const isFavA = favourites.includes(keyA);
+        const isFavB = favourites.includes(keyB);
 
-    if (sortVal === 'favs-first') {
-      if (isFavA && !isFavB) return -1;
-      if (!isFavA && isFavB) return 1;
-      // Secondary sort: alphabetical by name if both are favs or both are not
-      return String(a.ride).localeCompare(String(b.ride));
-    } else if (sortVal === 'name-asc') {
-      return String(a.ride).localeCompare(String(b.ride));
-    } else if (sortVal === 'park-asc') {
-      return String(a.park).localeCompare(String(b.park));
-    } else if (sortVal === 'height-asc') {
-      const hA = currentUnit === 'cm' ? (a.minHeightCm || 0) : (a.minHeightInch || 0);
-      const hB = currentUnit === 'cm' ? (b.minHeightCm || 0) : (b.minHeightInch || 0);
-      return hA - hB;
-    } else if (sortVal === 'height-desc') {
-      const hA = currentUnit === 'cm' ? (a.minHeightCm || 0) : (a.minHeightInch || 0);
-      const hB = currentUnit === 'cm' ? (b.minHeightCm || 0) : (b.minHeightInch || 0);
-      return hB - hA;
+        if (sortVal === 'favs-first') {
+          if (isFavA && !isFavB) return -1;
+          if (!isFavA && isFavB) return 1;
+          return String(a.ride).localeCompare(String(b.ride));
+        } else if (sortVal === 'name-asc') {
+          return String(a.ride).localeCompare(String(b.ride));
+        } else if (sortVal === 'park-asc') {
+          return String(a.park).localeCompare(String(b.park));
+        } else if (sortVal === 'height-asc') {
+          const hA = currentUnit === 'cm' ? (a.minHeightCm || 0) : (a.minHeightInch || 0);
+          const hB = currentUnit === 'cm' ? (b.minHeightCm || 0) : (b.minHeightInch || 0);
+          return hA - hB;
+        } else if (sortVal === 'height-desc') {
+          const hA = currentUnit === 'cm' ? (a.minHeightCm || 0) : (a.minHeightInch || 0);
+          const hB = currentUnit === 'cm' ? (b.minHeightCm || 0) : (b.minHeightInch || 0);
+          return hB - hA;
+        }
+        return 0;
+      });
     }
-    return 0;
-  });
-}
 
     function toggleTileExpansion(wrapperEl) {
       wrapperEl.classList.toggle('tile-expanded');
