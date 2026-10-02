@@ -489,7 +489,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v80 Debug</div>
+    <div class="version-badge" id="versionBadgeBtn">v83 Debug</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -656,6 +656,7 @@
           <div>
             <label style="font-size: 0.8rem; font-weight: bold; color: var(--muted); display: block; margin-bottom: 0.2rem;">Select Park UUID to Test:</label>
             <select id="debugParkPresetSelect" class="guided-select">
+              <option value="75ea578a-adc8-4116-a54d-dccb60765ef9">Magic Kingdom (75ea578a...)</option>
               <option value="8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7">Alton Towers (8e6bf2ae...)</option>
               <option value="66fbd0d1-14dd-4f1a-bb18-5e0b7447f07d">Blackpool Pleasure Beach (66fbd0d1...)</option>
               <option value="e8d0207f-da8a-4048-bec8-117aa946b2c2">Disneyland Paris (e8d0207f...)</option>
@@ -664,7 +665,6 @@
               <option value="7c48a21b-221c-42f8-8339-6334c5f2fb12">LEGOLAND Windsor (7c48a21b...)</option>
               <option value="c4307928-fc3c-47df-b976-305026751727">Chessington (c4307928...)</option>
               <option value="6f9c3c13-8b74-4b47-b73a-4efb7189a05b">Thorpe Park (6f9c3c13...)</option>
-              <option value="73405151-0fd0-4d7f-b44e-909d432379b3">Magic Kingdom (73405151...)</option>
             </select>
           </div>
 
@@ -686,7 +686,7 @@
           </div>
           <div class="debug-stat-box">
             <div class="debug-stat-val" id="debugStatCount">0</div>
-            <div class="debug-stat-label">Raw Entities Returned</div>
+            <div class="debug-stat-label">Live Entities Returned</div>
           </div>
           <div class="debug-stat-box">
             <div class="debug-stat-val" id="debugStatQueues">0</div>
@@ -710,7 +710,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v80';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v83';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -735,7 +735,7 @@
       'flamingo land': '172d77cb-6341-4b3b-8a66-e145dad8dda9',
       'legoland windsor': '7c48a21b-221c-42f8-8339-6334c5f2fb12',
       'thorpe park': '6f9c3c13-8b74-4b47-b73a-4efb7189a05b',
-      'magic kingdom': '73405151-0fd0-4d7f-b44e-909d432379b3',
+      'magic kingdom': '75ea578a-adc8-4116-a54d-dccb60765ef9',
       'epcot': '438d0111-adc6-4d04-b9c1-8b01267b1407',
       'disney\'s animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
       'animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
@@ -1266,8 +1266,10 @@
         try {
           const res = await fetch(`https://api.themeparks.wiki/v1/entity/${wikiId}/live`);
           const data = await res.json();
-          if (data && data.live && Array.isArray(data.live)) {
-            data.live.forEach(item => {
+          // ThemeParks.wiki returns live data under data.liveData
+          const liveArray = data.liveData || data.live || [];
+          if (Array.isArray(liveArray)) {
+            liveArray.forEach(item => {
               if (item.id) {
                 const cleanId = String(item.id).trim().toLowerCase();
                 let wait = null;
@@ -1337,8 +1339,6 @@
     });
 
     // Dedicated Debug Console Diagnostics Logic
-    let lastDebugPayload = null;
-
     async function runDebugDiagnostic() {
       const presetUuid = document.getElementById('debugParkPresetSelect').value;
       const customUuid = document.getElementById('debugCustomUuidInput').value.trim();
@@ -1362,9 +1362,7 @@
         }
 
         const data = await res.json();
-        lastDebugPayload = { targetUuid, status: res.status, data };
-
-        const liveArray = data.live || [];
+        const liveArray = data.liveData || data.live || [];
         document.getElementById('debugStatCount').textContent = liveArray.length;
 
         let queueCount = 0;
@@ -1387,7 +1385,6 @@
 
         document.getElementById('debugStatQueues').textContent = queueCount;
 
-        // Check matching against local database rides
         let matchesCount = 0;
         allRides.forEach(r => {
           const u = getRideUuid(r);
@@ -1397,12 +1394,11 @@
         });
         document.getElementById('debugStatMatches').textContent = matchesCount;
 
-        consoleEl.textContent = `=== API Diagnostic Summary ===\nTarget UUID: ${targetUuid}\nHTTP Status: ${res.status} OK\nTotal Entities Returned: ${liveArray.length}\nEntities with Queue/Status: ${queueCount}\nApp DB UUID Matches: ${matchesCount}\n\n=== Sample Entity Payloads (First 10) ===\n` + JSON.stringify(sampleItems, null, 2);
+        consoleEl.textContent = `=== API Diagnostic Summary ===\nTarget UUID: ${targetUuid}\nHTTP Status: ${res.status} OK\nTotal Live Entities Returned: ${liveArray.length}\nEntities with Queue/Status: ${queueCount}\nApp DB UUID Matches: ${matchesCount}\n\n=== Sample Entity Payloads (First 10) ===\n` + JSON.stringify(sampleItems, null, 2);
 
       } catch (err) {
         document.getElementById('debugStatStatus').textContent = 'ERR';
         consoleEl.textContent += `\n❌ Diagnostic Error / Network Failure:\n${err.stack || err.message || err}`;
-        lastDebugPayload = { targetUuid, error: err.message };
       }
     }
 
@@ -1508,7 +1504,6 @@
       return name.includes('universal') || name.includes('epic') || name.includes('islands of adventure') || name.includes('volcano bay');
     }
 
-    // USA Sub-Grouping Helper (Florida / Tampa vs California)
     function getUsaSubGroup(parkName) {
       const norm = parkName.toLowerCase().trim();
       if (norm.includes('california') || norm.includes('hollywood') || norm.includes('knott') || norm.includes('magic mountain')) {
