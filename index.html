@@ -98,7 +98,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Twemoji Country Flags', system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding-bottom: 2rem; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; transition: background-color 0.3s ease, color 0.3s ease; }
     
-    /* Full-Width Edge-to-Edge Hero Banner with Absolute Version Badge Overlay */
     .hero-banner { width: 100%; margin: 0 0 1.5rem 0; border-radius: 0; overflow: hidden; position: relative; height: 180px; box-shadow: var(--shadow); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center; text-align: center; background: var(--card-bg); }
     .hero-banner img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: brightness(0.45) saturate(1.1); transition: filter 0.3s ease; }
     [data-theme="light"] .hero-banner img { filter: brightness(0.65) saturate(1.05); }
@@ -115,23 +114,20 @@
 
     /* Prominent Main Nav Switcher */
     .view-nav { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
-    .nav-btn { background: var(--card-bg); border: 2px solid var(--border); color: var(--text); padding: 0.65rem 1.5rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem; box-shadow: var(--shadow); }
+    .nav-btn { background: var(--card-bg); border: 2px solid var(--border); color: var(--text); padding: 0.65rem 1.25rem; border-radius: 12px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem; box-shadow: var(--shadow); }
     .nav-btn:hover { border-color: var(--accent); transform: translateY(-2px); }
     .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35); }
     [data-theme="light"] .nav-btn.active { box-shadow: 0 6px 15px rgba(2, 132, 199, 0.25); }
     .nav-badge { background: rgba(0, 0, 0, 0.2); color: inherit; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.8rem; }
 
-    /* Action Nav Buttons (Share / Print) */
     .action-nav-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.65rem 1.15rem; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: var(--shadow); }
     .action-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* Theme Toggle Button */
     .theme-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem; }
     .theme-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .controls { max-width: 1000px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; gap: 0.75rem; width: 100%; padding: 0 1rem; }
     
-    /* Top Row: Search, Sort, Height Slider combined */
     .top-controls-row { display: grid; grid-template-columns: 2fr 1.3fr 1.3fr; gap: 0.65rem; align-items: stretch; }
     
     input[type="text"] { width: 100%; padding: 0.6rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; box-shadow: var(--shadow); height: 42px; transition: border-color 0.2s ease; }
@@ -139,7 +135,6 @@
     
     select.sort-select { width: 100%; padding: 0.6rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: var(--shadow); height: 42px; }
 
-    /* Filter Row: 4 Dropdowns + Inline Reset Button */
     .filter-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.65rem; align-items: stretch; }
     
     .btn-secondary { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.4rem 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; box-shadow: var(--shadow); height: 42px; display: flex; align-items: center; justify-content: center; width: 100%; }
@@ -165,7 +160,6 @@
     .dropdown-option:hover { background: var(--badge-bg); }
     .dropdown-option input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
 
-    /* Cross-Platform Flag Styling */
     .flag-emoji { font-size: 1.1rem; line-height: 1; display: inline-block; vertical-align: middle; }
 
     .park-favicon { width: 16px; height: 16px; border-radius: 3px; object-fit: contain; vertical-align: middle; flex-shrink: 0; background: rgba(255,255,255,0.2); }
@@ -176,7 +170,6 @@
     .height-bottom { display: flex; align-items: center; gap: 0.5rem; width: 100%; }
     input[type="range"] { flex: 1; accent-color: var(--accent); cursor: pointer; height: 4px; }
     
-    /* Balanced Equal-Width CM / Inch Toggle Buttons */
     .unit-toggle { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; flex-shrink: 0; }
     .unit-btn { background: none; border: none; color: var(--muted); padding: 0.2rem 0.5rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; width: 36px; text-align: center; }
     .unit-btn.active { background: var(--accent); color: #ffffff; }
@@ -223,7 +216,7 @@
     .park-group-content { display: none; padding: 1rem 1.25rem; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.75rem; }
     .park-group-container.expanded .park-group-content { display: flex; }
     
-    .slim-ride-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0.75rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; gap: 1rem; transition: transform 0.15s ease; }
+    .slim-ride-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; gap: 1rem; transition: transform 0.15s ease; }
     .slim-ride-row:hover { transform: translateX(4px); border-color: var(--accent); }
     .slim-ride-details { display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1; }
     .slim-ride-name { font-weight: 600; font-size: 0.95rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -283,6 +276,9 @@
     .live-wait-badge.wait-long { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
     .live-wait-badge.wait-down { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
 
+    /* Showtimes Badge */
+    .showtime-badge { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid var(--accent); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 6px; margin-bottom: 0.5rem; display: inline-block; }
+
     /* About Modal Styles */
     .modal-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); z-index: 300; align-items: center; justify-content: center; padding: 1rem; }
     .modal-backdrop.show { display: flex; }
@@ -298,7 +294,7 @@
     .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); border: 1px solid var(--accent); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 200; transition: transform 0.3s ease; }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* Responsive Adjustments */
+    /* Responsive Adjustments & Mobile Slim View Stacking */
     @media (max-width: 850px) {
       .top-controls-row { grid-template-columns: 1fr; }
       .filter-row { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
@@ -330,6 +326,12 @@
       #rideCounter { display: block; line-height: 1.3; }
       #rideCounter .line-1 { display: block; font-size: 0.85rem; color: var(--muted); }
       #rideCounter .line-2 { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text); }
+
+      /* Mobile Stacking for Slim View */
+      .slim-ride-row { flex-direction: column; align-items: stretch; gap: 0.5rem; padding: 0.75rem; }
+      .slim-ride-details { width: 100%; justify-content: space-between; }
+      .slim-ride-name { white-space: normal; word-break: break-word; font-size: 0.9rem; flex: 1; }
+      .slim-ride-meta-tags { justify-content: space-between; width: 100%; border-top: 1px dashed var(--border); padding-top: 0.4rem; margin-top: 0.2rem; }
     }
 
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
@@ -391,7 +393,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v63</div>
+    <div class="version-badge" id="versionBadgeBtn">v64</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -405,11 +407,14 @@
       <button class="nav-btn" id="viewFavsBtn">
         ★ Favourites <span class="nav-badge" id="favCountBadge">0</span>
       </button>
+      <button class="nav-btn" id="viewParkInfoBtn" onclick="showToast('Park Info tab coming soon!')">
+        🗺️ Park Info
+      </button>
       <button class="action-nav-btn" id="shareFavsBtn" style="display: none;">
         🔗 Share
       </button>
       <button class="action-nav-btn" id="printFavsBtn" style="display: none;">
-        🖨️ Print Checklist
+        🖨️️ Print
       </button>
     </div>
   </header>
@@ -444,7 +449,6 @@
     
     <!-- Filter Row: Country, Park, Type, Sensory, Reset Button -->
     <div class="filter-row">
-      <!-- Country Multi-Select -->
       <div class="multiselect-container">
         <button class="multiselect-btn" id="countryBtn">Countries (All)</button>
         <div class="multiselect-dropdown" id="countryDropdown">
@@ -456,7 +460,6 @@
         </div>
       </div>
 
-      <!-- Park Multi-Select -->
       <div class="multiselect-container">
         <button class="multiselect-btn" id="parkBtn">Parks (All)</button>
         <div class="multiselect-dropdown" id="parkDropdown">
@@ -474,7 +477,6 @@
         </div>
       </div>
 
-      <!-- Type Multi-Select with Park Category Selector -->
       <div class="multiselect-container">
         <button class="multiselect-btn" id="typeBtn">Ride Types (All)</button>
         <div class="multiselect-dropdown" id="typeDropdown">
@@ -491,7 +493,6 @@
         </div>
       </div>
 
-      <!-- Sensory Multi-Select -->
       <div class="multiselect-container">
         <button class="multiselect-btn" id="sensoryBtn">Sensory (All)</button>
         <div class="multiselect-dropdown" id="sensoryDropdown">
@@ -503,7 +504,6 @@
         </div>
       </div>
 
-      <!-- Reset Filters Button -->
       <button class="btn-secondary" id="clearFiltersBtn">↺ Reset Filters</button>
     </div>
   </div>
@@ -513,8 +513,8 @@
       <span id="rideCounter">Showing 0 rides</span>
       
       <div class="status-controls-group">
-        <button class="live-toggle-btn" id="liveWaitToggleBtn" title="Toggle Live Wait Times">
-          ⚡ <span id="liveToggleText">Show Live Wait Times</span>
+        <button class="live-toggle-btn" id="liveWaitToggleBtn" title="Toggle Live Wait Times & Showtimes">
+          ⚡ <span id="liveToggleText">Show Live Times</span>
         </button>
         
         <div class="display-toggle">
@@ -547,7 +547,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v63';
+    const CACHE_KEY = 'theme_park_rides_cache_v64';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -879,7 +879,7 @@
             <div>
               <label class="guided-label">Destination Country</label>
               <select id="guidedCountrySelect" class="guided-select">
-                ${countries.map(c => `<option value="${c}">${getCountryFlag(c)}${c}</option>`).join('')}
+                ${countries.map(c => `<option value="${c}">${getCountryFlag(c)} ${c}</option>`).join('')}
               </select>
             </div>
             
@@ -932,7 +932,6 @@
       document.getElementById('rideCounter').textContent = 'Guided Setup Active';
     }
 
-    // Direct Live Wait Time Fetcher with Robust Object Parsing & Name Matching
     async function fetchLiveWaitTimes() {
       if (isFetchingLive) return;
       isFetchingLive = true;
@@ -956,15 +955,21 @@
               if (item.id) {
                 const cleanId = String(item.id).trim().toLowerCase();
                 let wait = null;
+                let showtimes = null;
+
                 if (item.queue) {
                   if (item.queue.STANDBY && item.queue.STANDBY.waitTime !== undefined) {
                     wait = item.queue.STANDBY.waitTime;
                   } else if (item.queue.waitTime !== undefined) {
                     wait = item.queue.waitTime;
                   }
+                  if (item.queue.SHOWTIMES && Array.isArray(item.queue.SHOWTIMES)) {
+                    showtimes = item.queue.SHOWTIMES;
+                  }
                 }
+
                 const status = item.status || 'OPERATING';
-                const liveObj = { waitTime: wait, status: status };
+                const liveObj = { waitTime: wait, status: status, showtimes: showtimes };
 
                 liveWaitData[cleanId] = liveObj;
                 if (item.name) {
@@ -980,7 +985,7 @@
       }
 
       isFetchingLive = false;
-      toggleText.textContent = 'Live Wait Times: ON';
+      toggleText.textContent = 'Live Times: ON';
       renderRidesBatch();
     }
 
@@ -1009,7 +1014,7 @@
         fetchLiveWaitTimes();
       } else {
         btn.classList.remove('active');
-        toggleText.textContent = 'Show Live Wait Times';
+        toggleText.textContent = 'Show Live Times';
         renderRidesBatch();
       }
     });
@@ -1585,11 +1590,13 @@
               if (liveInfo) {
                 if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
                   liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱️ ${liveInfo.waitTime}m</span>`;
+                } else if (liveInfo.status === 'REFURBISHMENT') {
+                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#f59e0b;">🔧 Maintenance</span>`;
                 } else {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;">⚪ ${liveInfo.status}</span>`;
+                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;">🌙 Park Closed</span>`;
                 }
               } else {
-                liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;">⚪ N/A</span>`;
+                liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;">🌙 Park Closed</span>`;
               }
             }
 
@@ -1665,13 +1672,15 @@
               if (liveInfo.waitTime >= 30 && liveInfo.waitTime < 60) badgeClass = 'wait-medium';
               else if (liveInfo.waitTime >= 60) badgeClass = 'wait-long';
               liveBadgeHtml = `<div class="live-wait-badge ${badgeClass}">⏱️ ${liveInfo.waitTime} min wait</div>`;
-            } else if (liveInfo.status === 'DOWN' || liveInfo.status === 'CLOSED') {
-              liveBadgeHtml = `<div class="live-wait-badge wait-down">🔴 ${liveInfo.status}</div>`;
+            } else if (liveInfo.status === 'REFURBISHMENT') {
+              liveBadgeHtml = `<div class="live-wait-badge wait-down">🔧 Under Maintenance</div>`;
+            } else if (liveInfo.status === 'DOWN') {
+              liveBadgeHtml = `<div class="live-wait-badge wait-down">🔴 Temporarily Down</div>`;
             } else {
-              liveBadgeHtml = `<div class="live-wait-badge wait-down">⚪ ${liveInfo.status}</div>`;
+              liveBadgeHtml = `<div class="live-wait-badge wait-down">🌙 Park Closed</div>`;
             }
           } else {
-            liveBadgeHtml = `<div class="live-wait-badge wait-down">⚪ Live Data N/A</div>`;
+            liveBadgeHtml = `<div class="live-wait-badge wait-down">🌙 Park Closed</div>`;
           }
         }
 
