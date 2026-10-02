@@ -24,9 +24,12 @@
       --badge-bg: rgba(56, 189, 248, 0.1);
       --star-active: #f59e0b;
       --yt-red: #ef4444;
-      --yt-bg: rgba(56, 189, 248, 0.08);
-      --yt-border: rgba(56, 189, 248, 0.25);
-      --yt-text: #38bdf8;
+      --yt-bg: rgba(239, 68, 68, 0.12);
+      --yt-border: rgba(239, 68, 68, 0.3);
+      --yt-text: #fca5a5;
+      --queue-bg: rgba(245, 158, 11, 0.12);
+      --queue-border: rgba(245, 158, 11, 0.35);
+      --queue-text: #fde047;
       --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
       --input-bg: #1e293b;
 
@@ -59,9 +62,12 @@
       --badge-bg: rgba(2, 132, 199, 0.1);
       --star-active: #d97706;
       --yt-red: #dc2626;
-      --yt-bg: rgba(2, 132, 199, 0.08);
-      --yt-border: rgba(2, 132, 199, 0.25);
-      --yt-text: #0284c7;
+      --yt-bg: rgba(220, 38, 38, 0.08);
+      --yt-border: rgba(220, 38, 38, 0.25);
+      --yt-text: #b91c1c;
+      --queue-bg: rgba(217, 119, 6, 0.1);
+      --queue-border: rgba(217, 119, 6, 0.3);
+      --queue-text: #92400e;
       --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
       --input-bg: #ffffff;
 
@@ -197,7 +203,7 @@
     .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.25rem; position: relative; }
     .grid.compact .card-body { flex: 1.2; min-width: 0; padding-right: 2rem; }
     .grid.compact .card-meta { flex: 1.4; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
-    .grid.compact .card-actions { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+    .grid.compact .card-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; margin-top: 0; }
     .grid.compact .ride-thumb { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
     .grid.compact .fav-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.6rem; line-height: 1; }
 
@@ -237,12 +243,33 @@
     .grid.compact .details { display: block; font-size: 0.85rem; margin-bottom: 0.25rem; line-height: 1.3; }
     .grid.compact .sensory-box { display: block; margin-top: 0.35rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
     
-    /* Card Action Bar Layout (POV + Queue Pass) */
+    /* Card Action Bar Layout (Watch POV + Queue Pass) */
     .card-actions { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.85rem; }
-    .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.45rem 0.85rem; background: var(--yt-bg); color: var(--yt-text); border: 1px solid var(--yt-border); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; flex: 1; }
-    .pov-link:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+    .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.45rem 0.85rem; background: var(--yt-bg); color: var(--yt-text); border: 1px solid var(--yt-border); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; flex: 1; text-align: center; }
+    .pov-link:hover { background: #ef4444; color: #ffffff; border-color: #ef4444; }
     
-    .queue-pass-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.45rem 0.75rem; background: var(--badge-bg); border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: var(--accent); white-space: nowrap; }
+    /* Queue Pass Tooltip Badge */
+    .queue-pass-badge { position: relative; display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.45rem 0.75rem; background: var(--queue-bg); border: 1px solid var(--queue-border); border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--queue-text); cursor: help; white-space: nowrap; transition: all 0.2s ease; }
+    .queue-pass-badge:hover { background: var(--queue-border); }
+    
+    /* Clean CSS Tooltip popup on hover */
+    .queue-pass-badge:hover::after {
+      content: attr(data-pass);
+      position: absolute;
+      bottom: 125%;
+      right: 0;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+      z-index: 100;
+      pointer-events: none;
+    }
 
     /* Live Wait Badge */
     .live-wait-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px; margin-bottom: 0.5rem; }
@@ -265,15 +292,6 @@
     /* Toast Notification */
     .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); border: 1px solid var(--accent); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 200; transition: transform 0.3s ease; }
     .toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* Skeleton Loading State Styles */
-    .skeleton-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; width: 100%; max-width: 1000px; margin: 0 auto; }
-    .skeleton-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; height: 260px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
-    .skeleton-line { background: var(--border); border-radius: 4px; height: 16px; animation: pulse 1.4s infinite ease-in-out; }
-    .skeleton-line.title { height: 22px; width: 65%; }
-    .skeleton-line.short { width: 35%; }
-    .skeleton-line.long { width: 85%; }
-    @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 0.7; } 100% { opacity: 0.3; } }
 
     /* Responsive Adjustments */
     @media (max-width: 850px) {
@@ -368,7 +386,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v61</div>
+    <div class="version-badge" id="versionBadgeBtn">v62</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -524,7 +542,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v61';
+    const CACHE_KEY = 'theme_park_rides_cache_v62';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -908,6 +926,7 @@
       document.getElementById('rideCounter').textContent = 'Guided Setup Active';
     }
 
+    // Direct Live Wait Time Fetcher with Robust Object Parsing
     async function fetchLiveWaitTimes() {
       if (isFetchingLive) return;
       isFetchingLive = true;
@@ -925,12 +944,20 @@
         try {
           const res = await fetch(`https://api.themeparks.wiki/v1/entity/${wikiId}/live`);
           const data = await res.json();
-          if (data && data.live) {
+          if (data && data.live && Array.isArray(data.live)) {
             data.live.forEach(item => {
-              if (item.entityType === 'ATTRACTION' && item.id) {
-                const wait = item.queue && item.queue.STANDBY ? item.queue.STANDBY.waitTime : null;
+              if (item.id) {
+                const cleanId = String(item.id).trim().toLowerCase();
+                let wait = null;
+                if (item.queue) {
+                  if (item.queue.STANDBY && item.queue.STANDBY.waitTime !== undefined) {
+                    wait = item.queue.STANDBY.waitTime;
+                  } else if (item.queue.waitTime !== undefined) {
+                    wait = item.queue.waitTime;
+                  }
+                }
                 const status = item.status || 'OPERATING';
-                liveWaitData[item.id.toLowerCase()] = { waitTime: wait, status: status };
+                liveWaitData[cleanId] = { waitTime: wait, status: status };
               }
             });
           }
@@ -1525,6 +1552,19 @@
             const heightStr = r.minHeightCm ? `${r.minHeightCm}cm` : 'All';
             const povUrl = getPovVideoUrl(r.park, r.ride);
 
+            let liveBadgeHtml = '';
+            if (showLiveWaitTimes) {
+              const rideUuid = getRideUuid(r);
+              const liveInfo = rideUuid ? liveWaitData[rideUuid] : null;
+              if (liveInfo) {
+                if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
+                  liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱️ ${liveInfo.waitTime}m</span>`;
+                } else {
+                  liveBadgeHtml = `<span style="font-size:0.8rem; color:#94a3b8;">⚪ ${liveInfo.status}</span>`;
+                }
+              }
+            }
+
             return `
               <div class="slim-ride-row">
                 <div class="slim-ride-details">
@@ -1533,6 +1573,7 @@
                   </button>
                   <span class="slim-ride-name">${r.ride}</span>
                   ${showPassIcon ? `<span title="Queue Pass: ${queuePassVal}">⏩</span>` : ''}
+                  ${liveBadgeHtml}
                 </div>
                 <div class="slim-ride-meta-tags">
                   <span class="tag">${r.type || 'Ride'}</span>
@@ -1600,7 +1641,7 @@
             } else if (liveInfo.status === 'DOWN' || liveInfo.status === 'CLOSED') {
               liveBadgeHtml = `<div class="live-wait-badge wait-down">🔴 ${liveInfo.status}</div>`;
             } else {
-              liveBadgeHtml = `<div class="live-wait-badge wait-down">⚪ Status: ${liveInfo.status}</div>`;
+              liveBadgeHtml = `<div class="live-wait-badge wait-down">⚪ ${liveInfo.status}</div>`;
             }
           }
         }
@@ -1639,7 +1680,7 @@
               <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link">
                 ▶ Watch POV
               </a>
-              ${showPassIcon ? `<div class="queue-pass-badge" title="Queue Pass: ${queuePassVal}">⏩ ${queuePassVal}</div>` : ''}
+              ${showPassIcon ? `<div class="queue-pass-badge" data-pass="${queuePassVal}">⏩ Pass</div>` : ''}
             </div>
           </div>
         `;
