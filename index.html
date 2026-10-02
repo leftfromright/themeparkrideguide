@@ -423,7 +423,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v67</div>
+    <div class="version-badge" id="versionBadgeBtn">v68</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -585,7 +585,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CACHE_KEY = 'theme_park_rides_cache_v67';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v68';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -691,6 +691,29 @@
       return COUNTRY_FLAG_MAP[norm] || '🌍';
     }
 
+    // Automated LocalStorage Quota Management
+    function clearOldCaches() {
+      try {
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('theme_park_rides_cache_') && key !== CURRENT_CACHE_KEY) {
+            localStorage.removeItem(key);
+          }
+        }
+      } catch (e) {
+        console.warn('Could not clean old cache keys from localStorage:', e);
+      }
+    }
+
+    function safeSaveCache(data) {
+      clearOldCaches();
+      try {
+        localStorage.setItem(CURRENT_CACHE_KEY, JSON.stringify(data));
+      } catch (e) {
+        console.warn('LocalStorage quota exceeded or disabled. Operating in-memory mode.', e);
+      }
+    }
+
     let allRides = [];
     let currentFilteredRides = [];
     let displayedCount = 24;
@@ -725,7 +748,9 @@
 
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('site_theme', theme);
+      try {
+        localStorage.setItem('site_theme', theme);
+      } catch (e) {}
       currentTheme = theme;
 
       const icon = document.getElementById('themeIcon');
@@ -746,10 +771,17 @@
 
     applyTheme(currentTheme);
 
-    let favourites = JSON.parse(localStorage.getItem('ride_favourites') || '[]');
+    let favourites = [];
+    try {
+      favourites = JSON.parse(localStorage.getItem('ride_favourites') || '[]');
+    } catch (e) {
+      favourites = [];
+    }
 
     function saveFavourites() {
-      localStorage.setItem('ride_favourites', JSON.stringify(favourites));
+      try {
+        localStorage.setItem('ride_favourites', JSON.stringify(favourites));
+      } catch (e) {}
       updateFavBadge();
     }
 
@@ -888,25 +920,31 @@
     }
 
     async function fetchRideData() {
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        try {
-          allRides = preprocessRides(JSON.parse(cached));
-          buildParkDomainMap(allRides);
-          updateFavBadge();
-          reinitAllFilters();
-          renderGuidedOnboarding();
-          return;
-        } catch (e) {
-          console.error('Cache parse error:', e);
+      clearOldCaches();
+      
+      try {
+        const cached = localStorage.getItem(CURRENT_CACHE_KEY);
+        if (cached) {
+          try {
+            allRides = preprocessRides(JSON.parse(cached));
+            buildParkDomainMap(allRides);
+            updateFavBadge();
+            reinitAllFilters();
+            renderGuidedOnboarding();
+            return;
+          } catch (e) {
+            console.error('Cache parse error:', e);
+          }
         }
+      } catch (e) {
+        console.warn('LocalStorage read unavailable:', e);
       }
 
       try {
         const response = await fetch(API_URL);
         const freshRides = await response.json();
         
-        localStorage.setItem(CACHE_KEY, JSON.stringify(freshRides));
+        safeSaveCache(freshRides);
         allRides = preprocessRides(freshRides);
         buildParkDomainMap(allRides);
         updateFavBadge();
@@ -1459,10 +1497,11 @@
       return result;
     }
 
-    // Render Country-Grouped Park Info View
+    // Render Country-Grouped Park Info View (Auto-renders on load)
     function renderParkInfoCards() {
       const container = document.getElementById('parkInfoCardsContainer');
-      const searchVal = normalizeText(document.getElementById('parkSearchInput').value || '');
+      const searchInputEl = document.getElementById('parkSearchInput');
+      const searchVal = searchInputEl ? normalizeText(searchInputEl.value) : '';
 
       const uniqueParksMap = {};
       allRides.forEach(r => {
