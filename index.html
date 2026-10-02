@@ -115,7 +115,8 @@
     .version-badge:hover { transform: scale(1.05); border-color: var(--accent); }
 
     .hero-content { position: relative; z-index: 2; padding: 1rem; color: #ffffff; text-shadow: 0 2px 6px rgba(0,0,0,0.7); max-width: 1000px; width: 100%; }
-    .hero-content h1 { font-size: 2.2rem; margin-bottom: 0.35rem; letter-spacing: -0.025em; color: var(--accent); }
+    .hero-content h1 { font-size: 2.2rem; margin-bottom: 0.35rem; letter-spacing: -0.025em; color: var(--accent); display: inline-block; cursor: pointer; text-decoration: none; }
+    .hero-content h1:hover { opacity: 0.9; }
     [data-theme="light"] .hero-content h1 { color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
     .hero-content p { font-size: 1rem; opacity: 0.95; max-width: 700px; margin: 0 auto; line-height: 1.4; }
 
@@ -217,17 +218,16 @@
 
     .grid.compact { grid-template-columns: 1fr; gap: 0.75rem; }
     .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.25rem; position: relative; }
-    .grid.compact .card-fav-ribbon { display: none !important; } /* Omit ribbon in compact mode to prevent overlap */
+    .grid.compact .card-fav-ribbon { display: none !important; }
     .grid.compact .card-body { flex: 1.2; min-width: 0; padding-right: 2rem; }
     .grid.compact .card-meta { flex: 1.4; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
     
-    /* Compact View Action Column Stacked (POV & Pass) */
-    .grid.compact .card-actions { display: flex; flex-direction: column; align-items: stretch; gap: 0.4rem; flex-shrink: 0; margin-top: 0; width: 90px; }
+    .grid.compact .card-actions { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 0.4rem; flex-shrink: 0; margin-top: 0; width: 90px; }
     .grid.compact .pov-link, .grid.compact .queue-pass-badge { width: 100%; flex: none; text-align: center; }
 
     .grid.compact .ride-thumb-link { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
     .grid.compact .ride-thumb { height: 100%; }
-    .grid.compact .fav-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.6rem; line-height: 1; }
+    .grid.compact .fav-btn { position: absolute; top: 0.75rem; right: 0.75rem; font-size: 1.5rem; line-height: 1; z-index: 6; }
 
     /* Single-Column Slim Grouped View (Direct Park Grouping) */
     .grid.slim-view { display: flex; flex-direction: column; gap: 1rem; grid-template-columns: 1fr !important; width: 100%; max-width: 1000px; margin: 0 auto; }
@@ -241,10 +241,11 @@
     .park-group-content { display: none; padding: 1rem; border-top: 1px solid var(--border); flex-direction: column; gap: 0.65rem; background: var(--bg); }
     .park-group-container.expanded .park-group-content { display: flex; }
     
-    /* Expandable Ride Tile in Slim View */
-    .slim-ride-wrapper { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--card-bg); transition: border-color 0.2s ease; }
+    /* Expandable Ride Tile in Slim View with Enhanced Favourite Highlighting */
+    .slim-ride-wrapper { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--card-bg); transition: border-color 0.2s ease, background-color 0.2s ease; }
     .slim-ride-wrapper:hover { border-color: var(--accent); }
-    .slim-ride-wrapper.favourited { border-left: 4px solid var(--star-active); background: rgba(245, 158, 11, 0.03); }
+    .slim-ride-wrapper.favourited { border: 2px solid var(--star-active); background: rgba(245, 158, 11, 0.08); box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15); }
+    [data-theme="light"] .slim-ride-wrapper.favourited { background: rgba(217, 119, 6, 0.06); }
     
     .slim-ride-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; cursor: pointer; gap: 1rem; user-select: none; }
     .slim-ride-details { display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1; }
@@ -265,6 +266,9 @@
 
     /* Country Grouped Park Info View Styles */
     .park-info-view { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; width: 100%; }
+    .park-search-bar-wrapper { margin-bottom: 0.5rem; width: 100%; display: flex; justify-content: center; }
+    .park-search-input { width: 100%; max-width: 500px; }
+
     .country-group-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); transition: border-color 0.2s ease; margin-bottom: 0.5rem; }
     .country-group-container:hover { border-color: var(--accent); }
     .country-group-header { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 1.35rem; background: var(--badge-bg); cursor: pointer; font-weight: 700; font-size: 1.15rem; user-select: none; }
@@ -386,6 +390,7 @@
       .height-filter input[type="range"] { height: 6px; }
       .multiselect-btn, .btn-secondary { height: 46px; font-size: 0.9rem; }
       .hours-calendar-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+      .park-search-bar-wrapper { justify-content: flex-start; }
     }
 
     @media (max-width: 640px) {
@@ -421,6 +426,7 @@
       .slim-ride-meta-tags { justify-content: space-between; width: 100%; border-top: 1px dashed var(--border); padding-top: 0.4rem; margin-top: 0.2rem; }
       .slim-drawer-body { flex-direction: column-reverse; align-items: flex-start; }
       .slim-ride-thumb { width: 100%; height: 120px; }
+      .park-search-bar-wrapper { justify-content: stretch; }
     }
 
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
@@ -486,10 +492,10 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v85</div>
+    <div class="version-badge" id="versionBadgeBtn">v87</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
-      <h1>Theme Park Ride Guide</h1>
+      <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
       <p>Search, filter, and discover ride height requirements, details, and sensory notes to plan your family days out.</p>
     </div>
   </div>
@@ -634,8 +640,8 @@
 
     <!-- Country-Grouped Park Info View -->
     <div class="park-info-view" id="parkInfoGrid" style="display: none;">
-      <div style="margin-bottom: 0.5rem; width: 100%;">
-        <input type="text" id="parkSearchInput" placeholder="Filter parks by name, country, or location..." style="width: 100%; max-width: 500px;">
+      <div class="park-search-bar-wrapper">
+        <input type="text" id="parkSearchInput" class="park-search-input" placeholder="Filter parks by name, country, or location...">
       </div>
       <div id="parkInfoCardsContainer"></div>
     </div>
@@ -648,7 +654,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v85';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v87';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -893,7 +899,7 @@
         icon.textContent = '🌙';
         label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀️️';
+        icon.textContent = '☀️';
         label.textContent = 'Light Mode';
       }
     }
@@ -1054,7 +1060,6 @@
       }));
     }
 
-    // Fast Bootstrap: Check local cache first for instant load, then fetch fresh data asynchronously
     async function fetchRideData() {
       clearOldCaches();
       
@@ -1599,6 +1604,23 @@
         return tag.keywords.some(kw => text.includes(kw));
       });
     }
+
+    function resetToHome() {
+      document.getElementById('searchInput').value = '';
+      const slider = document.getElementById('heightSlider');
+      slider.value = slider.max;
+      document.getElementById('heightValue').textContent = `${slider.value} ${currentUnit}`;
+      selectedParkCategory = 'all';
+      document.querySelectorAll('.park-cat-btn').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-cat') === 'all');
+      });
+      isGuidedActive = false;
+      reinitAllFilters();
+      switchToRideView('all');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('homeHeaderLink').addEventListener('click', resetToHome);
 
     function switchToRideView(viewType) {
       currentView = viewType;
