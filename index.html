@@ -212,7 +212,8 @@
     .grid.compact .card-body { flex: 1.2; min-width: 0; padding-right: 2rem; }
     .grid.compact .card-meta { flex: 1.4; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
     .grid.compact .card-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; margin-top: 0; }
-    .grid.compact .ride-thumb { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
+    .grid.compact .ride-thumb-link { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
+    .grid.compact .ride-thumb { height: 100%; }
     .grid.compact .fav-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.6rem; line-height: 1; }
 
     /* Slim Collapsible Grouped View Styles */
@@ -231,9 +232,9 @@
     .slim-ride-name { font-weight: 600; font-size: 0.95rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .slim-ride-meta-tags { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; font-size: 0.85rem; color: var(--muted); }
 
-    /* Country Grouped Park Info View Styles with Enhanced Padding & Collapsible States */
+    /* Country Grouped Park Info View Styles */
     .park-info-view { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; width: 100%; }
-    .country-group-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); transition: border-color 0.2s ease, margin 0.2s ease; margin-bottom: 0.5rem; }
+    .country-group-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); transition: border-color 0.2s ease; margin-bottom: 0.5rem; }
     .country-group-container:hover { border-color: var(--accent); }
     .country-group-header { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 1.35rem; background: var(--badge-bg); cursor: pointer; font-weight: 700; font-size: 1.15rem; user-select: none; }
     .country-group-header .country-info { display: flex; align-items: center; gap: 0.75rem; }
@@ -287,7 +288,7 @@
     .grid.compact .details { display: block; font-size: 0.85rem; margin-bottom: 0.25rem; line-height: 1.3; }
     .grid.compact .sensory-box { display: block; margin-top: 0.35rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
     
-    /* Card Action Bar Layout (Gentle Neutral POV + Interactive Queue Pass Link) */
+    /* Card Action Bar Layout */
     .card-actions { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.85rem; }
     .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.45rem 0.85rem; background: var(--pov-bg); color: var(--pov-text); border: 1px solid var(--pov-border); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; flex: 1; text-align: center; }
     .pov-link:hover { background: var(--pov-hover-bg); color: var(--pov-hover-text); border-color: var(--pov-hover-bg); }
@@ -314,7 +315,7 @@
       pointer-events: none;
     }
 
-    /* Live Wait Badge (Clickable Link to Park Info) */
+    /* Live Wait Badge */
     .live-wait-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 6px; margin-bottom: 0.5rem; cursor: pointer; transition: transform 0.15s ease, opacity 0.15s ease; }
     .live-wait-badge:hover { transform: scale(1.03); opacity: 0.9; }
     .live-wait-badge.wait-short { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
@@ -362,7 +363,7 @@
       .grid.compact .meta-item, .meta-item { grid-template-columns: 90px 1fr; }
       .grid.compact .card-actions { flex-direction: row; justify-content: space-between; width: 100%; border-top: 1px solid var(--border); padding-top: 0.75rem; }
       .grid.compact .pov-link { flex: 1; text-align: center; }
-      .grid.compact .ride-thumb { display: none; }
+      .grid.compact .ride-thumb-link { display: none; }
       
       .controls { gap: 0.75rem; }
       .meta-counts { align-items: flex-start; }
@@ -406,7 +407,8 @@
     .sensory-box.severity-orange { background: var(--sensory-orange-bg); border-left-color: var(--sensory-orange-border); color: var(--sensory-orange-text); }
     .sensory-box.severity-red { background: var(--sensory-red-bg); border-left-color: var(--sensory-red-border); color: var(--sensory-red-text); }
 
-    .loading { text-align: center; color: var(--muted); font-size: 1.2rem; grid-column: 1 / -1; padding: 3rem 0; }
+    .loading { text-align: center; color: var(--muted); font-size: 1.1rem; grid-column: 1 / -1; padding: 3rem 0; }
+    .retry-btn { margin-top: 1rem; background: var(--accent); color: #ffffff; border: none; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
 
     footer { max-width: 1000px; margin: 3rem auto 0 auto; text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem; color: var(--muted); font-size: 0.85rem; width: 100%; padding-left: 1rem; padding-right: 1rem; }
     footer p { margin-bottom: 0.4rem; }
@@ -439,7 +441,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v70</div>
+    <div class="version-badge" id="versionBadgeBtn">v71</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1>Theme Park Ride Guide</h1>
@@ -601,7 +603,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v70';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v71';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -831,7 +833,7 @@
         icon.textContent = '🌙';
         label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀️';
+        icon.textContent = '☀️️';
         label.textContent = 'Light Mode';
       }
     }
@@ -990,26 +992,25 @@
     async function fetchRideData() {
       clearOldCaches();
       
+      let cachedRides = null;
       try {
         const cached = localStorage.getItem(CURRENT_CACHE_KEY);
         if (cached) {
-          try {
-            allRides = preprocessRides(JSON.parse(cached));
-            buildParkDomainMap(allRides);
-            updateFavBadge();
-            reinitAllFilters();
-            renderGuidedOnboarding();
-            return;
-          } catch (e) {
-            console.error('Cache parse error:', e);
-          }
+          cachedRides = JSON.parse(cached);
         }
       } catch (e) {
         console.warn('LocalStorage read unavailable:', e);
       }
 
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL, { redirect: 'follow' });
+        
+        // Guard against HTML error / 404 responses from Google Apps Script
+        const contentType = response.headers.get('content-type') || '';
+        if (!response.ok || contentType.includes('text/html')) {
+          throw new Error(`Server returned HTML/HTTP ${response.status} instead of JSON.`);
+        }
+
         const freshRides = await response.json();
         
         safeSaveCache(freshRides);
@@ -1020,7 +1021,22 @@
         renderGuidedOnboarding();
       } catch (error) {
         console.error('Error fetching data:', error);
-        document.getElementById('rideGrid').innerHTML = '<div class="loading">Failed to load ride data.</div>';
+        
+        if (cachedRides && Array.isArray(cachedRides) && cachedRides.length > 0) {
+          allRides = preprocessRides(cachedRides);
+          buildParkDomainMap(allRides);
+          updateFavBadge();
+          reinitAllFilters();
+          renderGuidedOnboarding();
+          showToast('Loaded offline cached data.');
+        } else {
+          document.getElementById('rideGrid').innerHTML = `
+            <div class="loading">
+              <p>Unable to load live ride data right now.</p>
+              <button class="retry-btn" onclick="fetchRideData()">↺ Try Again</button>
+            </div>
+          `;
+        }
       }
     }
 
@@ -1193,7 +1209,7 @@
     }
 
     function filterByParkOnly(parkName) {
-      isGuidedActive = false; // Directly bypass selection box
+      isGuidedActive = false;
       selectedParks = [parkName];
       document.querySelectorAll('.park-cb').forEach(cb => {
         cb.checked = (cb.value === parkName);
@@ -1462,7 +1478,7 @@
       document.getElementById('statusBarSection').style.display = 'flex';
 
       if (viewType === 'favourites') {
-        isGuidedActive = false; // Bypass guided setup for direct favourites viewing
+        isGuidedActive = false;
         document.getElementById('viewFavsBtn').classList.add('active');
         document.getElementById('viewAllBtn').classList.remove('active');
         document.getElementById('printFavsBtn').style.display = 'inline-flex';
@@ -1495,7 +1511,6 @@
 
       if (targetParkName) {
         setTimeout(() => {
-          // Expand target park's country container automatically
           const targetCard = document.getElementById(`park-card-${normalizeText(targetParkName)}`);
           if (targetCard) {
             const countryContainer = targetCard.closest('.country-group-container');
@@ -1518,7 +1533,7 @@
     function getNext7DaysHours(parkName) {
       const norm = parkName.toLowerCase().trim();
       const result = [];
-      const now = new Date(); // Anchor: Oct 2, 2026
+      const now = new Date();
 
       for (let i = 0; i < 7; i++) {
         const d = new Date(now);
@@ -1526,7 +1541,7 @@
 
         const dayName = d.toLocaleDateString('en-GB', { weekday: 'short' });
         const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-        const dayOfWeek = d.getDay(); // 0 = Sun, 5 = Fri, 6 = Sat
+        const dayOfWeek = d.getDay();
 
         let timeStr = '10:00 - 18:00';
         let isClosed = false;
@@ -1568,7 +1583,7 @@
       return result;
     }
 
-    // Render Country-Grouped Park Info View (Collapsed by Default)
+    // Render Country-Grouped Park Info View
     function renderParkInfoCards() {
       const container = document.getElementById('parkInfoCardsContainer');
       const searchInputEl = document.getElementById('parkSearchInput');
@@ -1687,7 +1702,6 @@
           `;
         }).join('');
 
-        // Expand country automatically if searching
         const isExpandedClass = searchVal ? 'expanded' : '';
 
         return `
@@ -2031,7 +2045,7 @@
               const liveInfo = getLiveInfoForRide(r);
               if (liveInfo) {
                 if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
-                  liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱️️ ${liveInfo.waitTime}m</span>`;
+                  liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱ ${liveInfo.waitTime}m</span>`;
                 } else if (liveInfo.status === 'REFURBISHMENT') {
                   liveBadgeHtml = `<span style="font-size:0.8rem; color:#f59e0b; cursor:pointer;" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔧 Maintenance</span>`;
                 } else {
