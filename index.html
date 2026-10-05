@@ -23,6 +23,7 @@
     [data-theme="dark"] {
       --bg: #0f172a;
       --card-bg: #1e293b;
+      --nav-banner-bg: rgba(30, 41, 59, 0.7);
       --accent: #38bdf8;
       --text: #f8fafc;
       --muted: #94a3b8;
@@ -66,6 +67,7 @@
     [data-theme="light"] {
       --bg: #f8fafc;
       --card-bg: #ffffff;
+      --nav-banner-bg: rgba(226, 232, 240, 0.7);
       --accent: #0284c7;
       --text: #0f172a;
       --muted: #64748b;
@@ -120,14 +122,15 @@
     [data-theme="light"] .hero-content h1 { color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
     .hero-content p { font-size: 1rem; opacity: 0.95; max-width: 700px; margin: 0 auto; line-height: 1.4; }
 
-    header { max-width: 1000px; margin: 0 auto 1.5rem auto; width: 100%; padding: 0 1rem; }
+    /* Full-Width Desktop Navigation Banner Styling */
+    header { width: 100%; background: var(--nav-banner-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0; margin-bottom: 1.5rem; backdrop-filter: blur(8px); }
 
     /* Main Menu Wrapper: Left-Aligned Menu, Right-Aligned Favourites Toolbar */
-    .view-nav-wrapper { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; width: 100%; flex-wrap: wrap; }
+    .view-nav-wrapper { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; width: 100%; padding: 0 1rem; flex-wrap: wrap; }
     
     .view-nav { display: flex; justify-content: flex-start; gap: 0.75rem; flex-wrap: wrap; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); }
     
-    .nav-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.75rem 1.25rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; gap: 0.5rem; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .nav-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.75rem 1.25rem; border-radius: 12px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; gap: 0.4rem; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); white-space: nowrap; }
     .nav-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
     .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35); }
     [data-theme="light"] .nav-btn.active { box-shadow: 0 6px 15px rgba(2, 132, 199, 0.25); }
@@ -389,7 +392,7 @@
     .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); border: 1px solid var(--accent); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 200; transition: transform 0.3s ease; }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* Responsive Adjustments & Mobile Equal-Sized Navigation Buttons */
+    /* Responsive Adjustments & Mobile Balanced Navigation Buttons */
     @media (max-width: 850px) {
       .top-controls-row { grid-template-columns: 1fr; }
       .filter-row { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
@@ -405,9 +408,10 @@
       .hero-content h1 { font-size: 1.4rem; }
       .hero-content p { font-size: 0.8rem; }
       
-      .view-nav-wrapper { flex-direction: column; width: 100%; gap: 0.75rem; }
-      .view-nav { width: 100%; display: flex; }
-      .nav-btn { flex: 1; padding: 0.7rem 0.5rem; font-size: 0.9rem; text-align: center; }
+      header { padding: 0.75rem 0; }
+      .view-nav-wrapper { flex-direction: column; width: 100%; gap: 0.75rem; padding: 0 0.75rem; }
+      .view-nav { width: 100%; display: flex; gap: 0.4rem; padding: 0.35rem; }
+      .nav-btn { flex: 1; padding: 0.65rem 0.3rem; font-size: 0.85rem; text-align: center; white-space: nowrap; }
 
       .favs-action-bar { width: 100%; justify-content: center; margin-left: 0; }
       .action-pill-btn { flex: 1; height: 42px; padding: 0.4rem 0.6rem; font-size: 0.8rem; justify-content: center; }
@@ -470,7 +474,7 @@
     .sensory-box.severity-green { background: var(--sensory-green-bg); border-left-color: var(--sensory-green-border); color: var(--sensory-green-text); }
     .sensory-box.severity-yellow { background: var(--sensory-yellow-bg); border-left-color: var(--sensory-yellow-border); color: var(--sensory-yellow-text); }
     .sensory-box.severity-orange { background: var(--sensory-orange-bg); border-left-color: var(--sensory-orange-border); color: var(--sensory-orange-text); }
-    .sensory-box.severity-red { background: var(--sensory-red-bg); border-left-color: var(--sensory-red-border); color: var(--sensory-red-text); }
+    .sensory-box.severity-red { background: var(--sensory-red-bg); border-left-color: var(--sensory-red-border); color: var(--sensory-sensory-red-text); }
 
     .loading { text-align: center; color: var(--muted); font-size: 1.1rem; grid-column: 1 / -1; padding: 3rem 0; }
     .retry-btn { margin-top: 1rem; background: var(--accent); color: #ffffff; border: none; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
@@ -506,7 +510,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v89</div>
+    <div class="version-badge" id="versionBadgeBtn">v90</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -514,6 +518,7 @@
     </div>
   </div>
 
+  <!-- Full-Width Desktop Navigation Banner -->
   <header>
     <div class="view-nav-wrapper">
       <div class="view-nav">
@@ -678,7 +683,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v89';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v90';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
