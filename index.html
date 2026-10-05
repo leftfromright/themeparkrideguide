@@ -878,7 +878,7 @@
     let currentView = 'all';
     let viewMode = 'grid';
     
-    let isGuidedActive = true;
+    let isGuidedActive = false;
     let showLiveWaitTimes = false;
     let liveWaitData = {};
     let liveWaitNameMap = {};
@@ -1093,7 +1093,7 @@
         buildParkDomainMap(allRides);
         updateFavBadge();
         reinitAllFilters();
-        renderGuidedOnboarding();
+        filterRides();
       }
 
       try {
@@ -1109,11 +1109,7 @@
         buildParkDomainMap(allRides);
         updateFavBadge();
         reinitAllFilters();
-        if (isGuidedActive && document.getElementById('rideGrid').innerHTML.includes('Loading parks...')) {
-          renderGuidedOnboarding();
-        } else if (!isGuidedActive) {
-          filterRides();
-        }
+        filterRides();
       } catch (error) {
         console.error('Error fetching fresh data:', error);
         if (!cachedRides || cachedRides.length === 0) {
@@ -1125,80 +1121,6 @@
           `;
         }
       }
-    }
-
-    function renderGuidedOnboarding() {
-      if (!isGuidedActive) {
-        filterRides();
-        return;
-      }
-
-      const countries = [...new Set(allRides.map(r => r.country).filter(Boolean))].sort();
-      const defaultCountry = countries[0] || '';
-      const parksForDefault = [...new Set(allRides.filter(r => r.country === defaultCountry).map(r => r.park).filter(Boolean))].sort();
-
-      const grid = document.getElementById('rideGrid');
-
-      grid.innerHTML = `
-        <div class="guided-container" style="grid-column: 1 / -1;">
-          <h2>👋 Where are you planning your day out?</h2>
-          <p>Select your destination country and park to get started.</p>
-          
-          <div class="guided-step-group">
-            <div>
-              <label class="guided-label">Destination Country</label>
-              <select id="guidedCountrySelect" class="guided-select">
-                ${countries.map(c => `<option value="${c}">${getCountryFlag(c)} ${c}</option>`).join('')}
-              </select>
-            </div>
-            
-            <div>
-              <label class="guided-label">Destination Park</label>
-              <select id="guidedParkSelect" class="guided-select">
-                <option value="ALL">All Parks in Country</option>
-                ${parksForDefault.map(p => `<option value="${p}">${p}</option>`).join('')}
-              </select>
-            </div>
-          </div>
-
-          <button class="guided-btn" id="startGuidedBtn">🚀 Show My Park Results</button>
-        </div>
-      `;
-
-      document.getElementById('guidedCountrySelect').addEventListener('change', (e) => {
-        const selectedC = e.target.value;
-        const availableParks = [...new Set(allRides.filter(r => r.country === selectedC).map(r => r.park).filter(Boolean))].sort();
-        const parkSelect = document.getElementById('guidedParkSelect');
-        parkSelect.innerHTML = `<option value="ALL">All Parks in Country</option>` + availableParks.map(p => `<option value="${p}">${p}</option>`).join('');
-      });
-
-      document.getElementById('startGuidedBtn').addEventListener('click', () => {
-        const chosenCountry = document.getElementById('guidedCountrySelect').value;
-        const chosenPark = document.getElementById('guidedParkSelect').value;
-
-        selectedCountries = [chosenCountry];
-        document.querySelectorAll('.country-cb').forEach(cb => {
-          cb.checked = (cb.value === chosenCountry);
-        });
-        updateCountryBtnLabel();
-
-        initParkFilter();
-
-        if (chosenPark !== 'ALL') {
-          selectedParks = [chosenPark];
-          document.querySelectorAll('.park-cb').forEach(cb => {
-            cb.checked = (cb.value === chosenPark);
-          });
-          updateParkBtnLabel();
-        }
-
-        initTypeFilter();
-
-        isGuidedActive = false;
-        filterRides();
-      });
-
-      document.getElementById('rideCounter').textContent = 'Guided Setup Active';
     }
 
     async function fetchLiveWaitTimes() {
@@ -1401,77 +1323,61 @@
       const dataset = getActiveDataset();
       const availableRides = dataset.filter(r => selectedCountries.includes(r.country));
       
-      const totalCountries = document.querySelectorAll('.country-cb').length;
-      const shouldGroup = (selectedCountries.length === 0 || selectedCountries.length === totalCountries);
-
       const container = document.getElementById('parkOptions');
 
-      if (shouldGroup) {
-        const parksByCountry = {};
-        availableRides.forEach(r => {
-          if (!r.park) return;
-          const country = r.country || 'Other';
-          if (!parksByCountry[country]) parksByCountry[country] = new Set();
-          parksByCountry[country].add(r.park);
-        });
+      const parksByCountry = {};
+      availableRides.forEach(r => {
+        if (!r.park) return;
+        const country = r.country || 'Other';
+        if (!parksByCountry[country]) parksByCountry[country] = new Set();
+        parksByCountry[country].add(r.park);
+      });
 
-        const sortedCountries = Object.keys(parksByCountry).sort();
-        let html = '';
+      const sortedCountries = Object.keys(parksByCountry).sort();
+      let html = '';
 
-        sortedCountries.forEach(country => {
-          const countryParks = [...parksByCountry[country]].sort();
-          const flag = getCountryFlag(country);
-          html += `<div class="dropdown-group-header"><span class="flag-emoji">${flag}</span> ${country}</div>`;
-          
-          if (country.toLowerCase().includes('usa') || country.toLowerCase().includes('united states')) {
-            const subGroups = {};
-            countryParks.forEach(p => {
-              const sub = getUsaSubGroup(p);
-              if (!subGroups[sub]) subGroups[sub] = [];
-              subGroups[sub].push(p);
-            });
+      sortedCountries.forEach(country => {
+        const countryParks = [...parksByCountry[country]].sort();
+        const flag = getCountryFlag(country);
+        html += `<div class="dropdown-group-header"><span class="flag-emoji">${flag}</span> ${country}</div>`;
+        
+        if (country.toLowerCase().includes('usa') || country.toLowerCase().includes('united states')) {
+          const subGroups = {};
+          countryParks.forEach(p => {
+            const sub = getUsaSubGroup(p);
+            if (!subGroups[sub]) subGroups[sub] = [];
+            subGroups[sub].push(p);
+          });
 
-            ['Central Florida (Orlando / Tampa)', 'California'].forEach(subName => {
-              if (subGroups[subName] && subGroups[subName].length > 0) {
-                html += `<div class="dropdown-subgroup-header">📍 ${subName}</div>`;
-                subGroups[subName].sort().forEach(p => {
-                  html += `
-                    <label class="dropdown-option subgroup-item">
-                      <input type="checkbox" value="${p}" checked class="park-cb">
-                      ${getFaviconHtml(p)}
-                      <span>${p}</span>
-                    </label>
-                  `;
-                });
-              }
-            });
-          } else {
-            countryParks.forEach(p => {
-              html += `
-                <label class="dropdown-option">
-                  <input type="checkbox" value="${p}" checked class="park-cb">
-                  ${getFaviconHtml(p)}
-                  <span>${p}</span>
-                </label>
-              `;
-            });
-          }
-        });
+          ['Central Florida (Orlando / Tampa)', 'California'].forEach(subName => {
+            if (subGroups[subName] && subGroups[subName].length > 0) {
+              html += `<div class="dropdown-subgroup-header">📍 ${subName}</div>`;
+              subGroups[subName].sort().forEach(p => {
+                html += `
+                  <label class="dropdown-option subgroup-item">
+                    <input type="checkbox" value="${p}" checked class="park-cb">
+                    ${getFaviconHtml(p)}
+                    <span>${p}</span>
+                  </label>
+                `;
+              });
+            }
+          });
+        } else {
+          countryParks.forEach(p => {
+            html += `
+              <label class="dropdown-option">
+                <input type="checkbox" value="${p}" checked class="park-cb">
+                ${getFaviconHtml(p)}
+                <span>${p}</span>
+              </label>
+            `;
+          });
+        }
+      });
 
-        container.innerHTML = html;
-        selectedParks = [...new Set(availableRides.map(r => r.park).filter(Boolean))];
-      } else {
-        const parks = [...new Set(availableRides.map(r => r.park).filter(Boolean))].sort();
-        selectedParks = [...parks];
-
-        container.innerHTML = parks.map(p => `
-          <label class="dropdown-option">
-            <input type="checkbox" value="${p}" checked class="park-cb">
-            ${getFaviconHtml(p)}
-            <span>${p}</span>
-          </label>
-        `).join('');
-      }
+      container.innerHTML = html;
+      selectedParks = [...new Set(availableRides.map(r => r.park).filter(Boolean))];
 
       const allParksList = [...new Set(availableRides.map(r => r.park).filter(Boolean))];
       const brandContainer = document.getElementById('brandActions');
@@ -1622,7 +1528,6 @@
 
     function switchToRideView(viewType) {
       currentView = viewType;
-      isGuidedActive = false;
       reinitAllFilters();
 
       document.getElementById('viewParkInfoBtn').classList.remove('active');
@@ -1981,7 +1886,6 @@
       document.querySelectorAll('.park-cat-btn').forEach(b => {
         b.classList.toggle('active', b.getAttribute('data-cat') === 'all');
       });
-      isGuidedActive = false;
       reinitAllFilters();
       filterRides();
     });
@@ -2228,6 +2132,7 @@
             const queuePassVal = getQueuePass(r);
             const showPassIcon = hasQueuePass(r);
             const heightStr = r.minHeightCm ? `${r.minHeightCm}cm` : 'All';
+            const areaStr = r.location || 'General';
             const povUrl = getPovVideoUrl(r.park, r.ride);
             const passUrl = getPriorityPassUrl(r.park, r.passUrl || r.queuePassUrl);
             const sensoryClass = calculateSensorySeverityClass(r.sensory);
@@ -2260,7 +2165,7 @@
                     ${liveBadgeHtml}
                   </div>
                   <div class="slim-ride-meta-tags">
-                    <span class="tag">${r.type || 'Ride'}</span>
+                    <span class="tag" style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${areaStr}">📍 ${areaStr}</span>
                     <span><strong>${heightStr}</strong></span>
                     <span class="slim-expand-icon">▼</span>
                   </div>
@@ -2270,6 +2175,7 @@
                 <div class="slim-ride-drawer">
                   <div class="slim-drawer-body">
                     <div class="slim-drawer-info">
+                      ${r.type ? `<div><strong>Type:</strong> ${r.type}</div>` : ''}
                       ${r.details ? `<div><strong>Details:</strong> ${r.details}</div>` : ''}
                       ${r.location ? `<div><strong>Area:</strong> ${r.location}</div>` : ''}
                       <div><strong>Min Height Requirement:</strong> ${heightStr} ${r.heightNotes ? `(${r.heightNotes})` : ''}</div>
@@ -2410,7 +2316,7 @@
     }
 
     window.addEventListener('scroll', () => {
-      if (isGuidedActive || currentView === 'park-info') return;
+      if (currentView === 'park-info') return;
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
         if (displayedCount < currentFilteredRides.length) {
           displayedCount += 24;
@@ -2421,7 +2327,6 @@
 
     function filterRides() {
       if (currentView === 'park-info') return;
-      if (isGuidedActive && currentView !== 'favourites') return;
 
       const rawSearch = document.getElementById('searchInput').value;
       const searchNormalized = normalizeText(rawSearch);
@@ -2452,10 +2357,6 @@
     }
 
     document.getElementById('searchInput').addEventListener('input', () => {
-      if (isGuidedActive) {
-        isGuidedActive = false;
-        reinitAllFilters();
-      }
       filterRides();
     });
 
