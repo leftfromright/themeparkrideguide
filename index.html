@@ -234,18 +234,19 @@
     .card.favourited { border: 2px solid var(--star-active); box-shadow: 0 6px 15px rgba(245, 158, 11, 0.2); }
     .card.favourited .card-fav-ribbon { display: flex; position: absolute; top: 0; right: 0; background: var(--star-active); color: #ffffff; text-shadow: 0 1px 1px rgba(0,0,0,0.4); font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-bottom-left-radius: 10px; z-index: 5; align-items: center; gap: 0.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
 
-    .grid.compact { grid-template-columns: 1fr; gap: 0.75rem; }
-    .grid.compact .card { padding: 1rem 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.25rem; position: relative; }
+    /* Refined, Spacious Compact List Styling */
+    .grid.compact { grid-template-columns: 1fr; gap: 0.85rem; }
+    .grid.compact .card { padding: 1.25rem 1.5rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.5rem; position: relative; }
     .grid.compact .card-fav-ribbon { display: none !important; }
-    .grid.compact .card-body { flex: 1.2; min-width: 0; padding-right: 2rem; }
-    .grid.compact .card-meta { flex: 1.4; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+    .grid.compact .card-body { flex: 1.5; min-width: 0; padding-right: 1.5rem; margin-bottom: 0; }
+    .grid.compact .card-meta { flex: 1.5; display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
     
-    .grid.compact .card-actions { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 0.4rem; flex-shrink: 0; margin-top: 0; width: 90px; }
-    .grid.compact .pov-link, .grid.compact .queue-pass-badge { width: 100%; flex: none; text-align: center; }
+    .grid.compact .card-actions { display: flex; flex-direction: row; align-items: center; justify-content: flex-end; gap: 0.5rem; flex-shrink: 0; margin-top: 0; width: auto; }
+    .grid.compact .pov-link, .grid.compact .queue-pass-badge { width: auto; flex: none; padding: 0.4rem 0.8rem; }
 
-    .grid.compact .ride-thumb-link { width: 60px; height: 60px; margin: 0; flex-shrink: 0; }
+    .grid.compact .ride-thumb-link { width: 75px; height: 75px; margin: 0; flex-shrink: 0; }
     .grid.compact .ride-thumb { height: 100%; }
-    .grid.compact .fav-btn { position: absolute; top: 0.75rem; right: 0.75rem; font-size: 1.5rem; line-height: 1; z-index: 6; }
+    .grid.compact .fav-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.4rem; line-height: 1; z-index: 6; }
 
     /* Single-Column Slim Grouped View (Direct Park Grouping) */
     .grid.slim-view { display: flex; flex-direction: column; gap: 1rem; grid-template-columns: 1fr !important; width: 100%; max-width: 1000px; margin: 0 auto; }
@@ -518,7 +519,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v93</div>
+    <div class="version-badge" id="versionBadgeBtn">v94</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -691,7 +692,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v93';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v94';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -2324,7 +2325,7 @@
                 <div class="meta-item"><span class="meta-label">Min Height:</span> <strong>${heightStr}</strong></div>
                 ${r.heightNotes ? `<div class="meta-item"><span class="meta-label">Height Notes:</span> <strong>${r.heightNotes}</strong></div>` : ''}
               </div>
-              ${r.sensory ? `<div class="sensory-box ${sensoryClass}"><strong>Sensory:<span> ${r.sensory}</div>` : ''}
+              ${r.sensory ? `<div class="sensory-box ${sensoryClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
             </div>
 
             <div class="card-actions">
