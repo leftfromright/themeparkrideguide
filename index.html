@@ -122,21 +122,23 @@
 
     header { max-width: 1000px; margin: 0 auto 1.5rem auto; text-align: center; width: 100%; padding: 0 1rem; }
 
-    /* Prominent Main Menu Bar Styles */
-    .view-nav { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); max-width: 600px; margin: 0 auto; }
-    .nav-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; gap: 0.6rem; flex: 1; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    /* Prominent Main Menu Bar Styles with Integrated Favourites Action Toolbar (Option 1) */
+    .view-nav-wrapper { max-width: 800px; margin: 0 auto; display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .view-nav { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); flex: 1; min-width: 320px; }
+    .nav-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.75rem 1.25rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; gap: 0.5rem; flex: 1; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     .nav-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
     .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35); }
     [data-theme="light"] .nav-btn.active { box-shadow: 0 6px 15px rgba(2, 132, 199, 0.25); }
     .nav-badge { background: rgba(0, 0, 0, 0.2); color: inherit; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.8rem; }
 
+    /* Persistent Top-Right Action Toolbar Container (Option 1) */
+    .favs-action-bar { display: flex; gap: 0.5rem; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); transition: opacity 0.2s ease, visibility 0.2s ease; }
+    .favs-action-bar.hidden-spacer { opacity: 0; visibility: hidden; pointer-events: none; }
+    .action-pill-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.7rem 1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.05); height: 50px; }
+    .action-pill-btn:hover { border-color: var(--accent); color: var(--accent); }
+
     .theme-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem; }
     .theme-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-    /* Centred Favourites View Action Bar */
-    .favs-action-bar { max-width: 1000px; margin: 0 auto 1.25rem auto; display: flex; gap: 0.75rem; justify-content: center; width: 100%; padding: 0 1rem; flex-wrap: wrap; }
-    .action-pill-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: var(--shadow); }
-    .action-pill-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .controls { max-width: 1000px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; gap: 0.75rem; width: 100%; padding: 0 1rem; }
     
@@ -253,7 +255,7 @@
     .slim-ride-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; cursor: pointer; gap: 1rem; user-select: none; }
     .slim-ride-details { display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1; }
     .slim-ride-name { font-weight: 600; font-size: 0.95rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .slim-ride-meta-tags { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; font-size: 0.85rem; color: var(--muted); }
+    .slim-ride-meta-tags { display: flex; gap: 0.65rem; align-items: center; flex-shrink: 0; font-size: 0.85rem; color: var(--muted); }
     .slim-expand-icon { font-size: 0.8rem; color: var(--accent); font-weight: bold; transition: transform 0.2s ease; }
 
     /* Expanded Drawer Content with Thumbnail Layout */
@@ -400,8 +402,10 @@
       .hero-banner { height: 150px; }
       .hero-content h1 { font-size: 1.4rem; }
       .hero-content p { font-size: 0.8rem; }
-      .view-nav { flex-direction: column; gap: 0.5rem; }
-      .nav-btn { width: 100%; }
+      .view-nav-wrapper { flex-direction: column; width: 100%; }
+      .view-nav { width: 100%; }
+      .favs-action-bar { width: 100%; justify-content: center; }
+      .action-pill-btn { flex: 1; height: 42px; padding: 0.4rem 0.6rem; font-size: 0.8rem; justify-content: center; }
 
       .top-controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
       .filter-row { display: flex; flex-direction: column; gap: 0.75rem; }
@@ -506,29 +510,31 @@
   </div>
 
   <header>
-    <div class="view-nav">
-      <button class="nav-btn active" id="viewAllBtn">🎢 All Rides</button>
-      <button class="nav-btn" id="viewFavsBtn">
-        ★ Favourites <span class="nav-badge" id="favCountBadge">0</span>
-      </button>
-      <button class="nav-btn" id="viewParkInfoBtn">
-        🗺 Park Info
-      </button>
+    <div class="view-nav-wrapper">
+      <div class="view-nav">
+        <button class="nav-btn active" id="viewAllBtn">🎢 All Rides</button>
+        <button class="nav-btn" id="viewFavsBtn">
+          ★ Favourites <span class="nav-badge" id="favCountBadge">0</span>
+        </button>
+        <button class="nav-btn" id="viewParkInfoBtn">
+          🗺 Park Info
+        </button>
+      </div>
+
+      <!-- Persistent Top-Right Action Toolbar (Option 1 - Reserves Footprint) -->
+      <div class="favs-action-bar hidden-spacer" id="favsActionBar">
+        <button class="action-pill-btn" id="clearFavsBtn" title="Clear all favourites">
+          🗑 Clear
+        </button>
+        <button class="action-pill-btn" id="shareFavsBtn">
+          🔗 Share
+        </button>
+        <button class="action-pill-btn" id="printFavsBtn">
+          🖨 Print
+        </button>
+      </div>
     </div>
   </header>
-
-  <!-- Favourites Tab Contextual Action Bar -->
-  <div class="favs-action-bar" id="favsActionBar" style="display: none;">
-    <button class="action-pill-btn" id="clearFavsBtn" title="Clear all favourites">
-      🗑 Clear Favourites
-    </button>
-    <button class="action-pill-btn" id="shareFavsBtn">
-      🔗 Share Favourites
-    </button>
-    <button class="action-pill-btn" id="printFavsBtn">
-      🖨 Print Favourites
-    </button>
-  </div>
 
   <div class="controls" id="rideControlsSection">
     <!-- Top Row: Search, Sort, Height Slider -->
@@ -1536,14 +1542,16 @@
       document.getElementById('rideControlsSection').style.display = 'flex';
       document.getElementById('statusBarSection').style.display = 'flex';
 
+      const favsActionBar = document.getElementById('favsActionBar');
+
       if (viewType === 'favourites') {
         document.getElementById('viewFavsBtn').classList.add('active');
         document.getElementById('viewAllBtn').classList.remove('active');
-        document.getElementById('favsActionBar').style.display = 'flex';
+        favsActionBar.classList.remove('hidden-spacer');
       } else {
         document.getElementById('viewAllBtn').classList.add('active');
         document.getElementById('viewFavsBtn').classList.remove('active');
-        document.getElementById('favsActionBar').style.display = 'none';
+        favsActionBar.classList.add('hidden-spacer');
       }
 
       filterRides();
@@ -1573,7 +1581,7 @@
       document.getElementById('rideGrid').style.display = 'none';
       document.getElementById('rideControlsSection').style.display = 'none';
       document.getElementById('statusBarSection').style.display = 'none';
-      document.getElementById('favsActionBar').style.display = 'none';
+      document.getElementById('favsActionBar').classList.add('hidden-spacer');
 
       document.getElementById('parkInfoGrid').style.display = 'flex';
       renderParkInfoCards();
@@ -2165,7 +2173,7 @@
                     ${liveBadgeHtml}
                   </div>
                   <div class="slim-ride-meta-tags">
-                    <span class="tag" style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${areaStr}">📍 ${areaStr}</span>
+                    <span class="tag" title="${areaStr}">📍 ${areaStr}</span>
                     <span><strong>${heightStr}</strong></span>
                     <span class="slim-expand-icon">▼</span>
                   </div>
