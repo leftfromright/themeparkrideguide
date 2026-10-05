@@ -518,7 +518,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v91</div>
+    <div class="version-badge" id="versionBadgeBtn">v92</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -691,7 +691,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v91';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v92';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -936,7 +936,7 @@
         icon.textContent = '🌙';
         label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀️️';
+        icon.textContent = '☀';
         label.textContent = 'Light Mode';
       }
     }
@@ -2370,7 +2370,12 @@
         const matchesType = selectedTypes.includes(r.type);
         const matchesSensory = rideMatchesSensory(r.sensory);
         
-        const rideHeight = currentUnit === 'cm' ? (Number(r.minHeightCm) || 0) : (Number(r.minHeightInch) || 0);
+        // Height check: if ride has a height requirement, verify it doesn't exceed maxHeight.
+        // If minHeightCm/Inch is 0 or unlisted, it's suitable for all heights (allowed).
+        const rideHeight = currentUnit === 'cm' 
+          ? (r.minHeightCm !== undefined && r.minHeightCm !== null && r.minHeightCm !== '' ? Number(r.minHeightCm) : 0)
+          : (r.minHeightInch !== undefined && r.minHeightInch !== null && r.minHeightInch !== '' ? Number(r.minHeightInch) : 0);
+          
         const matchesHeight = rideHeight <= maxHeight;
 
         return matchesSearch && matchesCountry && matchesPark && matchesType && matchesSensory && matchesHeight;
