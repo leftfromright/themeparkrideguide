@@ -518,7 +518,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v92</div>
+    <div class="version-badge" id="versionBadgeBtn">v93</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -691,7 +691,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v92';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v93';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -891,6 +891,7 @@
 
     let allRides = [];
     let currentFilteredRides = [];
+    let currentBaseRides = [];
     let displayedCount = 24;
     let parkDomainMap = {};
     let selectedCountries = [];
@@ -2117,7 +2118,7 @@
     function renderRidesBatch() {
       const grid = document.getElementById('rideGrid');
       const shownCount = Math.min(displayedCount, currentFilteredRides.length);
-      const totalCount = currentFilteredRides.length;
+      const totalCount = currentBaseRides.length;
 
       const counterEl = document.getElementById('rideCounter');
       if (window.innerWidth <= 640) {
@@ -2323,7 +2324,7 @@
                 <div class="meta-item"><span class="meta-label">Min Height:</span> <strong>${heightStr}</strong></div>
                 ${r.heightNotes ? `<div class="meta-item"><span class="meta-label">Height Notes:</span> <strong>${r.heightNotes}</strong></div>` : ''}
               </div>
-              ${r.sensory ? `<div class="sensory-box ${sensoryClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
+              ${r.sensory ? `<div class="sensory-box ${sensoryClass}"><strong>Sensory:<span> ${r.sensory}</div>` : ''}
             </div>
 
             <div class="card-actions">
@@ -2360,25 +2361,29 @@
 
       const dataset = getActiveDataset();
 
-      const filtered = dataset.filter(r => {
+      // Step 1: Base rides filtered ONLY by selected countries and parks and park category (Theme/Water)
+      currentBaseRides = dataset.filter(r => {
         if (selectedParkCategory === 'theme' && isWaterPark(r.park)) return false;
         if (selectedParkCategory === 'water' && !isWaterPark(r.park)) return false;
 
-        const matchesSearch = !searchNormalized || r._searchNorm.includes(searchNormalized);
         const matchesCountry = selectedCountries.includes(r.country);
         const matchesPark = selectedParks.includes(r.park);
+        return matchesCountry && matchesPark;
+      });
+
+      // Step 2: Fully filtered rides (incorporating search, ride types, sensory tags, and height slider)
+      const filtered = currentBaseRides.filter(r => {
+        const matchesSearch = !searchNormalized || r._searchNorm.includes(searchNormalized);
         const matchesType = selectedTypes.includes(r.type);
         const matchesSensory = rideMatchesSensory(r.sensory);
         
-        // Height check: if ride has a height requirement, verify it doesn't exceed maxHeight.
-        // If minHeightCm/Inch is 0 or unlisted, it's suitable for all heights (allowed).
         const rideHeight = currentUnit === 'cm' 
           ? (r.minHeightCm !== undefined && r.minHeightCm !== null && r.minHeightCm !== '' ? Number(r.minHeightCm) : 0)
           : (r.minHeightInch !== undefined && r.minHeightInch !== null && r.minHeightInch !== '' ? Number(r.minHeightInch) : 0);
           
         const matchesHeight = rideHeight <= maxHeight;
 
-        return matchesSearch && matchesCountry && matchesPark && matchesType && matchesSensory && matchesHeight;
+        return matchesSearch && matchesType && matchesSensory && matchesHeight;
       });
 
       currentFilteredRides = sortRides(filtered);
