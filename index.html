@@ -122,19 +122,21 @@
 
     header { max-width: 1000px; margin: 0 auto 1.5rem auto; text-align: center; width: 100%; padding: 0 1rem; }
 
-    /* Prominent Main Nav Switcher */
-    .view-nav { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
-    .nav-btn { background: var(--card-bg); border: 2px solid var(--border); color: var(--text); padding: 0.65rem 1.25rem; border-radius: 12px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem; box-shadow: var(--shadow); }
-    .nav-btn:hover { border-color: var(--accent); transform: translateY(-2px); }
+    /* Prominent Main Menu Bar Styles */
+    .view-nav { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); max-width: 600px; margin: 0 auto; }
+    .nav-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; gap: 0.6rem; flex: 1; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .nav-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
     .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35); }
     [data-theme="light"] .nav-btn.active { box-shadow: 0 6px 15px rgba(2, 132, 199, 0.25); }
     .nav-badge { background: rgba(0, 0, 0, 0.2); color: inherit; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.8rem; }
 
-    .action-nav-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.65rem 1.15rem; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: var(--shadow); }
-    .action-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
-
     .theme-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem; }
     .theme-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Favourites View Action Bar */
+    .favs-action-bar { max-width: 1000px; margin: 0 auto 1.25rem auto; display: flex; gap: 0.75rem; justify-content: flex-end; width: 100%; padding: 0 1rem; }
+    .action-pill-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.45rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: var(--shadow); }
+    .action-pill-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .controls { max-width: 1000px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; gap: 0.75rem; width: 100%; padding: 0 1rem; }
     
@@ -397,6 +399,8 @@
       .hero-banner { height: 150px; }
       .hero-content h1 { font-size: 1.4rem; }
       .hero-content p { font-size: 0.8rem; }
+      .view-nav { flex-direction: column; gap: 0.5rem; }
+      .nav-btn { width: 100%; }
 
       .top-controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
       .filter-row { display: flex; flex-direction: column; gap: 0.75rem; }
@@ -467,7 +471,7 @@
 
     @media print {
       body { background: #ffffff !important; color: #000000 !important; padding: 0 !important; }
-      header, .controls, .status-bar, footer, .pov-link, .fav-btn, .version-badge, .hero-banner, .modal-backdrop { display: none !important; }
+      header, .controls, .status-bar, footer, .pov-link, .fav-btn, .version-badge, .hero-banner, .modal-backdrop, .favs-action-bar { display: none !important; }
       .grid, .park-info-view { display: block !important; }
       .card, .park-info-card { page-break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 1rem !important; padding: 1rem !important; color: #000 !important; background: #fff !important; }
       .card h2, .park-info-title-group h2 { color: #000 !important; }
@@ -509,17 +513,21 @@
       <button class="nav-btn" id="viewParkInfoBtn">
         🗺 Park Info
       </button>
-      <button class="action-nav-btn" id="clearFavsBtn" style="display: none;" title="Clear all favourites">
-        🗑 Clear Favourites
-      </button>
-      <button class="action-nav-btn" id="shareFavsBtn" style="display: none;">
-        🔗 Share
-      </button>
-      <button class="action-nav-btn" id="printFavsBtn" style="display: none;">
-        🖨 Print
-      </button>
     </div>
   </header>
+
+  <!-- Favourites Tab Contextual Action Bar -->
+  <div class="favs-action-bar" id="favsActionBar" style="display: none;">
+    <button class="action-pill-btn" id="clearFavsBtn" title="Clear all favourites">
+      🗑 Clear Favourites
+    </button>
+    <button class="action-pill-btn" id="shareFavsBtn">
+      🔗 Share Favourites
+    </button>
+    <button class="action-pill-btn" id="printFavsBtn">
+      🖨 Print Favourites
+    </button>
+  </div>
 
   <div class="controls" id="rideControlsSection">
     <!-- Top Row: Search, Sort, Height Slider -->
@@ -622,7 +630,7 @@
         
         <div class="display-toggle">
           <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
-            <span id="themeIcon">☀️️</span> <span id="themeLabel">Light Mode</span>
+            <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
           </button>
           <button class="toggle-icon-btn active" id="cardViewBtn" title="Grid View">田 Grid</button>
           <button class="toggle-icon-btn" id="compactViewBtn" title="Compact List">≡ Compact</button>
@@ -1640,15 +1648,11 @@
         isGuidedActive = false;
         document.getElementById('viewFavsBtn').classList.add('active');
         document.getElementById('viewAllBtn').classList.remove('active');
-        document.getElementById('clearFavsBtn').style.display = 'inline-flex';
-        document.getElementById('printFavsBtn').style.display = 'inline-flex';
-        document.getElementById('shareFavsBtn').style.display = 'inline-flex';
+        document.getElementById('favsActionBar').style.display = 'flex';
       } else {
         document.getElementById('viewAllBtn').classList.add('active');
         document.getElementById('viewFavsBtn').classList.remove('active');
-        document.getElementById('clearFavsBtn').style.display = 'none';
-        document.getElementById('printFavsBtn').style.display = 'none';
-        document.getElementById('shareFavsBtn').style.display = 'none';
+        document.getElementById('favsActionBar').style.display = 'none';
       }
 
       filterRides();
@@ -1663,9 +1667,7 @@
       document.getElementById('rideGrid').style.display = 'none';
       document.getElementById('rideControlsSection').style.display = 'none';
       document.getElementById('statusBarSection').style.display = 'none';
-      document.getElementById('clearFavsBtn').style.display = 'none';
-      document.getElementById('printFavsBtn').style.display = 'none';
-      document.getElementById('shareFavsBtn').style.display = 'none';
+      document.getElementById('favsActionBar').style.display = 'none';
 
       document.getElementById('parkInfoGrid').style.display = 'flex';
       renderParkInfoCards();
