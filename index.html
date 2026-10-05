@@ -120,19 +120,21 @@
     [data-theme="light"] .hero-content h1 { color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
     .hero-content p { font-size: 1rem; opacity: 0.95; max-width: 700px; margin: 0 auto; line-height: 1.4; }
 
-    header { max-width: 1000px; margin: 0 auto 1.5rem auto; text-align: center; width: 100%; padding: 0 1rem; }
+    header { max-width: 1000px; margin: 0 auto 1.5rem auto; width: 100%; padding: 0 1rem; }
 
-    /* Prominent Main Menu Bar Styles with Integrated Favourites Action Toolbar (Option 1) */
-    .view-nav-wrapper { max-width: 800px; margin: 0 auto; display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap; }
-    .view-nav { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); flex: 1; min-width: 320px; }
-    .nav-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.75rem 1.25rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; gap: 0.5rem; flex: 1; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    /* Main Menu Wrapper: Left-Aligned Menu, Right-Aligned Favourites Toolbar */
+    .view-nav-wrapper { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; width: 100%; flex-wrap: wrap; }
+    
+    .view-nav { display: flex; justify-content: flex-start; gap: 0.75rem; flex-wrap: wrap; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); }
+    
+    .nav-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.75rem 1.25rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; gap: 0.5rem; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     .nav-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
     .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35); }
     [data-theme="light"] .nav-btn.active { box-shadow: 0 6px 15px rgba(2, 132, 199, 0.25); }
     .nav-badge { background: rgba(0, 0, 0, 0.2); color: inherit; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.8rem; }
 
-    /* Persistent Top-Right Action Toolbar Container (Option 1) */
-    .favs-action-bar { display: flex; gap: 0.5rem; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); transition: opacity 0.2s ease, visibility 0.2s ease; }
+    /* Persistent Right-Side Favourites Action Toolbar */
+    .favs-action-bar { display: flex; gap: 0.5rem; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); transition: opacity 0.2s ease, visibility 0.2s ease; margin-left: auto; }
     .favs-action-bar.hidden-spacer { opacity: 0; visibility: hidden; pointer-events: none; }
     .action-pill-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.7rem 1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.05); height: 50px; }
     .action-pill-btn:hover { border-color: var(--accent); color: var(--accent); }
@@ -387,7 +389,7 @@
     .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); border: 1px solid var(--accent); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 200; transition: transform 0.3s ease; }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* Responsive Adjustments & Mobile Hours Stacking */
+    /* Responsive Adjustments & Mobile Equal-Sized Navigation Buttons */
     @media (max-width: 850px) {
       .top-controls-row { grid-template-columns: 1fr; }
       .filter-row { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
@@ -402,9 +404,12 @@
       .hero-banner { height: 150px; }
       .hero-content h1 { font-size: 1.4rem; }
       .hero-content p { font-size: 0.8rem; }
-      .view-nav-wrapper { flex-direction: column; width: 100%; }
-      .view-nav { width: 100%; }
-      .favs-action-bar { width: 100%; justify-content: center; }
+      
+      .view-nav-wrapper { flex-direction: column; width: 100%; gap: 0.75rem; }
+      .view-nav { width: 100%; display: flex; }
+      .nav-btn { flex: 1; padding: 0.7rem 0.5rem; font-size: 0.9rem; text-align: center; }
+
+      .favs-action-bar { width: 100%; justify-content: center; margin-left: 0; }
       .action-pill-btn { flex: 1; height: 42px; padding: 0.4rem 0.6rem; font-size: 0.8rem; justify-content: center; }
 
       .top-controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
@@ -521,7 +526,7 @@
         </button>
       </div>
 
-      <!-- Persistent Top-Right Action Toolbar (Option 1 - Reserves Footprint) -->
+      <!-- Right-Aligned Action Toolbar (Reserves Footprint) -->
       <div class="favs-action-bar hidden-spacer" id="favsActionBar">
         <button class="action-pill-btn" id="clearFavsBtn" title="Clear all favourites">
           🗑 Clear
