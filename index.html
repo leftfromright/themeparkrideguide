@@ -109,7 +109,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Twemoji Country Flags', system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding-bottom: 2rem; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; transition: background-color 0.3s ease, color 0.3s ease; }
     
-    .hero-banner { width: 100%; margin: 0 0 1.5rem 0; border-radius: 0; overflow: hidden; position: relative; height: 180px; box-shadow: var(--shadow); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center; text-align: center; background: var(--card-bg); }
+    .hero-banner { width: 100%; margin: 0; border-radius: 0; overflow: hidden; position: relative; height: 180px; box-shadow: none; border-bottom: none; display: flex; align-items: center; justify-content: center; text-align: center; background: var(--card-bg); }
     .hero-banner img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: brightness(0.45) saturate(1.1); transition: filter 0.3s ease; }
     [data-theme="light"] .hero-banner img { filter: brightness(0.65) saturate(1.05); }
     
@@ -122,7 +122,7 @@
     [data-theme="light"] .hero-content h1 { color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
     .hero-content p { font-size: 1rem; opacity: 0.95; max-width: 700px; margin: 0 auto; line-height: 1.4; }
 
-    /* Full-Width Desktop Navigation Banner Styling */
+    /* Full-Width Desktop Navigation Banner Styling (Sits flush right below hero banner) */
     header { width: 100%; background: var(--nav-banner-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0; margin-bottom: 1.5rem; backdrop-filter: blur(8px); }
 
     /* Main Menu Wrapper: Left-Aligned Menu, Right-Aligned Favourites Toolbar */
@@ -134,6 +134,14 @@
     .nav-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
     .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35); }
     [data-theme="light"] .nav-btn.active { box-shadow: 0 6px 15px rgba(2, 132, 199, 0.25); }
+    
+    /* Yellow star for Favourites button */
+    .nav-btn .fav-star-icon { color: var(--star-active); text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+    .nav-btn.active .fav-star-icon { color: #ffffff; }
+
+    /* Coloured emoji icon for desktop & mobile */
+    .emoji-icon { font-style: normal; display: inline-block; line-height: 1; font-family: 'Twemoji Country Flags', system-ui, -apple-system, sans-serif; }
+
     .nav-badge { background: rgba(0, 0, 0, 0.2); color: inherit; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.8rem; }
 
     /* Persistent Right-Side Favourites Action Toolbar */
@@ -510,7 +518,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v90</div>
+    <div class="version-badge" id="versionBadgeBtn">v91</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -518,16 +526,16 @@
     </div>
   </div>
 
-  <!-- Full-Width Desktop Navigation Banner -->
+  <!-- Full-Width Desktop Navigation Banner (Sits flush right below hero banner) -->
   <header>
     <div class="view-nav-wrapper">
       <div class="view-nav">
-        <button class="nav-btn active" id="viewAllBtn">🎢 All Rides</button>
+        <button class="nav-btn active" id="viewAllBtn"><span class="emoji-icon">🎢</span> All Rides</button>
         <button class="nav-btn" id="viewFavsBtn">
-          ★ Favourites <span class="nav-badge" id="favCountBadge">0</span>
+          <span class="emoji-icon fav-star-icon">★</span> Favourites <span class="nav-badge" id="favCountBadge">0</span>
         </button>
         <button class="nav-btn" id="viewParkInfoBtn">
-          🗺 Park Info
+          <span class="emoji-icon">🗺</span> Park Info
         </button>
       </div>
 
@@ -683,7 +691,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v90';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v91';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -928,7 +936,7 @@
         icon.textContent = '🌙';
         label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀️';
+        icon.textContent = '☀️️';
         label.textContent = 'Light Mode';
       }
     }
