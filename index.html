@@ -519,7 +519,7 @@
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v94</div>
+    <div class="version-badge" id="versionBadgeBtn">v95</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -692,7 +692,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v94';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v95';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -1775,7 +1775,7 @@
                 <div class="park-info-item">
                   <span class="park-info-item-label">🎢 Catalogued Attractions</span>
                   <span class="park-info-item-value">${p.ridesCount} Rides Available</span>
-                  <button class="action-link" style="background:none; border:none; padding:0; text-align:left; font-size: 0.78rem;" onclick="filterByParkOnly('${p.name.replace(/'/g, "\\'")}'); switchToRideView('all');">View All ${p.name} Rides ↗</button>
+                  <button class="action-link" style="background:none; border:none; padding:0; text-align:left; font-size: 0.78rem;" onclick="switchToRideView('all'); filterByParkOnly('${p.name.replace(/'/g, "\\'")}');">View All ${p.name} Rides ↗</button>
                 </div>
 
                 ${p.sampleQueuePass ? `
@@ -1790,7 +1790,7 @@
               <div class="park-info-actions">
                 ${officialUrl ? `<a href="${officialUrl}" target="_blank" rel="noopener" class="park-action-btn">🌐 Official Website</a>` : ''}
                 <a href="${mapsUrl}" target="_blank" rel="noopener" class="park-action-btn">🗺 Google Maps Directions</a>
-                <button class="park-action-btn" onclick="filterByParkOnly('${p.name.replace(/'/g, "\\'")}'); switchToRideView('all');">🎢 View Park Rides (${p.ridesCount})</button>
+                <button class="park-action-btn" onclick="switchToRideView('all'); filterByParkOnly('${p.name.replace(/'/g, "\\'")}');">🎢 View Park Rides (${p.ridesCount})</button>
               </div>
             </div>
           `;
