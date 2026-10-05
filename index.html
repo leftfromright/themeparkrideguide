@@ -716,7 +716,27 @@
 
     const WATER_PARK_NAMES = ['blizzard beach', 'typhoon lagoon', 'volcano bay'];
 
-    const THEME_PARKS_WIKI_IDS = {
+const THEME_PARKS_WIKI_IDS = {
+      // Walt Disney World Resort Destination (Covers Magic Kingdom, Epcot, Animal Kingdom, Hollywood Studios)
+      'magic kingdom': 'e957da41-3552-4cf6-b636-5babc5cbc4e5',
+      'magic kingdom park': 'e957da41-3552-4cf6-b636-5babc5cbc4e5',
+      'epcot': 'e957da41-3552-4cf6-b636-5babc5cbc4e5',
+      'animal kingdom': 'e957da41-3552-4cf6-b636-5babc5cbc4e5',
+      'disney\'s animal kingdom': 'e957da41-3552-4cf6-b636-5babc5cbc4e5',
+      'disney\'s animal kingdom theme park': 'e957da41-3552-4cf6-b636-5babc5cbc4e5',
+      'hollywood studios': 'e957da41-3552-4cf6-b636-5babc5cbc4e5',
+      'disney\'s hollywood studios': 'e957da41-3552-4cf6-b636-5babc5cbc4e5',
+
+      // Universal Orlando Resort Destination (Covers Universal Studios Florida, Islands of Adventure, Volcano Bay, Epic Universe)
+      'universal studios florida': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+      'islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+      'universal\'s islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+      'volcano bay': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+      'universal\'s volcano bay': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+      'epic universe': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+      'universal epic universe': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+
+      // Standalone UK / European Parks (Work normally via individual park UUIDs)
       'alton towers': '8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7',
       'blackpool pleasure beach': '66fbd0d1-14dd-4f1a-bb18-5e0b7447f07d',
       'chessington world of adventures': 'c4307928-fc3c-47df-b976-305026751727',
@@ -726,23 +746,8 @@
       'flamingo land': '172d77cb-6341-4b3b-8a66-e145dad8dda9',
       'legoland windsor': '7c48a21b-221c-42f8-8339-6334c5f2fb12',
       'thorpe park': '6f9c3c13-8b74-4b47-b73a-4efb7189a05b',
-      'magic kingdom': '75ea578a-adc8-4116-a54d-dccb60765ef9',
-      'magic kingdom park': '75ea578a-adc8-4116-a54d-dccb60765ef9',
-      'epcot': '438d0111-adc6-4d04-b9c1-8b01267b1407',
-      'animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
-      'disney\'s animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
-      'disney\'s animal kingdom theme park': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
-      'hollywood studios': '284dc8cb-ed80-49ae-9e7d-afa964d4f828',
-      'disney\'s hollywood studios': '284dc8cb-ed80-49ae-9e7d-afa964d4f828',
       'disneyland park': 'da40d870-f8f8-4034-8be0-b5bf46f7f637',
-      'disney california adventure': 'eb2d56a4-44bc-4475-b040-4273570624d6',
-      'universal studios florida': 'f516a56e-69f8-44da-bf50-c81215b3992b',
-      'islands of adventure': '2105156a-9359-43c7-b76e-48f8bc5b1f63',
-      'universal\'s islands of adventure': '2105156a-9359-43c7-b76e-48f8bc5b1f63',
-      'volcano bay': '17006883-8a39-4d37-ab9a-243d57d7cf59',
-      'universal\'s volcano bay': '17006883-8a39-4d37-ab9a-243d57d7cf59',
-      'epic universe': '92d6be96-e173-455b-8664-4e44349479b1',
-      'universal epic universe': '92d6be96-e173-455b-8664-4e44349479b1'
+      'disney california adventure': 'eb2d56a4-44bc-4475-b040-4273570624d6'
     };
 
     const PARK_ICON_OVERRIDES = {
