@@ -494,14 +494,14 @@
   <!-- Debug Console Drawer -->
   <div class="debug-console" id="debugConsole">
     <div class="debug-header">
-      <span>🐛 Live API Debug Console (v98)</span>
+      <span>🐛 Live API Debug Console (v99)</span>
       <button class="debug-close" id="closeDebugBtn">✕</button>
     </div>
     <div id="debugLogContent"></div>
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v98</div>
+    <div class="version-badge" id="versionBadgeBtn">v99</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -666,7 +666,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v98';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v99';
 
     let debugModeActive = false;
     function logDebug(message, type = 'info') {
@@ -728,15 +728,19 @@
       'thorpe park': '6f9c3c13-8b74-4b47-b73a-4efb7189a05b',
       'magic kingdom': '75ea578a-adc8-4116-a54d-dccb60765ef9',
       'epcot': '438d0111-adc6-4d04-b9c1-8b01267b1407',
-      'disney\'s animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
       'animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
-      'disney\'s hollywood studios': '284dc8cb-ed80-49ae-9e7d-afa964d4f828',
+      'disney\'s animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
       'hollywood studios': '284dc8cb-ed80-49ae-9e7d-afa964d4f828',
+      'disney\'s hollywood studios': '284dc8cb-ed80-49ae-9e7d-afa964d4f828',
       'disneyland park': 'da40d870-f8f8-4034-8be0-b5bf46f7f637',
       'disney california adventure': 'eb2d56a4-44bc-4475-b040-4273570624d6',
       'universal studios florida': 'f516a56e-69f8-44da-bf50-c81215b3992b',
+      'islands of adventure': '2105156a-9359-43c7-b76e-48f8bc5b1f63',
       'universal\'s islands of adventure': '2105156a-9359-43c7-b76e-48f8bc5b1f63',
-      'islands of adventure': '2105156a-9359-43c7-b76e-48f8bc5b1f63'
+      'volcano bay': '17006883-8a39-4d37-ab9a-243d57d7cf59',
+      'universal\'s volcano bay': '17006883-8a39-4d37-ab9a-243d57d7cf59',
+      'epic universe': '92d6be96-e173-455b-8664-4e44349479b1',
+      'universal epic universe': '92d6be96-e173-455b-8664-4e44349479b1'
     };
 
     const PARK_ICON_OVERRIDES = {
