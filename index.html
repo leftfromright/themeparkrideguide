@@ -31,7 +31,6 @@
       --badge-bg: rgba(56, 189, 248, 0.1);
       --star-active: #f59e0b;
       
-      /* Gentle Neutral POV Button Styling with Red Play Symbol */
       --pov-bg: rgba(255, 255, 255, 0.06);
       --pov-border: rgba(255, 255, 255, 0.15);
       --pov-text: #cbd5e1;
@@ -45,7 +44,6 @@
       --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
       --input-bg: #1e293b;
 
-      /* Sensory Severity Colors */
       --sensory-green-bg: rgba(34, 197, 94, 0.1);
       --sensory-green-border: #22c55e;
       --sensory-green-text: #4ade80;
@@ -88,7 +86,6 @@
       --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
       --input-bg: #ffffff;
 
-      /* Sensory Severity Colors */
       --sensory-green-bg: rgba(34, 197, 94, 0.08);
       --sensory-green-border: #16a34a;
       --sensory-green-text: #15803d;
@@ -122,10 +119,7 @@
     [data-theme="light"] .hero-content h1 { color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
     .hero-content p { font-size: 1rem; opacity: 0.95; max-width: 700px; margin: 0 auto; line-height: 1.4; }
 
-    /* Full-Width Desktop Navigation Banner Styling (Sits flush right below hero banner) */
     header { width: 100%; background: var(--nav-banner-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0; margin-bottom: 1.5rem; backdrop-filter: blur(8px); }
-
-    /* Main Menu Wrapper: Left-Aligned Menu, Right-Aligned Favourites Toolbar */
     .view-nav-wrapper { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; width: 100%; padding: 0 1rem; flex-wrap: wrap; }
     
     .view-nav { display: flex; justify-content: flex-start; gap: 0.75rem; flex-wrap: wrap; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); }
@@ -135,16 +129,12 @@
     .nav-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35); }
     [data-theme="light"] .nav-btn.active { box-shadow: 0 6px 15px rgba(2, 132, 199, 0.25); }
     
-    /* Yellow star for Favourites button */
     .nav-btn .fav-star-icon { color: var(--star-active); text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
     .nav-btn.active .fav-star-icon { color: #ffffff; }
 
-    /* Coloured emoji icon for desktop & mobile */
     .emoji-icon { font-style: normal; display: inline-block; line-height: 1; font-family: 'Twemoji Country Flags', system-ui, -apple-system, sans-serif; }
-
     .nav-badge { background: rgba(0, 0, 0, 0.2); color: inherit; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.8rem; }
 
-    /* Persistent Right-Side Favourites Action Toolbar */
     .favs-action-bar { display: flex; gap: 0.5rem; align-items: center; background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow); transition: opacity 0.2s ease, visibility 0.2s ease; margin-left: auto; }
     .favs-action-bar.hidden-spacer { opacity: 0; visibility: hidden; pointer-events: none; }
     .action-pill-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.7rem 1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.05); height: 50px; }
@@ -154,7 +144,6 @@
     .theme-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .controls { max-width: 1000px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; gap: 0.75rem; width: 100%; padding: 0 1rem; }
-    
     .top-controls-row { display: grid; grid-template-columns: 2fr 1.3fr 1.3fr; gap: 0.65rem; align-items: stretch; }
     
     input[type="text"] { width: 100%; padding: 0.6rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; box-shadow: var(--shadow); height: 42px; transition: border-color 0.2s ease; }
@@ -163,7 +152,6 @@
     select.sort-select { width: 100%; padding: 0.6rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: var(--shadow); height: 42px; }
 
     .filter-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.65rem; align-items: stretch; }
-    
     .btn-secondary { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.4rem 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; box-shadow: var(--shadow); height: 42px; display: flex; align-items: center; justify-content: center; width: 100%; }
     .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -192,7 +180,6 @@
     .dropdown-option.subgroup-item { padding-left: 1.25rem; }
 
     .flag-emoji { font-size: 1.1rem; line-height: 1; display: inline-block; vertical-align: middle; }
-
     .park-favicon { width: 16px; height: 16px; border-radius: 3px; object-fit: contain; vertical-align: middle; flex-shrink: 0; background: rgba(255,255,255,0.2); }
 
     .height-filter { width: 100%; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.35rem 0.75rem; display: flex; flex-direction: column; justify-content: center; gap: 0.15rem; height: 42px; box-shadow: var(--shadow); }
@@ -217,6 +204,10 @@
     .live-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; }
     .live-toggle-btn.active { background: rgba(34, 197, 94, 0.15); color: #22c55e; border-color: #22c55e; }
 
+    /* Debug Console Toggle Button */
+    .debug-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .debug-toggle-btn.active { background: rgba(245, 158, 11, 0.15); color: var(--star-active); border-color: var(--star-active); }
+
     .pills-container { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .filter-pill { background: var(--badge-bg); border: 1px solid var(--border); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 16px; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem; }
     .pill-remove { cursor: pointer; font-size: 0.85rem; opacity: 0.8; }
@@ -229,12 +220,10 @@
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; overflow: hidden; position: relative; box-shadow: var(--shadow); }
     .card:hover { transform: translateY(-3px); border-color: var(--accent); }
     
-    /* Favourited Card Indicator Styling */
     .card .card-fav-ribbon { display: none; }
     .card.favourited { border: 2px solid var(--star-active); box-shadow: 0 6px 15px rgba(245, 158, 11, 0.2); }
     .card.favourited .card-fav-ribbon { display: flex; position: absolute; top: 0; right: 0; background: var(--star-active); color: #ffffff; text-shadow: 0 1px 1px rgba(0,0,0,0.4); font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-bottom-left-radius: 10px; z-index: 5; align-items: center; gap: 0.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
 
-    /* Refined, Spacious Compact List Styling */
     .grid.compact { grid-template-columns: 1fr; gap: 0.85rem; }
     .grid.compact .card { padding: 1.25rem 1.5rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.5rem; position: relative; }
     .grid.compact .card-fav-ribbon { display: none !important; }
@@ -243,15 +232,12 @@
     
     .grid.compact .card-actions { display: flex; flex-direction: row; align-items: center; justify-content: flex-end; gap: 0.5rem; flex-shrink: 0; margin-top: 0; width: auto; }
     .grid.compact .pov-link, .grid.compact .queue-pass-badge { width: auto; flex: none; padding: 0.4rem 0.8rem; }
-
     .grid.compact .ride-thumb-link { width: 75px; height: 75px; margin: 0; flex-shrink: 0; }
     .grid.compact .ride-thumb { height: 100%; }
     .grid.compact .fav-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.4rem; line-height: 1; z-index: 6; }
 
-    /* Single-Column Slim Grouped View (Direct Park Grouping) */
     .grid.slim-view { display: flex; flex-direction: column; gap: 1rem; grid-template-columns: 1fr !important; width: 100%; max-width: 1000px; margin: 0 auto; }
 
-    /* Park Container in Slim View */
     .park-group-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s ease; width: 100%; box-shadow: var(--shadow); }
     .park-group-container:hover { border-color: var(--accent); }
     .park-group-header { display: flex; justify-content: space-between; align-items: center; padding: 0.95rem 1.25rem; background: var(--badge-bg); cursor: pointer; font-weight: 700; font-size: 1.05rem; user-select: none; }
@@ -260,7 +246,6 @@
     .park-group-content { display: none; padding: 1rem; border-top: 1px solid var(--border); flex-direction: column; gap: 0.65rem; background: var(--bg); }
     .park-group-container.expanded .park-group-content { display: flex; }
     
-    /* Expandable Ride Tile in Slim View with Enhanced Favourite Highlighting */
     .slim-ride-wrapper { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--card-bg); transition: border-color 0.2s ease, background-color 0.2s ease; }
     .slim-ride-wrapper:hover { border-color: var(--accent); }
     .slim-ride-wrapper.favourited { border: 2px solid var(--star-active); background: rgba(245, 158, 11, 0.08); box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15); }
@@ -272,7 +257,6 @@
     .slim-ride-meta-tags { display: flex; gap: 0.65rem; align-items: center; flex-shrink: 0; font-size: 0.85rem; color: var(--muted); }
     .slim-expand-icon { font-size: 0.8rem; color: var(--accent); font-weight: bold; transition: transform 0.2s ease; }
 
-    /* Expanded Drawer Content with Thumbnail Layout */
     .slim-ride-drawer { display: none; padding: 0.85rem 1rem; background: var(--bg); border-top: 1px dashed var(--border); flex-direction: column; gap: 0.65rem; font-size: 0.88rem; animation: drawerOpen 0.2s ease; }
     @keyframes drawerOpen { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
     
@@ -283,7 +267,6 @@
     .slim-drawer-info { display: flex; flex-direction: column; gap: 0.4rem; flex: 1; min-width: 0; }
     .slim-ride-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); flex-shrink: 0; background: var(--card-bg); }
 
-    /* Country Grouped Park Info View Styles */
     .park-info-view { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; width: 100%; }
     .park-search-bar-wrapper { margin-bottom: 0.5rem; width: 100%; display: flex; justify-content: center; }
     .park-search-input { width: 100%; max-width: 500px; }
@@ -306,7 +289,6 @@
     .park-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.85rem; font-size: 0.88rem; }
     .park-info-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 0.9rem; display: flex; flex-direction: column; gap: 0.2rem; }
     
-    /* Header Row Layout for Hours Item (Inline Title + View More) */
     .hours-item-header { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; width: 100%; margin-bottom: 0.25rem; }
     .hours-item-header .park-info-item-label { margin-bottom: 0; }
     .hours-view-more-link { font-size: 0.78rem; font-weight: 700; color: var(--accent); text-decoration: none; white-space: nowrap; }
@@ -318,7 +300,6 @@
     .park-action-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.85rem; background: var(--badge-bg); border: 1px solid var(--border); color: var(--accent); border-radius: 8px; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease; }
     .park-action-btn:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
-    /* 7-Day Hours Calendar Grid */
     .hours-calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-top: 0.35rem; }
     .hours-day-box { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.5rem; text-align: center; display: flex; flex-direction: column; gap: 0.15rem; }
     .hours-day-box.is-today { border-color: var(--accent); background: var(--badge-bg); }
@@ -327,17 +308,10 @@
     .hours-day-time { font-size: 0.72rem; font-weight: 700; color: var(--accent); }
     .hours-day-time.closed { color: #ef4444; }
 
-    /* Guided Onboarding Banner */
     .guided-container { background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 16px; padding: 2.5rem 2rem; text-align: center; max-width: 600px; margin: 2rem auto; box-shadow: var(--shadow); }
     .guided-container h2 { font-size: 1.8rem; color: var(--accent); margin-bottom: 0.5rem; }
     .guided-container p { color: var(--muted); margin-bottom: 1.5rem; font-size: 1rem; }
-    .guided-step-group { display: flex; flex-direction: column; gap: 1rem; text-align: left; max-width: 400px; margin: 0 auto 1.5rem auto; }
-    .guided-label { font-size: 0.85rem; font-weight: 600; color: var(--muted); margin-bottom: 0.25rem; display: block; }
-    .guided-select { width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; cursor: pointer; box-shadow: var(--shadow); }
-    .guided-select:focus { border-color: var(--accent); }
-    .guided-btn { background: var(--accent); color: #ffffff; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: opacity 0.2s ease, transform 0.15s ease; width: 100%; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); }
-    .guided-btn:hover { opacity: 0.9; transform: translateY(-2px); }
-
+    
     .meta-list { border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem; color: var(--muted); display: flex; flex-direction: column; gap: 0.3rem; }
     .meta-item { display: grid; grid-template-columns: 95px 1fr; gap: 0.5rem; align-items: baseline; }
     .meta-label { color: var(--muted); white-space: nowrap; }
@@ -347,14 +321,12 @@
     .grid.compact .details { display: block; font-size: 0.85rem; margin-bottom: 0.25rem; line-height: 1.3; }
     .grid.compact .sensory-box { display: block; margin-top: 0.35rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
     
-    /* Card Action Bar Layout with Bright Red Play Icon */
     .card-actions { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.85rem; }
     .pov-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.45rem 0.85rem; background: var(--pov-bg); color: var(--pov-text); border: 1px solid var(--pov-border); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; flex: 1; text-align: center; }
     .pov-link .pov-symbol { color: var(--pov-icon); font-weight: 700; transition: color 0.2s ease; }
     .pov-link:hover { background: var(--pov-hover-bg); color: var(--pov-hover-text); border-color: var(--pov-hover-bg); }
     .pov-link:hover .pov-symbol { color: var(--pov-hover-text); }
     
-    /* Priority Queue Pass Link Badge with Hover Tooltip */
     .queue-pass-badge { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem; padding: 0.45rem 0.75rem; background: var(--queue-bg); border: 1px solid var(--queue-border); border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--queue-text); cursor: pointer; text-decoration: none; white-space: nowrap; transition: all 0.2s ease; flex: 1; text-align: center; }
     .queue-pass-badge:hover { background: var(--queue-border); transform: translateY(-1px); }
     
@@ -376,7 +348,6 @@
       pointer-events: none;
     }
 
-    /* Live Wait Badge */
     .live-wait-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 6px; margin-bottom: 0.5rem; cursor: pointer; transition: transform 0.15s ease, opacity 0.15s ease; }
     .live-wait-badge:hover { transform: scale(1.03); opacity: 0.9; }
     .live-wait-badge.wait-short { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
@@ -384,9 +355,17 @@
     .live-wait-badge.wait-long { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
     .live-wait-badge.wait-unknown { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
     .live-wait-badge.wait-closed { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
-    .live-wait-badge.wait-down { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
 
-    /* About Modal Styles */
+    /* Floating Debug Console Drawer Styling */
+    .debug-console { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #090d16; border-top: 2px solid var(--star-active); color: #38bdf8; font-family: monospace; font-size: 0.8rem; z-index: 400; padding: 1rem; max-height: 250px; overflow-y: auto; box-shadow: 0 -10px 25px rgba(0,0,0,0.5); }
+    .debug-console.show { display: block; }
+    .debug-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; border-bottom: 1px solid #334155; padding-bottom: 0.3rem; font-weight: bold; color: #f59e0b; }
+    .debug-close { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1rem; }
+    .debug-close:hover { color: #f8fafc; }
+    .debug-log-line { margin-bottom: 0.2rem; white-space: pre-wrap; word-break: break-all; }
+    .debug-log-line.error { color: #fca5a5; }
+    .debug-log-line.success { color: #4ade80; }
+
     .modal-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); z-index: 300; align-items: center; justify-content: center; padding: 1rem; }
     .modal-backdrop.show { display: flex; }
     .modal-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; max-width: 400px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); text-align: center; position: relative; animation: modalPop 0.25s ease; }
@@ -397,11 +376,9 @@
     .modal-close-btn { background: var(--accent); color: #ffffff; border: none; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: opacity 0.2s ease; }
     .modal-close-btn:hover { opacity: 0.9; }
 
-    /* Toast Notification */
     .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); border: 1px solid var(--accent); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 200; transition: transform 0.3s ease; }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* Responsive Adjustments & Mobile Balanced Navigation Buttons */
     @media (max-width: 850px) {
       .top-controls-row { grid-template-columns: 1fr; }
       .filter-row { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
@@ -439,14 +416,12 @@
       .grid.compact .ride-thumb-link { display: none; }
       
       .hours-item-header { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
-
       .controls { gap: 0.75rem; }
       .meta-counts { align-items: flex-start; }
       #rideCounter { display: block; line-height: 1.3; }
       #rideCounter .line-1 { display: block; font-size: 0.85rem; color: var(--muted); }
       #rideCounter .line-2 { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text); }
 
-      /* Mobile Stacking for Slim View */
       .slim-ride-row { flex-direction: column; align-items: stretch; gap: 0.5rem; padding: 0.75rem; }
       .slim-ride-details { width: 100%; justify-content: space-between; }
       .slim-ride-name { white-space: normal; word-break: break-word; font-size: 0.9rem; flex: 1; }
@@ -471,7 +446,6 @@
     .card h2 a { color: inherit; text-decoration: none; }
     .card h2 a:hover { color: var(--accent); text-decoration: underline; }
 
-    /* Clickable Ride Thumbnail Styling */
     .ride-thumb-link { display: block; overflow: hidden; border-radius: 8px; margin: 0.5rem 0 0.75rem 0; border: 1px solid var(--border); }
     .ride-thumb { width: 100%; height: 160px; object-fit: cover; display: block; background-color: var(--bg); transition: transform 0.25s ease, filter 0.25s ease; }
     .ride-thumb-link:hover .ride-thumb { transform: scale(1.04); filter: brightness(1.08); }
@@ -483,7 +457,7 @@
     .sensory-box.severity-green { background: var(--sensory-green-bg); border-left-color: var(--sensory-green-border); color: var(--sensory-green-text); }
     .sensory-box.severity-yellow { background: var(--sensory-yellow-bg); border-left-color: var(--sensory-yellow-border); color: var(--sensory-yellow-text); }
     .sensory-box.severity-orange { background: var(--sensory-orange-bg); border-left-color: var(--sensory-orange-border); color: var(--sensory-orange-text); }
-    .sensory-box.severity-red { background: var(--sensory-red-bg); border-left-color: var(--sensory-red-border); color: var(--sensory-sensory-red-text); }
+    .sensory-box.severity-red { background: var(--sensory-red-bg); border-left-color: var(--sensory-red-border); color: var(--sensory-red-text); }
 
     .loading { text-align: center; color: var(--muted); font-size: 1.1rem; grid-column: 1 / -1; padding: 3rem 0; }
     .retry-btn { margin-top: 1rem; background: var(--accent); color: #ffffff; border: none; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
@@ -494,7 +468,7 @@
 
     @media print {
       body { background: #ffffff !important; color: #000000 !important; padding: 0 !important; }
-      header, .controls, .status-bar, footer, .pov-link, .fav-btn, .version-badge, .hero-banner, .modal-backdrop, .favs-action-bar { display: none !important; }
+      header, .controls, .status-bar, footer, .pov-link, .fav-btn, .version-badge, .hero-banner, .modal-backdrop, .favs-action-bar, .debug-console { display: none !important; }
       .grid, .park-info-view { display: block !important; }
       .card, .park-info-card { page-break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 1rem !important; padding: 1rem !important; color: #000 !important; background: #fff !important; }
       .card h2, .park-info-title-group h2 { color: #000 !important; }
@@ -518,8 +492,17 @@
     </div>
   </div>
 
+  <!-- Debug Console Drawer -->
+  <div class="debug-console" id="debugConsole">
+    <div class="debug-header">
+      <span>🐛 Live API Debug Console (v96)</span>
+      <button class="debug-close" id="closeDebugBtn">✕</button>
+    </div>
+    <div id="debugLogContent"></div>
+  </div>
+
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v95</div>
+    <div class="version-badge" id="versionBadgeBtn">v96</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -527,7 +510,6 @@
     </div>
   </div>
 
-  <!-- Full-Width Desktop Navigation Banner (Sits flush right below hero banner) -->
   <header>
     <div class="view-nav-wrapper">
       <div class="view-nav">
@@ -540,23 +522,15 @@
         </button>
       </div>
 
-      <!-- Right-Aligned Action Toolbar (Reserves Footprint) -->
       <div class="favs-action-bar hidden-spacer" id="favsActionBar">
-        <button class="action-pill-btn" id="clearFavsBtn" title="Clear all favourites">
-          🗑 Clear
-        </button>
-        <button class="action-pill-btn" id="shareFavsBtn">
-          🔗 Share
-        </button>
-        <button class="action-pill-btn" id="printFavsBtn">
-          🖨 Print
-        </button>
+        <button class="action-pill-btn" id="clearFavsBtn" title="Clear all favourites">🗑 Clear</button>
+        <button class="action-pill-btn" id="shareFavsBtn">🔗 Share</button>
+        <button class="action-pill-btn" id="printFavsBtn">🖨 Print</button>
       </div>
     </div>
   </header>
 
   <div class="controls" id="rideControlsSection">
-    <!-- Top Row: Search, Sort, Height Slider -->
     <div class="top-controls-row">
       <input type="text" id="searchInput" placeholder="Search ride, park, type, or details...">
       
@@ -568,7 +542,6 @@
         <option value="height-desc">Sort: Height (High to Low)</option>
       </select>
 
-      <!-- Height Slider -->
       <div class="height-filter">
         <div class="height-top">
           <span class="height-label">Max Height:</span>
@@ -584,7 +557,6 @@
       </div>
     </div>
     
-    <!-- Filter Row: Country, Park, Type, Sensory, Reset Button -->
     <div class="filter-row">
       <div class="multiselect-container">
         <button class="multiselect-btn" id="countryBtn">Countries (All)</button>
@@ -650,6 +622,10 @@
       <span id="rideCounter">Showing 0 rides</span>
       
       <div class="status-controls-group">
+        <button class="debug-toggle-btn" id="debugToggleBtn" title="Toggle Live API Debug Mode">
+          🐛 <span id="debugToggleText">Debug Mode: OFF</span>
+        </button>
+
         <button class="live-toggle-btn" id="liveWaitToggleBtn" title="Toggle Live Wait Times & Showtimes">
           ⚡ <span id="liveToggleText">Show Live Times</span>
         </button>
@@ -676,7 +652,6 @@
       </div>
     </div>
 
-    <!-- Country-Grouped Park Info View -->
     <div class="park-info-view" id="parkInfoGrid" style="display: none;">
       <div class="park-search-bar-wrapper">
         <input type="text" id="parkSearchInput" class="park-search-input" placeholder="Filter parks by name, country, or location...">
@@ -692,7 +667,43 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v95';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v96';
+
+    let debugModeActive = false;
+    function logDebug(message, type = 'info') {
+      const consoleEl = document.getElementById('debugLogContent');
+      if (!consoleEl) return;
+      const timestamp = new Date().toLocaleTimeString();
+      const line = document.createElement('div');
+      line.className = `debug-log-line ${type}`;
+      line.textContent = `[${timestamp}] ${message}`;
+      consoleEl.appendChild(line);
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+      console.log(`[DEBUG] ${message}`);
+    }
+
+    document.getElementById('debugToggleBtn').addEventListener('click', () => {
+      debugModeActive = !debugModeActive;
+      const btn = document.getElementById('debugToggleBtn');
+      const consoleBox = document.getElementById('debugConsole');
+      const text = document.getElementById('debugToggleText');
+      
+      if (debugModeActive) {
+        btn.classList.add('active');
+        consoleBox.classList.add('show');
+        text.textContent = 'Debug Mode: ON';
+        logDebug('Debug mode enabled. Fetching live entity payloads...', 'success');
+        if (showLiveWaitTimes) fetchLiveWaitTimes();
+      } else {
+        btn.classList.remove('active');
+        consoleBox.classList.remove('show');
+        text.textContent = 'Debug Mode: OFF';
+      }
+    });
+
+    document.getElementById('closeDebugBtn').addEventListener('click', () => {
+      document.getElementById('debugConsole').classList.remove('show');
+    });
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -824,16 +835,12 @@
     };
 
     function getPriorityPassUrl(parkName, explicitPassUrl) {
-      if (explicitPassUrl && explicitPassUrl.startsWith('http')) {
-        return explicitPassUrl;
-      }
+      if (explicitPassUrl && explicitPassUrl.startsWith('http')) return explicitPassUrl;
       if (!parkName) return '#';
-      
       const norm = parkName.toLowerCase().trim();
       for (const [key, url] of Object.entries(PRIORITY_PASS_URLS)) {
         if (norm.includes(key)) return url;
       }
-
       return `https://www.google.com/search?q=${encodeURIComponent(`${parkName} fastpass express priority pass tickets pricing`)}`;
     }
 
@@ -847,25 +854,14 @@
     }
 
     const COUNTRY_FLAG_MAP = {
-      'united kingdom': '🇬🇧',
-      'uk': '🇬🇧',
-      'united states': '🇺🇸',
-      'usa': '🇺🇸',
-      'france': '🇫🇷',
-      'germany': '🇩🇪',
-      'spain': '🇪🇸',
-      'italy': '🇮🇹',
-      'japan': '🇯🇵',
-      'uae': '🇦🇪',
-      'united arab emirates': '🇦🇪',
-      'canada': '🇨🇦',
-      'australia': '🇦🇺'
+      'united kingdom': '🇬🇧', 'uk': '🇬🇧', 'united states': '🇺🇸', 'usa': '🇺🇸',
+      'france': '🇫🇷', 'germany': '🇩🇪', 'spain': '🇪🇸', 'italy': '🇮🇹',
+      'japan': '🇯🇵', 'uae': '🇦🇪', 'united arab emirates': '🇦🇪', 'canada': '🇨🇦', 'australia': '🇦🇺'
     };
 
     function getCountryFlag(countryName) {
       if (!countryName) return '🌍';
-      const norm = countryName.toLowerCase().trim();
-      return COUNTRY_FLAG_MAP[norm] || '🌍';
+      return COUNTRY_FLAG_MAP[countryName.toLowerCase().trim()] || '🌍';
     }
 
     function clearOldCaches() {
@@ -876,18 +872,14 @@
             localStorage.removeItem(key);
           }
         }
-      } catch (e) {
-        console.warn('Could not clean old cache keys from localStorage:', e);
-      }
+      } catch (e) {}
     }
 
     function safeSaveCache(data) {
       clearOldCaches();
       try {
         localStorage.setItem(CURRENT_CACHE_KEY, JSON.stringify(data));
-      } catch (e) {
-        console.warn('LocalStorage quota exceeded or disabled.', e);
-      }
+      } catch (e) {}
     }
 
     let allRides = [];
@@ -912,54 +904,35 @@
     let liveLastCheckedTime = null;
 
     const aboutModal = document.getElementById('aboutModal');
-    document.getElementById('versionBadgeBtn').addEventListener('click', () => {
-      aboutModal.classList.add('show');
-    });
-    document.getElementById('closeModalBtn').addEventListener('click', () => {
-      aboutModal.classList.remove('show');
-    });
-    aboutModal.addEventListener('click', (e) => {
-      if (e.target === aboutModal) aboutModal.classList.remove('show');
-    });
+    document.getElementById('versionBadgeBtn').addEventListener('click', () => aboutModal.classList.add('show'));
+    document.getElementById('closeModalBtn').addEventListener('click', () => aboutModal.classList.remove('show'));
+    aboutModal.addEventListener('click', (e) => { if (e.target === aboutModal) aboutModal.classList.remove('show'); });
 
     let currentTheme = localStorage.getItem('site_theme') || 'dark';
 
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
-      try {
-        localStorage.setItem('site_theme', theme);
-      } catch (e) {}
+      try { localStorage.setItem('site_theme', theme); } catch (e) {}
       currentTheme = theme;
-
       const icon = document.getElementById('themeIcon');
       const label = document.getElementById('themeLabel');
-
       if (theme === 'light') {
-        icon.textContent = '🌙';
-        label.textContent = 'Dark Mode';
+        icon.textContent = '🌙'; label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀';
-        label.textContent = 'Light Mode';
+        icon.textContent = '☀'; label.textContent = 'Light Mode';
       }
     }
 
     document.getElementById('themeToggleBtn').addEventListener('click', () => {
       applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
     });
-
     applyTheme(currentTheme);
 
     let favourites = [];
-    try {
-      favourites = JSON.parse(localStorage.getItem('ride_favourites') || '[]');
-    } catch (e) {
-      favourites = [];
-    }
+    try { favourites = JSON.parse(localStorage.getItem('ride_favourites') || '[]'); } catch (e) { favourites = []; }
 
     function saveFavourites() {
-      try {
-        localStorage.setItem('ride_favourites', JSON.stringify(favourites));
-      } catch (e) {}
+      try { localStorage.setItem('ride_favourites', JSON.stringify(favourites)); } catch (e) {}
       updateFavBadge();
     }
 
@@ -972,26 +945,17 @@
         .replace(/[^a-z0-9]/g, "");
     }
 
-    function getRideKey(r) {
-      return normalizeText(`${r.park}_${r.ride}`);
-    }
+    function getRideKey(r) { return normalizeText(`${r.park}_${r.ride}`); }
 
     function toggleFavourite(event, rideKey) {
-      if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      
+      if (event) { event.preventDefault(); event.stopPropagation(); }
       if (favourites.includes(rideKey)) {
         favourites = favourites.filter(id => id !== rideKey);
       } else {
         favourites.push(rideKey);
       }
       saveFavourites();
-      
-      if (currentView === 'favourites') {
-        reinitAllFilters();
-      }
+      if (currentView === 'favourites') reinitAllFilters();
       filterRides();
     }
 
@@ -999,27 +963,19 @@
       document.getElementById('favCountBadge').textContent = favourites.length;
     }
 
-    function getQueuePass(r) {
-      return String(r.queuePass || '').trim();
-    }
-
+    function getQueuePass(r) { return String(r.queuePass || '').trim(); }
     function hasQueuePass(r) {
       const val = getQueuePass(r);
       return val !== '' && val.toLowerCase() !== 'no' && val.toLowerCase() !== 'n/a' && val.toLowerCase() !== 'none';
     }
-
-    function getRideUuid(r) {
-      return String(r.themeParkWikiRideID || '').trim().toLowerCase();
-    }
+    function getRideUuid(r) { return String(r.themeParkWikiRideID || '').trim().toLowerCase(); }
 
     function extractDomain(urlStr) {
       if (!urlStr) return '';
       try {
         const url = new URL(urlStr.startsWith('http') ? urlStr : `https://${urlStr}`);
         return url.hostname;
-      } catch (e) {
-        return '';
-      }
+      } catch (e) { return ''; }
     }
 
     function buildParkDomainMap(rides) {
@@ -1027,10 +983,7 @@
       rides.forEach(r => {
         if (r.park && !parkDomainMap[r.park]) {
           const normPark = r.park.toLowerCase().trim();
-          let domain = PARK_DOMAIN_OVERRIDES[normPark];
-          if (!domain) {
-            domain = extractDomain(r.rideUrl) || extractDomain(r.imageUrl);
-          }
+          let domain = PARK_DOMAIN_OVERRIDES[normPark] || extractDomain(r.rideUrl) || extractDomain(r.imageUrl);
           if (domain) parkDomainMap[r.park] = domain;
         }
       });
@@ -1038,47 +991,34 @@
 
     function getDisplayParkName(parkName) {
       if (!parkName) return '';
-      if (parkName.toLowerCase().includes('chessington')) {
-        return 'Chessington';
-      }
+      if (parkName.toLowerCase().includes('chessington')) return 'Chessington';
       return parkName;
     }
 
     function getFaviconHtml(parkName) {
       if (!parkName) return '<span style="font-size: 0.85rem;">🎢</span>';
       const normPark = parkName.toLowerCase().trim();
-
       for (const [key, icon] of Object.entries(PARK_ICON_OVERRIDES)) {
-        if (normPark.includes(key)) {
-          return `<span style="font-size: 0.95rem; line-height: 1;">${icon}</span>`;
-        }
+        if (normPark.includes(key)) return `<span style="font-size: 0.95rem; line-height: 1;">${icon}</span>`;
       }
-
       let domain = PARK_DOMAIN_OVERRIDES[normPark] || parkDomainMap[parkName];
-
       if (domain) {
-        const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-        return `<img src="${faviconUrl}" class="park-favicon" alt="" onerror="this.onerror=null; this.outerHTML='<span style=\\'font-size: 0.85rem;\\'>🎢</span>';">`;
+        return `<img src="https://www.google.com/s2/favicons?domain=${domain}&sz=64" class="park-favicon" alt="" onerror="this.onerror=null; this.outerHTML='<span style=\\'font-size: 0.85rem;\\'>🎢</span>';">`;
       }
-
       return `<span style="font-size: 0.85rem;">🎢</span>`;
     }
 
     function calculateSensorySeverityClass(sensoryText) {
       if (!sensoryText) return 'severity-green';
       const text = sensoryText.toLowerCase();
-
       if (text.includes('none') || text.includes('mild') || text.includes('gentle')) return 'severity-green';
-
       let matchedCount = 0;
       SENSORY_TAGS.forEach(t => {
         if (t.id !== 'none' && t.keywords.some(kw => text.includes(kw))) matchedCount++;
       });
-
       if (matchedCount >= 3 || text.includes('strobe') || text.includes('extreme')) return 'severity-red';
       if (matchedCount === 2 || text.includes('dark') || text.includes('drop')) return 'severity-orange';
       if (matchedCount === 1) return 'severity-yellow';
-
       return 'severity-green';
     }
 
@@ -1103,16 +1043,11 @@
 
     async function fetchRideData() {
       clearOldCaches();
-      
       let cachedRides = null;
       try {
         const cached = localStorage.getItem(CURRENT_CACHE_KEY);
-        if (cached) {
-          cachedRides = JSON.parse(cached);
-        }
-      } catch (e) {
-        console.warn('LocalStorage read unavailable:', e);
-      }
+        if (cached) cachedRides = JSON.parse(cached);
+      } catch (e) {}
 
       if (cachedRides && Array.isArray(cachedRides) && cachedRides.length > 0) {
         allRides = preprocessRides(cachedRides);
@@ -1126,9 +1061,8 @@
         const response = await fetch(API_URL, { redirect: 'follow' });
         const contentType = response.headers.get('content-type') || '';
         if (!response.ok || contentType.includes('text/html')) {
-          throw new Error(`Server returned HTML/HTTP ${response.status} instead of JSON.`);
+          throw new Error(`Server returned HTTP ${response.status}`);
         }
-
         const freshRides = await response.json();
         safeSaveCache(freshRides);
         allRides = preprocessRides(freshRides);
@@ -1157,6 +1091,7 @@
 
       const toggleText = document.getElementById('liveToggleText');
       toggleText.textContent = 'Fetching Live Times...';
+      if (debugModeActive) logDebug('Starting live wait times fetch across parks...', 'info');
 
       const uniqueParks = [...new Set(allRides.map(r => r.park.toLowerCase().trim()))];
 
@@ -1164,18 +1099,24 @@
         let wikiId = THEME_PARKS_WIKI_IDS[parkName];
         if (!wikiId) {
           for (const [key, id] of Object.entries(THEME_PARKS_WIKI_IDS)) {
-            if (parkName.includes(key)) {
-              wikiId = id;
-              break;
-            }
+            if (parkName.includes(key)) { wikiId = id; break; }
           }
         }
-        if (!wikiId) continue;
+        if (!wikiId) {
+          if (debugModeActive) logDebug(`No wiki ID mapped for park: "${parkName}"`, 'error');
+          continue;
+        }
 
         try {
-          const res = await fetch(`https://api.themeparks.wiki/v1/entity/${wikiId}/live`);
+          const liveUrl = `https://api.themeparks.wiki/v1/entity/${wikiId}/live`;
+          if (debugModeActive) logDebug(`Fetching live API for [${parkName}]: ${liveUrl}`, 'info');
+          
+          const res = await fetch(liveUrl);
           const data = await res.json();
           const liveArray = data.liveData || data.live || [];
+          
+          if (debugModeActive) logDebug(`Received ${liveArray.length} items from API for ${parkName}`, 'success');
+
           if (Array.isArray(liveArray)) {
             liveArray.forEach(item => {
               if (item.id) {
@@ -1195,19 +1136,34 @@
                 }
 
                 const status = item.status || 'OPERATING';
-                const liveObj = { waitTime: wait, status: status, showtimes: showtimes };
+                const liveObj = { waitTime: wait, status: status, showtimes: showtimes, rawName: item.name };
 
                 liveWaitData[cleanId] = liveObj;
                 if (item.name) {
                   const normName = normalizeText(item.name);
                   liveWaitNameMap[`${parkName}_${normName}`] = liveObj;
+                  if (debugModeActive) logDebug(`Mapped live item -> Park: "${parkName}", Name: "${item.name}" (Norm: "${normName}"), ID: ${cleanId}, Status: ${status}, Wait: ${wait}m`, 'info');
                 }
               }
             });
           }
         } catch (err) {
-          console.error(`Failed to fetch live times for park ${parkName}:`, err);
+          if (debugModeActive) logDebug(`Failed fetch live times for ${parkName}: ${err.message}`, 'error');
         }
+      }
+
+      if (debugModeActive) {
+        logDebug(`Evaluating internal database rides against live lookup map...`, 'success');
+        allRides.forEach(r => {
+          const matched = getLiveInfoForRide(r);
+          const uuid = getRideUuid(r);
+          const nameKey = `${r.park.toLowerCase().trim()}_${normalizeText(r.ride)}`;
+          if (matched) {
+            logDebug(`MATCHED: "${r.ride}" (${r.park}) -> Status: ${matched.status}, Wait: ${matched.waitTime}m`, 'success');
+          } else {
+            logDebug(`UNMATCHED: "${r.ride}" (${r.park}) [UUID: ${uuid || 'None'}, Key: ${nameKey}]`, 'error');
+          }
+        });
       }
 
       isFetchingLive = false;
@@ -1221,13 +1177,11 @@
       if (rideUuid && liveWaitData[rideUuid]) {
         return liveWaitData[rideUuid];
       }
-      
       const normPark = r.park.toLowerCase().trim();
       const nameKey = `${normPark}_${normalizeText(r.ride)}`;
       if (liveWaitNameMap[nameKey]) {
         return liveWaitNameMap[nameKey];
       }
-
       return null;
     }
 
@@ -1257,13 +1211,10 @@
     function filterByParkOnly(parkName) {
       isGuidedActive = false;
       document.getElementById('searchInput').value = '';
-      
       const matchingRide = allRides.find(r => r.park === parkName);
       if (matchingRide && matchingRide.country) {
         selectedCountries = [matchingRide.country];
-        document.querySelectorAll('.country-cb').forEach(cb => {
-          cb.checked = (cb.value === matchingRide.country);
-        });
+        document.querySelectorAll('.country-cb').forEach(cb => { cb.checked = (cb.value === matchingRide.country); });
         updateCountryBtnLabel();
       } else {
         document.querySelectorAll('.country-cb').forEach(cb => cb.checked = true);
@@ -1271,15 +1222,11 @@
       }
 
       initParkFilter();
-
       selectedParks = [parkName];
-      document.querySelectorAll('.park-cb').forEach(cb => {
-        cb.checked = (cb.value === parkName);
-      });
+      document.querySelectorAll('.park-cb').forEach(cb => { cb.checked = (cb.value === parkName); });
       updateParkBtnLabel();
 
       initTypeFilter();
-
       document.querySelectorAll('.type-cb').forEach(cb => cb.checked = true);
       updateTypeSelections();
 
@@ -1291,7 +1238,6 @@
       const dataset = getActiveDataset();
       const countries = [...new Set(dataset.map(r => r.country).filter(Boolean))].sort();
       selectedCountries = [...countries];
-
       const container = document.getElementById('countryOptions');
       container.innerHTML = countries.map(c => `
         <label class="dropdown-option">
@@ -1299,9 +1245,7 @@
           <span><span class="flag-emoji">${getCountryFlag(c)}</span> ${c}</span>
         </label>
       `).join('');
-
       updateCountryBtnLabel();
-
       document.querySelectorAll('.country-cb').forEach(cb => {
         cb.addEventListener('change', () => {
           updateCountrySelections();
@@ -1313,8 +1257,7 @@
     }
 
     function updateCountrySelections() {
-      const cbs = document.querySelectorAll('.country-cb');
-      selectedCountries = Array.from(cbs).filter(cb => cb.checked).map(cb => cb.value);
+      selectedCountries = Array.from(document.querySelectorAll('.country-cb')).filter(cb => cb.checked).map(cb => cb.value);
       updateCountryBtnLabel();
     }
 
@@ -1339,18 +1282,14 @@
 
     function getUsaSubGroup(parkName) {
       const norm = parkName.toLowerCase().trim();
-      if (norm.includes('california') || norm.includes('hollywood') || norm.includes('knott') || norm.includes('magic mountain')) {
-        return 'California';
-      }
+      if (norm.includes('california') || norm.includes('hollywood') || norm.includes('knott') || norm.includes('magic mountain')) return 'California';
       return 'Central Florida (Orlando / Tampa)';
     }
 
     function initParkFilter() {
       const dataset = getActiveDataset();
       const availableRides = dataset.filter(r => selectedCountries.includes(r.country));
-      
       const container = document.getElementById('parkOptions');
-
       const parksByCountry = {};
       availableRides.forEach(r => {
         if (!r.park) return;
@@ -1374,7 +1313,6 @@
             if (!subGroups[sub]) subGroups[sub] = [];
             subGroups[sub].push(p);
           });
-
           ['Central Florida (Orlando / Tampa)', 'California'].forEach(subName => {
             if (subGroups[subName] && subGroups[subName].length > 0) {
               html += `<div class="dropdown-subgroup-header">📍 ${subName}</div>`;
@@ -1414,7 +1352,6 @@
       document.getElementById('selectUniversalParks').style.display = hasUniversal ? 'inline' : 'none';
 
       updateParkBtnLabel();
-
       document.querySelectorAll('.park-cb').forEach(cb => {
         cb.addEventListener('change', () => {
           updateParkSelections();
@@ -1425,8 +1362,7 @@
     }
 
     function updateParkSelections() {
-      const cbs = document.querySelectorAll('.park-cb');
-      selectedParks = Array.from(cbs).filter(cb => cb.checked).map(cb => cb.value);
+      selectedParks = Array.from(document.querySelectorAll('.park-cb')).filter(cb => cb.checked).map(cb => cb.value);
       updateParkBtnLabel();
     }
 
@@ -1455,7 +1391,6 @@
 
       const types = [...new Set(availableRides.map(r => r.type).filter(Boolean))].sort();
       selectedTypes = [...types];
-
       const container = document.getElementById('typeOptions');
       container.innerHTML = types.map(t => `
         <label class="dropdown-option">
@@ -1463,9 +1398,7 @@
           <span>${t}</span>
         </label>
       `).join('');
-
       updateTypeBtnLabel();
-
       document.querySelectorAll('.type-cb').forEach(cb => {
         cb.addEventListener('change', () => {
           updateTypeSelections();
@@ -1485,8 +1418,7 @@
     });
 
     function updateTypeSelections() {
-      const cbs = document.querySelectorAll('.type-cb');
-      selectedTypes = Array.from(cbs).filter(cb => cb.checked).map(cb => cb.value);
+      selectedTypes = Array.from(document.querySelectorAll('.type-cb')).filter(cb => cb.checked).map(cb => cb.value);
       updateTypeBtnLabel();
     }
 
@@ -1508,9 +1440,7 @@
           <span>${t.label}</span>
         </label>
       `).join('');
-
       updateSensoryBtnLabel();
-
       document.querySelectorAll('.sensory-cb').forEach(cb => {
         cb.addEventListener('change', () => {
           updateSensorySelections();
@@ -1520,8 +1450,7 @@
     }
 
     function updateSensorySelections() {
-      const cbs = document.querySelectorAll('.sensory-cb');
-      selectedSensory = Array.from(cbs).filter(cb => cb.checked).map(cb => cb.value);
+      selectedSensory = Array.from(document.querySelectorAll('.sensory-cb')).filter(cb => cb.checked).map(cb => cb.value);
       updateSensoryBtnLabel();
     }
 
@@ -1536,14 +1465,9 @@
     function rideMatchesSensory(rideSensoryText) {
       if (selectedSensory.length === SENSORY_TAGS.length) return true;
       if (selectedSensory.length === 0) return false;
-
       const text = String(rideSensoryText || '').toLowerCase();
       const hasNoWarnings = (!text || text.includes('none') || text.includes('mild') || text.includes('gentle') || text.includes('calm'));
-
-      if (selectedSensory.includes('none') && hasNoWarnings) {
-        return true;
-      }
-
+      if (selectedSensory.includes('none') && hasNoWarnings) return true;
       return selectedSensory.some(tagId => {
         if (tagId === 'none') return false;
         const tag = SENSORY_TAGS.find(t => t.id === tagId);
@@ -1555,7 +1479,6 @@
     function switchToRideView(viewType) {
       currentView = viewType;
       reinitAllFilters();
-
       document.getElementById('viewParkInfoBtn').classList.remove('active');
       document.getElementById('parkInfoGrid').style.display = 'none';
       document.getElementById('rideGrid').style.display = 'grid';
@@ -1563,7 +1486,6 @@
       document.getElementById('statusBarSection').style.display = 'flex';
 
       const favsActionBar = document.getElementById('favsActionBar');
-
       if (viewType === 'favourites') {
         document.getElementById('viewFavsBtn').classList.add('active');
         document.getElementById('viewAllBtn').classList.remove('active');
@@ -1573,7 +1495,6 @@
         document.getElementById('viewFavsBtn').classList.remove('active');
         favsActionBar.classList.add('hidden-spacer');
       }
-
       filterRides();
     }
 
@@ -1583,9 +1504,7 @@
       slider.value = slider.max;
       document.getElementById('heightValue').textContent = `${slider.value} ${currentUnit}`;
       selectedParkCategory = 'all';
-      document.querySelectorAll('.park-cat-btn').forEach(b => {
-        b.classList.toggle('active', b.getAttribute('data-cat') === 'all');
-      });
+      document.querySelectorAll('.park-cat-btn').forEach(b => { b.classList.toggle('active', b.getAttribute('data-cat') === 'all'); });
       switchToRideView('all');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1612,7 +1531,6 @@
           if (targetCard) {
             const countryContainer = targetCard.closest('.country-group-container');
             if (countryContainer) countryContainer.classList.add('expanded');
-            
             targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
             targetCard.style.borderColor = 'var(--accent)';
           }
@@ -1630,52 +1548,26 @@
       const norm = parkName.toLowerCase().trim();
       const result = [];
       const now = new Date();
-
       for (let i = 0; i < 7; i++) {
         const d = new Date(now);
         d.setDate(now.getDate() + i);
-
         const dayName = d.toLocaleDateString('en-GB', { weekday: 'short' });
         const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
         const dayOfWeek = d.getDay();
-
         let timeStr = '10:00 - 18:00';
         let isClosed = false;
 
         if (norm.includes('alton towers')) {
-          if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) {
-            timeStr = '10:00 - 21:00 (Scarefest)';
-          } else {
-            timeStr = '10:00 - 16:00';
-          }
+          timeStr = (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) ? '10:00 - 21:00 (Scarefest)' : '10:00 - 16:00';
         } else if (norm.includes('thorpe park')) {
-          if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) {
-            timeStr = '10:00 - 21:00 (Fright Nights)';
-          } else if (dayOfWeek === 1 || dayOfWeek === 2 || dayOfWeek === 3) {
-            isClosed = true;
-            timeStr = 'Closed';
-          } else {
-            timeStr = '10:00 - 17:00';
-          }
-        } else if (norm.includes('chessington')) {
-          timeStr = (dayOfWeek === 6 || dayOfWeek === 0) ? '10:00 - 18:00' : '10:00 - 17:00';
-        } else if (norm.includes('magic kingdom')) {
-          timeStr = '09:00 - 22:00';
-        } else if (norm.includes('epcot')) {
-          timeStr = '09:00 - 21:00';
-        } else if (norm.includes('universal') || norm.includes('islands of adventure')) {
+          if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) timeStr = '10:00 - 21:00 (Fright Nights)';
+          else if (dayOfWeek >= 1 && dayOfWeek <= 3) { isClosed = true; timeStr = 'Closed'; }
+          else timeStr = '10:00 - 17:00';
+        } else if (norm.includes('magic kingdom') || norm.includes('epcot') || norm.includes('universal')) {
           timeStr = '09:00 - 21:00';
         }
-
-        result.push({
-          dayName,
-          dateStr,
-          timeStr,
-          isToday: (i === 0),
-          isClosed
-        });
+        result.push({ dayName, dateStr, timeStr, isToday: (i === 0), isClosed });
       }
-
       return result;
     }
 
@@ -1699,9 +1591,7 @@
         if (r.park) uniqueParksMap[r.park].ridesCount++;
       });
 
-      const allParks = Object.values(uniqueParksMap);
-
-      const filtered = allParks.filter(p => {
+      const filtered = Object.values(uniqueParksMap).filter(p => {
         if (!searchVal) return true;
         return normalizeText(`${p.name} ${p.country} ${PARK_LOCATION_DETAILS[p.name.toLowerCase().trim()] || ''}`).includes(searchVal);
       });
@@ -1717,9 +1607,7 @@
         parksByCountry[p.country].push(p);
       });
 
-      const sortedCountries = Object.keys(parksByCountry).sort();
-
-      container.innerHTML = sortedCountries.map(country => {
+      container.innerHTML = Object.keys(parksByCountry).sort().map(country => {
         const countryParks = parksByCountry[country].sort((a, b) => a.name.localeCompare(b.name));
         const flag = getCountryFlag(country);
 
@@ -1728,12 +1616,10 @@
           const displayPark = getDisplayParkName(p.name);
           const faviconHtml = getFaviconHtml(p.name);
           const cardId = `park-card-${normalizeText(p.name)}`;
-
           const locationStr = PARK_LOCATION_DETAILS[normName] || `${p.name}, ${p.country}`;
           const next7Days = getNext7DaysHours(p.name);
           const passUrl = getPriorityPassUrl(p.name, p.explicitPassUrl);
           const hoursUrl = getParkHoursUrl(p.name);
-
           let domain = PARK_DOMAIN_OVERRIDES[normName] || parkDomainMap[p.name] || extractDomain(p.sampleRideUrl);
           const officialUrl = domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : null;
           const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name} ${locationStr}`)}`;
@@ -1754,30 +1640,24 @@
                   <h2>${displayPark}</h2>
                 </div>
               </div>
-
               <div class="park-info-grid">
                 <div class="park-info-item" style="grid-column: 1 / -1;">
                   <div class="hours-item-header">
                     <span class="park-info-item-label">📅 Upcoming 7-Day Operating Hours</span>
                     <a href="${hoursUrl}" target="_blank" rel="noopener" class="hours-view-more-link">View More Hours ↗</a>
                   </div>
-                  <div class="hours-calendar-grid">
-                    ${calendarHtml}
-                  </div>
+                  <div class="hours-calendar-grid">${calendarHtml}</div>
                 </div>
-
                 <div class="park-info-item">
                   <span class="park-info-item-label">📍 Location & Address</span>
                   <span class="park-info-item-value">${locationStr}</span>
                   <a href="${mapsUrl}" target="_blank" rel="noopener" class="action-link" style="margin-top: 0.2rem;">Open Google Maps ↗</a>
                 </div>
-                
                 <div class="park-info-item">
                   <span class="park-info-item-label">🎢 Catalogued Attractions</span>
                   <span class="park-info-item-value">${p.ridesCount} Rides Available</span>
                   <button class="action-link" style="background:none; border:none; padding:0; text-align:left; font-size: 0.78rem;" onclick="switchToRideView('all'); filterByParkOnly('${p.name.replace(/'/g, "\\'")}');">View All ${p.name} Rides ↗</button>
                 </div>
-
                 ${p.sampleQueuePass ? `
                   <div class="park-info-item">
                     <span class="park-info-item-label">⏩ Priority Pass System</span>
@@ -1786,7 +1666,6 @@
                   </div>
                 ` : ''}
               </div>
-
               <div class="park-info-actions">
                 ${officialUrl ? `<a href="${officialUrl}" target="_blank" rel="noopener" class="park-action-btn">🌐 Official Website</a>` : ''}
                 <a href="${mapsUrl}" target="_blank" rel="noopener" class="park-action-btn">🗺 Google Maps Directions</a>
@@ -1796,10 +1675,8 @@
           `;
         }).join('');
 
-        const isExpandedClass = searchVal ? 'expanded' : '';
-
         return `
-          <div class="country-group-container ${isExpandedClass}">
+          <div class="country-group-container ${searchVal ? 'expanded' : ''}">
             <div class="country-group-header" onclick="this.parentElement.classList.toggle('expanded')">
               <div class="country-info">
                 <span class="flag-emoji">${flag}</span>
@@ -1810,27 +1687,20 @@
                 <span class="country-arrow">▼</span>
               </div>
             </div>
-            <div class="country-group-content">
-              ${parkCardsHtml}
-            </div>
+            <div class="country-group-content">${parkCardsHtml}</div>
           </div>
         `;
       }).join('');
     }
 
     document.getElementById('parkSearchInput').addEventListener('input', renderParkInfoCards);
-
-    document.getElementById('printFavsBtn').addEventListener('click', () => {
-      window.print();
-    });
+    document.getElementById('printFavsBtn').addEventListener('click', () => window.print());
 
     function showToast(message) {
       const toast = document.getElementById('toastNotification');
       toast.textContent = message;
       toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
+      setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
     document.getElementById('clearFavsBtn').addEventListener('click', () => {
@@ -1846,36 +1716,17 @@
 
     document.getElementById('shareFavsBtn').addEventListener('click', async () => {
       const favRides = allRides.filter(r => favourites.includes(getRideKey(r)));
-      if (favRides.length === 0) {
-        showToast('No favourites to share yet!');
-        return;
-      }
-
+      if (favRides.length === 0) { showToast('No favourites to share yet!'); return; }
       let shareText = '🎢 My Theme Park Ride Favourites:\n\n';
       favRides.forEach(r => {
         let h = r.minHeightCm ? ` (Min Height: ${r.minHeightCm}cm)` : '';
         shareText += `• ${r.ride} (${r.park})${h}\n`;
       });
       shareText += `\nShared via Theme Park Ride Guide`;
-
       if (navigator.share) {
-        try {
-          await navigator.share({
-            title: 'My Theme Park Ride Favourites',
-            text: shareText
-          });
-          return;
-        } catch (err) {
-          if (err.name !== 'AbortError') console.error('Share error:', err);
-        }
+        try { await navigator.share({ title: 'My Theme Park Ride Favourites', text: shareText }); return; } catch (err) {}
       }
-
-      try {
-        await navigator.clipboard.writeText(shareText);
-        showToast('Favourites copied to clipboard!');
-      } catch (err) {
-        showToast('Failed to copy to clipboard.');
-      }
+      try { await navigator.clipboard.writeText(shareText); showToast('Favourites copied to clipboard!'); } catch (err) { showToast('Failed to copy.'); }
     });
 
     document.getElementById('cardViewBtn').addEventListener('click', () => {
@@ -1911,9 +1762,7 @@
       slider.value = slider.max;
       document.getElementById('heightValue').textContent = `${slider.value} ${currentUnit}`;
       selectedParkCategory = 'all';
-      document.querySelectorAll('.park-cat-btn').forEach(b => {
-        b.classList.toggle('active', b.getAttribute('data-cat') === 'all');
-      });
+      document.querySelectorAll('.park-cat-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-cat') === 'all'));
       reinitAllFilters();
       filterRides();
     });
@@ -1938,13 +1787,10 @@
     toggleDropdown('parkBtn', 'parkDropdown');
     toggleDropdown('typeBtn', 'typeDropdown');
     toggleDropdown('sensoryBtn', 'sensoryDropdown');
-
     document.addEventListener('click', closeDropdowns);
-
-    document.getElementById('countryDropdown').addEventListener('click', e => e.stopPropagation());
-    document.getElementById('parkDropdown').addEventListener('click', e => e.stopPropagation());
-    document.getElementById('typeDropdown').addEventListener('click', e => e.stopPropagation());
-    document.getElementById('sensoryDropdown').addEventListener('click', e => e.stopPropagation());
+    ['countryDropdown', 'parkDropdown', 'typeDropdown', 'sensoryDropdown'].forEach(id => {
+      document.getElementById(id).addEventListener('click', e => e.stopPropagation());
+    });
 
     document.getElementById('selectAllCountries').addEventListener('click', () => {
       document.querySelectorAll('.country-cb').forEach(cb => cb.checked = true);
@@ -1953,7 +1799,6 @@
       initTypeFilter();
       filterRides();
     });
-
     document.getElementById('deselectAllCountries').addEventListener('click', () => {
       document.querySelectorAll('.country-cb').forEach(cb => cb.checked = false);
       updateCountrySelections();
@@ -1961,57 +1806,45 @@
       initTypeFilter();
       filterRides();
     });
-
     document.getElementById('selectAllParks').addEventListener('click', () => {
       document.querySelectorAll('.park-cb').forEach(cb => cb.checked = true);
       updateParkSelections();
       initTypeFilter();
       filterRides();
     });
-
     document.getElementById('deselectAllParks').addEventListener('click', () => {
       document.querySelectorAll('.park-cb').forEach(cb => cb.checked = false);
       updateParkSelections();
       initTypeFilter();
       filterRides();
     });
-
     document.getElementById('selectDisneyParks').addEventListener('click', () => {
-      document.querySelectorAll('.park-cb').forEach(cb => {
-        cb.checked = isDisneyPark(cb.value);
-      });
+      document.querySelectorAll('.park-cb').forEach(cb => { cb.checked = isDisneyPark(cb.value); });
       updateParkSelections();
       initTypeFilter();
       filterRides();
     });
-
     document.getElementById('selectUniversalParks').addEventListener('click', () => {
-      document.querySelectorAll('.park-cb').forEach(cb => {
-        cb.checked = isUniversalPark(cb.value);
-      });
+      document.querySelectorAll('.park-cb').forEach(cb => { cb.checked = isUniversalPark(cb.value); });
       updateParkSelections();
       initTypeFilter();
       filterRides();
     });
-
     document.getElementById('selectAllTypes').addEventListener('click', () => {
       document.querySelectorAll('.type-cb').forEach(cb => cb.checked = true);
       updateTypeSelections();
       filterRides();
     });
-
     document.getElementById('deselectAllTypes').addEventListener('click', () => {
       document.querySelectorAll('.type-cb').forEach(cb => cb.checked = false);
       updateTypeSelections();
       filterRides();
     });
-
     document.getElementById('selectAllSensory').addEventListener('click', () => {
       document.querySelectorAll('.sensory-cb').forEach(cb => cb.checked = true);
       updateSensorySelections();
       filterRides();
     });
-
     document.getElementById('deselectAllSensory').addEventListener('click', () => {
       document.querySelectorAll('.sensory-cb').forEach(cb => cb.checked = false);
       updateSensorySelections();
@@ -2021,12 +1854,10 @@
     function updateSliderConfig() {
       const slider = document.getElementById('heightSlider');
       if (currentUnit === 'cm') {
-        slider.min = 80;
-        slider.max = 200;
+        slider.min = 80; slider.max = 200;
         if (slider.value < 80 || slider.value > 200) slider.value = 200;
       } else {
-        slider.min = 30;
-        slider.max = 80;
+        slider.min = 30; slider.max = 80;
         if (slider.value < 30 || slider.value > 80) slider.value = 80;
       }
       document.getElementById('heightValue').textContent = `${slider.value} ${currentUnit}`;
@@ -2035,37 +1866,26 @@
     function renderActivePills() {
       const container = document.getElementById('pillsContainer');
       const pills = [];
-
       const searchVal = document.getElementById('searchInput').value.trim();
-      if (searchVal) {
-        pills.push({ label: `Search: "${searchVal}"`, clear: () => { document.getElementById('searchInput').value = ''; filterRides(); } });
-      }
-
-      if (selectedParkCategory === 'theme') {
-        pills.push({ label: 'Theme Parks Only', clear: () => { document.querySelector('.park-cat-btn[data-cat="all"]').click(); } });
-      } else if (selectedParkCategory === 'water') {
-        pills.push({ label: 'Water Parks Only', clear: () => { document.querySelector('.park-cat-btn[data-cat="all"]').click(); } });
-      }
+      if (searchVal) pills.push({ label: `Search: "${searchVal}"`, clear: () => { document.getElementById('searchInput').value = ''; filterRides(); } });
+      if (selectedParkCategory === 'theme') pills.push({ label: 'Theme Parks Only', clear: () => { document.querySelector('.park-cat-btn[data-cat="all"]').click(); } });
+      else if (selectedParkCategory === 'water') pills.push({ label: 'Water Parks Only', clear: () => { document.querySelector('.park-cat-btn[data-cat="all"]').click(); } });
 
       const totalCountries = document.querySelectorAll('.country-cb').length;
       if (selectedCountries.length > 0 && selectedCountries.length < totalCountries) {
         pills.push({ label: `Countries: ${selectedCountries.length}`, clear: () => { document.getElementById('selectAllCountries').click(); } });
       }
-
       const totalParks = document.querySelectorAll('.park-cb').length;
       if (selectedParks.length > 0 && selectedParks.length < totalParks) {
         pills.push({ label: `Parks: ${selectedParks.length}`, clear: () => { document.getElementById('selectAllParks').click(); } });
       }
-
       const totalTypes = document.querySelectorAll('.type-cb').length;
       if (selectedTypes.length > 0 && selectedTypes.length < totalTypes) {
         pills.push({ label: `Types: ${selectedTypes.length}`, clear: () => { document.getElementById('selectAllTypes').click(); } });
       }
-
       if (selectedSensory.length > 0 && selectedSensory.length < SENSORY_TAGS.length) {
         pills.push({ label: `Sensory: ${selectedSensory.length}`, clear: () => { document.getElementById('selectAllSensory').click(); } });
       }
-
       const slider = document.getElementById('heightSlider');
       if (Number(slider.value) < Number(slider.max)) {
         pills.push({ label: `Max Height: ${slider.value}${currentUnit}`, clear: () => { slider.value = slider.max; document.getElementById('heightValue').textContent = `${slider.value} ${currentUnit}`; filterRides(); } });
@@ -2077,10 +1897,7 @@
           <span class="pill-remove" data-pill="${idx}">✕</span>
         </span>
       `).join('');
-
-      container.querySelectorAll('.pill-remove').forEach((btn, idx) => {
-        btn.addEventListener('click', () => pills[idx].clear());
-      });
+      container.querySelectorAll('.pill-remove').forEach((btn, idx) => { btn.addEventListener('click', () => pills[idx].clear()); });
     }
 
     function sortRides(rides) {
@@ -2112,16 +1929,14 @@
       });
     }
 
-    function toggleTileExpansion(wrapperEl) {
-      wrapperEl.classList.toggle('tile-expanded');
-    }
+    function toggleTileExpansion(wrapperEl) { wrapperEl.classList.toggle('tile-expanded'); }
 
     function renderRidesBatch() {
       const grid = document.getElementById('rideGrid');
       const shownCount = Math.min(displayedCount, currentFilteredRides.length);
       const totalCount = currentBaseRides.length;
-
       const counterEl = document.getElementById('rideCounter');
+
       if (window.innerWidth <= 640) {
         counterEl.innerHTML = `<span class="line-1">Showing</span><span class="line-2">${shownCount} of ${totalCount} rides</span>`;
       } else {
@@ -2136,7 +1951,6 @@
         return;
       }
 
-      // Render Single-Column Slim View (Direct Park Grouping, No Country Wrapper)
       if (viewMode === 'slim') {
         const ridesByPark = {};
         currentFilteredRides.forEach(r => {
@@ -2145,9 +1959,7 @@
           ridesByPark[p].push(r);
         });
 
-        const sortedParkNames = Object.keys(ridesByPark).sort();
-
-        grid.innerHTML = sortedParkNames.map(parkName => {
+        grid.innerHTML = Object.keys(ridesByPark).sort().map(parkName => {
           const parkRides = ridesByPark[parkName];
           const displayPark = getDisplayParkName(parkName);
           const faviconHtml = getFaviconHtml(parkName);
@@ -2185,9 +1997,7 @@
               <div class="slim-ride-wrapper ${isFav ? 'favourited' : ''}">
                 <div class="slim-ride-row" onclick="toggleTileExpansion(this.parentElement)">
                   <div class="slim-ride-details">
-                    <button class="fav-btn ${isFav ? 'active' : ''}" type="button" onclick="toggleFavourite(event, '${rideKey}')" style="font-size: 1.2rem;" title="Favourite">
-                      ${isFav ? '★' : '☆'}
-                    </button>
+                    <button class="fav-btn ${isFav ? 'active' : ''}" type="button" onclick="toggleFavourite(event, '${rideKey}')" style="font-size: 1.2rem;" title="Favourite">${isFav ? '★' : '☆'}</button>
                     <span class="slim-ride-name">${r.ride}</span>
                     ${showPassIcon ? `<a href="${passUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="text-decoration:none;" title="Queue Pass: ${queuePassVal}">⏩</a>` : ''}
                     ${liveBadgeHtml}
@@ -2198,8 +2008,6 @@
                     <span class="slim-expand-icon">▼</span>
                   </div>
                 </div>
-
-                <!-- Expandable Details Drawer with Small Thumbnail -->
                 <div class="slim-ride-drawer">
                   <div class="slim-drawer-body">
                     <div class="slim-drawer-info">
@@ -2211,16 +2019,9 @@
                     </div>
                     ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.ride}" class="slim-ride-thumb" loading="lazy" decoding="async" onerror="this.style.display='none'">` : ''}
                   </div>
-                  
                   <div class="card-actions" style="margin-top: 0.5rem;">
-                    <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link" onclick="event.stopPropagation();">
-                      <span class="pov-symbol">▶</span> POV
-                    </a>
-                    ${showPassIcon ? `
-                      <a href="${passUrl}" target="_blank" rel="noopener" class="queue-pass-badge" data-pass="${queuePassVal}" onclick="event.stopPropagation();">
-                        ⏩ Pass
-                      </a>
-                    ` : ''}
+                    <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link" onclick="event.stopPropagation();"><span class="pov-symbol">▶</span> POV</a>
+                    ${showPassIcon ? `<a href="${passUrl}" target="_blank" rel="noopener" class="queue-pass-badge" data-pass="${queuePassVal}" onclick="event.stopPropagation();">⏩ Pass</a>` : ''}
                   </div>
                 </div>
               </div>
@@ -2237,19 +2038,14 @@
                 </div>
                 <span class="park-group-count">${parkRides.length} rides ▼</span>
               </div>
-              <div class="park-group-content">
-                ${rideRowsHtml}
-              </div>
+              <div class="park-group-content">${rideRowsHtml}</div>
             </div>
           `;
         }).join('');
         return;
       }
 
-      // Render Grid or Compact View
-      const ridesToRender = currentFilteredRides.slice(0, displayedCount);
-
-      grid.innerHTML = ridesToRender.map(r => {
+      grid.innerHTML = currentFilteredRides.slice(0, displayedCount).map(r => {
         const rideKey = getRideKey(r);
         const isFav = favourites.includes(rideKey);
         const displayPark = getDisplayParkName(r.park);
@@ -2258,17 +2054,10 @@
         const passUrl = getPriorityPassUrl(r.park, r.passUrl || r.queuePassUrl);
 
         let heightStr = 'None';
-        if (r.minHeightCm && r.minHeightInch) {
-          heightStr = `${r.minHeightCm} cm (${r.minHeightInch}")`;
-        } else if (r.minHeightCm) {
-          heightStr = `${r.minHeightCm} cm`;
-        }
+        if (r.minHeightCm && r.minHeightInch) heightStr = `${r.minHeightCm} cm (${r.minHeightInch}")`;
+        else if (r.minHeightCm) heightStr = `${r.minHeightCm} cm`;
 
-        const titleHtml = r.rideUrl 
-          ? `<a href="${r.rideUrl}" target="_blank" rel="noopener">${r.ride}</a>` 
-          : r.ride;
-
-        const rideTargetUrl = r.rideUrl || '#';
+        const titleHtml = r.rideUrl ? `<a href="${r.rideUrl}" target="_blank" rel="noopener">${r.ride}</a>` : r.ride;
         const povUrl = getPovVideoUrl(r.park, r.ride);
         const faviconHtml = getFaviconHtml(r.park);
         const sensoryClass = calculateSensorySeverityClass(r.sensory);
@@ -2276,7 +2065,6 @@
         let liveBadgeHtml = '';
         if (showLiveWaitTimes) {
           const liveInfo = getLiveInfoForRide(r);
-          
           if (liveInfo) {
             if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
               let badgeClass = 'wait-short';
@@ -2312,13 +2100,11 @@
               ${liveBadgeHtml}
               ${r.details ? `<p class="details">${r.details}</p>` : ''}
             </div>
-
             ${r.imageUrl ? `
-              <a href="${rideTargetUrl}" target="_blank" rel="noopener" class="ride-thumb-link" title="Open ${r.ride} official page">
+              <a href="${r.rideUrl || '#'}" target="_blank" rel="noopener" class="ride-thumb-link" title="Open official page">
                 <img src="${r.imageUrl}" alt="${r.ride}" class="ride-thumb" loading="lazy" decoding="async" onerror="this.parentElement.style.display='none'">
               </a>
             ` : ''}
-
             <div class="card-meta">
               <div class="meta-list">
                 ${r.location ? `<div class="meta-item"><span class="meta-label">Area:</span> <strong>${r.location}</strong></div>` : ''}
@@ -2327,16 +2113,9 @@
               </div>
               ${r.sensory ? `<div class="sensory-box ${sensoryClass}"><strong>Sensory:</strong> ${r.sensory}</div>` : ''}
             </div>
-
             <div class="card-actions">
-              <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link">
-                <span class="pov-symbol">▶</span> POV
-              </a>
-              ${showPassIcon ? `
-                <a href="${passUrl}" target="_blank" rel="noopener" class="queue-pass-badge" data-pass="${queuePassVal}">
-                  ⏩ Pass
-                </a>
-              ` : ''}
+              <a href="${povUrl}" target="_blank" rel="noopener" class="pov-link"><span class="pov-symbol">▶</span> POV</a>
+              ${showPassIcon ? `<a href="${passUrl}" target="_blank" rel="noopener" class="queue-pass-badge" data-pass="${queuePassVal}">⏩ Pass</a>` : ''}
             </div>
           </div>
         `;
@@ -2355,36 +2134,25 @@
 
     function filterRides() {
       if (currentView === 'park-info') return;
-
       const rawSearch = document.getElementById('searchInput').value;
       const searchNormalized = normalizeText(rawSearch);
       const maxHeight = Number(document.getElementById('heightSlider').value);
-
       const dataset = getActiveDataset();
 
-      // Step 1: Base rides filtered ONLY by selected countries and parks and park category (Theme/Water)
       currentBaseRides = dataset.filter(r => {
         if (selectedParkCategory === 'theme' && isWaterPark(r.park)) return false;
         if (selectedParkCategory === 'water' && !isWaterPark(r.park)) return false;
-
-        const matchesCountry = selectedCountries.includes(r.country);
-        const matchesPark = selectedParks.includes(r.park);
-        return matchesCountry && matchesPark;
+        return selectedCountries.includes(r.country) && selectedParks.includes(r.park);
       });
 
-      // Step 2: Fully filtered rides (incorporating search, ride types, sensory tags, and height slider)
       const filtered = currentBaseRides.filter(r => {
         const matchesSearch = !searchNormalized || r._searchNorm.includes(searchNormalized);
         const matchesType = selectedTypes.includes(r.type);
         const matchesSensory = rideMatchesSensory(r.sensory);
-        
         const rideHeight = currentUnit === 'cm' 
           ? (r.minHeightCm !== undefined && r.minHeightCm !== null && r.minHeightCm !== '' ? Number(r.minHeightCm) : 0)
           : (r.minHeightInch !== undefined && r.minHeightInch !== null && r.minHeightInch !== '' ? Number(r.minHeightInch) : 0);
-          
-        const matchesHeight = rideHeight <= maxHeight;
-
-        return matchesSearch && matchesType && matchesSensory && matchesHeight;
+        return matchesSearch && matchesType && matchesSensory && (rideHeight <= maxHeight);
       });
 
       currentFilteredRides = sortRides(filtered);
@@ -2393,17 +2161,12 @@
       renderRidesBatch();
     }
 
-    document.getElementById('searchInput').addEventListener('input', () => {
-      filterRides();
-    });
-
+    document.getElementById('searchInput').addEventListener('input', filterRides);
     document.getElementById('sortSelect').addEventListener('change', filterRides);
-
     document.getElementById('heightSlider').addEventListener('input', (e) => {
       document.getElementById('heightValue').textContent = `${e.target.value} ${currentUnit}`;
       filterRides();
     });
-
     document.getElementById('unitCm').addEventListener('click', () => {
       if (currentUnit === 'cm') return;
       currentUnit = 'cm';
@@ -2412,7 +2175,6 @@
       updateSliderConfig();
       filterRides();
     });
-
     document.getElementById('unitInch').addEventListener('click', () => {
       if (currentUnit === 'inch') return;
       currentUnit = 'inch';
