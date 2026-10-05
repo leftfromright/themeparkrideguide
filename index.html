@@ -494,14 +494,14 @@
   <!-- Debug Console Drawer -->
   <div class="debug-console" id="debugConsole">
     <div class="debug-header">
-      <span>🐛 Live API Debug Console (v99)</span>
+      <span>🐛 Live API Debug Console (v100)</span>
       <button class="debug-close" id="closeDebugBtn">✕</button>
     </div>
     <div id="debugLogContent"></div>
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v99</div>
+    <div class="version-badge" id="versionBadgeBtn">v100</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -666,7 +666,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v99';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v100';
 
     let debugModeActive = false;
     function logDebug(message, type = 'info') {
@@ -727,9 +727,11 @@
       'legoland windsor': '7c48a21b-221c-42f8-8339-6334c5f2fb12',
       'thorpe park': '6f9c3c13-8b74-4b47-b73a-4efb7189a05b',
       'magic kingdom': '75ea578a-adc8-4116-a54d-dccb60765ef9',
+      'magic kingdom park': '75ea578a-adc8-4116-a54d-dccb60765ef9',
       'epcot': '438d0111-adc6-4d04-b9c1-8b01267b1407',
       'animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
       'disney\'s animal kingdom': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
+      'disney\'s animal kingdom theme park': '8d6722d6-b51c-4235-96be-a7c8cfb9a0ce',
       'hollywood studios': '284dc8cb-ed80-49ae-9e7d-afa964d4f828',
       'disney\'s hollywood studios': '284dc8cb-ed80-49ae-9e7d-afa964d4f828',
       'disneyland park': 'da40d870-f8f8-4034-8be0-b5bf46f7f637',
@@ -1102,7 +1104,7 @@
         let wikiId = THEME_PARKS_WIKI_IDS[parkName];
         if (!wikiId) {
           for (const [key, id] of Object.entries(THEME_PARKS_WIKI_IDS)) {
-            if (parkName.includes(key)) { wikiId = id; break; }
+            if (parkName.includes(key) || key.includes(parkName)) { wikiId = id; break; }
           }
         }
         if (!wikiId) {
@@ -1184,6 +1186,12 @@
       const nameKey = `${normPark}_${normalizeText(r.ride)}`;
       if (liveWaitNameMap[nameKey]) {
         return liveWaitNameMap[nameKey];
+      }
+      // Fallback: search partial keys if exact match misses
+      for (const [key, val] of Object.entries(liveWaitNameMap)) {
+        if (key.startsWith(normPark) && key.includes(normalizeText(r.ride))) {
+          return val;
+        }
       }
       return null;
     }
