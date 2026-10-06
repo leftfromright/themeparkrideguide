@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Theme Park API Inspector & Unknown Resolver</title>
+  <title>Theme Park API Inspector & Problem Resolver</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
   <style>
     [data-theme="dark"] {
@@ -42,23 +42,28 @@
     
     header { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); flex-wrap: wrap; gap: 1rem; }
     header h1 { font-size: 1.5rem; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
-    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .header-actions { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
 
     .btn { background: var(--accent); color: #ffffff; border: none; padding: 0.6rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: opacity 0.2s ease, transform 0.1s ease; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; }
     .btn:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn-secondary { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); }
     .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-warning { background: var(--warning); color: #000000; }
 
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 1rem; }
-    .card h2 { font-size: 1.2rem; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
+    .card h2 { font-size: 1.2rem; color: var(--text); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
 
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
     .stat-box { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
     .stat-label { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--muted); }
     .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
 
-    .controls-row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
-    input[type="text"] { flex: 1; padding: 0.6rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; }
+    .controls-row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: space-between; }
+    .filter-group { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .filter-tab { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+    .filter-tab.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+    
+    input[type="text"] { flex: 1; min-width: 200px; padding: 0.5rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; }
     input[type="text"]:focus { border-color: var(--accent); }
 
     table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 0.5rem; }
@@ -67,11 +72,10 @@
     tr:hover { background: var(--badge-bg); }
 
     .badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
-    .badge-operating { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.3); }
-    .badge-unknown { background: rgba(249, 115, 22, 0.15); color: var(--warning); border: 1px solid rgba(249, 115, 22, 0.3); }
-    .badge-closed { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-working { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.3); }
+    .badge-problem { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
 
-    .log-box { background: #090d16; color: #38bdf8; font-family: monospace; font-size: 0.8rem; padding: 1rem; border-radius: 8px; max-height: 250px; overflow-y: auto; border: 1px solid var(--border); }
+    .log-box { background: #090d16; color: #38bdf8; font-family: monospace; font-size: 0.8rem; padding: 1rem; border-radius: 8px; max-height: 300px; overflow-y: auto; border: 1px solid var(--border); }
     .log-line { margin-bottom: 0.25rem; white-space: pre-wrap; word-break: break-all; }
     .log-line.error { color: #fca5a5; }
     .log-line.success { color: #4ade80; }
@@ -82,9 +86,10 @@
 
   <div class="container">
     <header>
-      <h1><span>🔍</span> Theme Park API Inspector & Resolver</h1>
+      <h1><span>🔍</span> API Inspector & Problem Resolver</h1>
       <div class="header-actions">
         <a href="index.html" class="btn btn-secondary">← Back to Guide</a>
+        <button class="btn btn-warning" id="auditProblemsBtn">⚡ Audit Problems Only</button>
         <button class="btn" id="runAuditBtn">▶ Run Full Ride Audit</button>
       </div>
     </header>
@@ -97,16 +102,12 @@
           <span class="stat-value" id="statTotal">0</span>
         </div>
         <div class="stat-box">
-          <span class="stat-label">Successfully Resolved</span>
-          <span class="stat-value" id="statResolved" style="color: var(--success);">0</span>
+          <span class="stat-label">Working (Resolved)</span>
+          <span class="stat-value" id="statWorking" style="color: var(--success);">0</span>
         </div>
         <div class="stat-box">
-          <span class="stat-label">Unknown / Mismatched</span>
-          <span class="stat-value" id="statUnknown" style="color: var(--warning);">0</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-label">Closed / Refurb</span>
-          <span class="stat-value" id="statClosed" style="color: var(--danger);">0</span>
+          <span class="stat-label">Problem (Unknown / Unmatched)</span>
+          <span class="stat-value" id="statProblem" style="color: var(--danger);">0</span>
         </div>
       </div>
     </div>
@@ -114,7 +115,12 @@
     <div class="card">
       <div class="controls-row">
         <h2>Live Audit Results</h2>
-        <input type="text" id="filterAuditInput" placeholder="Filter audit results by ride name or park...">
+        <div class="filter-group">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="working">Working</button>
+          <button class="filter-tab" data-filter="problem">Problem</button>
+        </div>
+        <input type="text" id="filterAuditInput" placeholder="Filter results...">
       </div>
       <div style="overflow-x: auto;">
         <table>
@@ -123,13 +129,13 @@
               <th>Park</th>
               <th>Ride Name</th>
               <th>Wiki ID</th>
-              <th>API Status</th>
-              <th>Wait Time / Showtime</th>
-              <th>Resolution Action</th>
+              <th>Classification</th>
+              <th>API Status / Wait</th>
+              <th>Resolution / Details</th>
             </tr>
           </thead>
           <tbody id="auditTableBody">
-            <tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">Click "Run Full Ride Audit" to test live API mappings and resolve unknown states.</td></tr>
+            <tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">Click "Run Full Ride Audit" to test live API mappings.</td></tr>
           </tbody>
         </table>
       </div>
@@ -138,7 +144,7 @@
     <div class="card">
       <h2>Diagnostic Console</h2>
       <div class="log-box" id="diagnosticLogs">
-        <div class="log-line">Inspector loaded. Ready to audit catalogue against ThemeParks.wiki API.</div>
+        <div class="log-line">Inspector ready. Click 'Audit Problems Only' to inspect unmatched rides and extract logs.</div>
       </div>
     </div>
   </div>
@@ -157,6 +163,8 @@
       'typhoon lagoon': 'b070cbc5-feaa-4b87-a8c1-f94cca037a18',
       'disneyland park': 'dae968d5-630d-4719-8b06-3d107e944401',
       'disney california adventure': '832fcd51-ea19-4e77-85c7-75d5843b127c',
+      'tokyo disneyland': '3cc919f1-d16d-43e0-8c3f-1dd269bd1a42',
+      'tokyo disneysea': '67b290d5-3478-4f23-b601-2f8fb71ba803',
       'universal studios florida': 'eb3f4560-2383-4a36-9152-6b3e5ed6bc57',
       'islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal\'s islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
@@ -187,19 +195,20 @@
     }
 
     let auditResults = [];
+    let currentCategoryFilter = 'all';
 
-    async function runAudit() {
-      const btn = document.getElementById('runAuditBtn');
-      btn.textContent = 'Auditing Live Endpoints...';
+    async function runAudit(problemsOnly = false) {
+      const btn = problemsOnly ? document.getElementById('auditProblemsBtn') : document.getElementById('runAuditBtn');
+      const originalText = btn.textContent;
+      btn.textContent = problemsOnly ? 'Inspecting Problems...' : 'Auditing All Rides...';
       btn.disabled = true;
-      document.getElementById('auditTableBody').innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">Fetching catalogue and querying live ThemeParks.wiki endpoints...</td></tr>`;
+
+      logMessage(problemsOnly ? 'Starting targeted audit on Problem entries...' : 'Starting full catalogue audit...', 'info');
       
-      logMessage('Fetching ride catalogue from Google Sheets API...', 'info');
       try {
         const res = await fetch(API_URL);
         const rides = await res.json();
-        logMessage(`Loaded ${rides.length} rides from catalogue. Mapping park live feeds...`, 'success');
-
+        
         const uniqueParks = [...new Set(rides.map(r => r.park.toLowerCase().trim()))];
         const parkLiveCache = {};
 
@@ -216,7 +225,6 @@
           }
           if (wikiId) {
             try {
-              logMessage(`Querying live feed for park: "${parkName}" (${wikiId})`, 'info');
               const liveRes = await fetch(`https://api.themeparks.wiki/v1/entity/${wikiId}/live`);
               const liveData = await liveRes.json();
               parkLiveCache[parkName] = { 
@@ -224,19 +232,16 @@
                 items: liveData.liveData || liveData.live || [] 
               };
             } catch (e) {
-              logMessage(`Failed to fetch live feed for ${parkName}: ${e.message}`, 'error');
               parkLiveCache[parkName] = { unavailable: true, items: [] };
             }
           } else {
-            logMessage(`No Wiki ID found mapped for park: "${parkName}"`, 'warning');
             parkLiveCache[parkName] = { unavailable: true, items: [] };
           }
         }
 
-        auditResults = [];
-        let statResolved = 0;
-        let statUnknown = 0;
-        let statClosed = 0;
+        if (!problemsOnly) auditResults = [];
+        let statWorking = 0;
+        let statProblem = 0;
 
         for (const r of rides) {
           const parkNorm = r.park.toLowerCase().trim();
@@ -244,123 +249,148 @@
           const rideUuid = String(r.themeParkWikiRideID || r.ThemeParkWikiRideID || '').trim().toLowerCase();
           const rideNameNorm = normalizeText(r.ride);
 
+          // If problemsOnly is active, skip rides that were already determined to be Working
+          if (problemsOnly) {
+            const existing = auditResults.find(item => item.park === r.park && item.ride === r.ride);
+            if (existing && existing.classification === 'Working') {
+              statWorking++;
+              continue;
+            }
+          }
+
           let matchedItem = null;
           let resolutionAction = 'Direct ID Match';
 
           if (cache && cache.unavailable) {
-            auditResults.push({
+            const probEntry = {
               park: r.park,
               ride: r.ride,
               uuid: rideUuid || 'None',
+              classification: 'Problem',
               status: 'UNAVAILABLE',
-              detail: 'Explicitly marked unavailable (e.g. Drayton Manor)',
-              action: 'Default Fallback (Not Available)'
-            });
-            statUnknown++;
+              detail: 'Park explicitly flagged unavailable (e.g. Drayton Manor)'
+            };
+            if (problemsOnly) {
+              const idx = auditResults.findIndex(i => i.park === r.park && i.ride === r.ride);
+              if (idx >= 0) auditResults[idx] = probEntry; else auditResults.push(probEntry);
+              logMessage(`[PROBLEM] Park: ${r.park} | Ride: ${r.ride} | Reason: Park feed unavailable/skipped`, 'warning');
+            } else {
+              auditResults.push(probEntry);
+            }
+            statProblem++;
             continue;
           }
 
           if (cache && cache.items) {
-            if (rideUuid) {
-              matchedItem = cache.items.find(i => String(i.id).trim().toLowerCase() === rideUuid);
-            }
+            if (rideUuid) matchedItem = cache.items.find(i => String(i.id).trim().toLowerCase() === rideUuid);
             if (!matchedItem) {
               matchedItem = cache.items.find(i => i.name && normalizeText(i.name) === rideNameNorm);
               if (matchedItem) resolutionAction = 'Fuzzy Name Match';
             }
             if (!matchedItem) {
-              matchedItem = cache.items.find(i => i.name && normalizeText(i.name).includes(rideNameNorm) || rideNameNorm.includes(normalizeText(i.name)));
-              if (matchedItem) resolutionAction = 'Sub-string Match Resolved';
+              matchedItem = cache.items.find(i => i.name && (normalizeText(i.name).includes(rideNameNorm) || rideNameNorm.includes(normalizeText(i.name))));
+              if (matchedItem) resolutionAction = 'Substring Match';
             }
           }
 
           if (matchedItem) {
             const status = matchedItem.status || 'OPERATING';
-            let wait = null;
-            if (matchedItem.queue) {
-              if (matchedItem.queue.STANDBY && matchedItem.queue.STANDBY.waitTime !== undefined) {
-                wait = matchedItem.queue.STANDBY.waitTime;
-              } else if (matchedItem.queue.waitTime !== undefined) {
-                wait = matchedItem.queue.waitTime;
-              }
-            }
-            if (status === 'OPERATING' || wait !== null) {
-              statResolved++;
-            } else {
-              statClosed++;
-            }
-            auditResults.push({
+            let wait = matchedItem.queue?.STANDBY?.waitTime ?? matchedItem.queue?.waitTime ?? null;
+            
+            const workEntry = {
               park: r.park,
               ride: r.ride,
               uuid: matchedItem.id || rideUuid,
+              classification: 'Working',
               status: status,
-              detail: wait !== null ? `${wait} min wait` : (matchedItem.showtimes ? 'Showtimes Available' : status),
-              action: resolutionAction
-            });
+              detail: wait !== null ? `${wait}m wait (${resolutionAction})` : `Showtime/Status: ${status} (${resolutionAction})`
+            };
+            if (problemsOnly) {
+              const idx = auditResults.findIndex(i => i.park === r.park && i.ride === r.ride);
+              if (idx >= 0) auditResults[idx] = workEntry;
+            } else {
+              auditResults.push(workEntry);
+            }
+            statWorking++;
           } else {
-            statUnknown++;
-            auditResults.push({
+            const probEntry = {
               park: r.park,
               ride: r.ride,
               uuid: rideUuid || 'Missing',
+              classification: 'Problem',
               status: 'UNKNOWN',
-              detail: 'Not found in park live feed payload',
-              action: 'Resolved via schedule/showtime fallback'
-            });
+              detail: 'Not found in park live feed payload'
+            };
+            if (problemsOnly) {
+              const idx = auditResults.findIndex(i => i.park === r.park && i.ride === r.ride);
+              if (idx >= 0) auditResults[idx] = probEntry; else auditResults.push(probEntry);
+              logMessage(`[PROBLEM] Park: ${r.park} | Ride: ${r.ride} | UUID: ${rideUuid} | Reason: Missing from live API array`, 'error');
+            } else {
+              auditResults.push(probEntry);
+            }
+            statProblem++;
           }
         }
 
         document.getElementById('statTotal').textContent = rides.length;
-        document.getElementById('statResolved').textContent = statResolved;
-        document.getElementById('statUnknown').textContent = statUnknown;
-        document.getElementById('statClosed').textContent = statClosed;
+        document.getElementById('statWorking').textContent = auditResults.filter(i => i.classification === 'Working').length;
+        document.getElementById('statProblem').textContent = auditResults.filter(i => i.classification === 'Problem').length;
 
         renderAuditTable(auditResults);
-        logMessage('Audit completed successfully across all catalogue records.', 'success');
+        logMessage(problemsOnly ? 'Targeted problem inspection finished. Logs captured above.' : 'Full audit completed.', 'success');
 
       } catch (err) {
-        logMessage(`Audit failed: ${err.message}`, 'error');
-        document.getElementById('auditTableBody').innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--danger); padding: 2rem;">Error running audit: ${err.message}</td></tr>`;
+        logMessage(`Audit error: ${err.message}`, 'error');
       } finally {
-        btn.textContent = '▶ Run Full Ride Audit';
+        btn.textContent = originalText;
         btn.disabled = false;
       }
     }
 
     function renderAuditTable(results) {
       const tbody = document.getElementById('auditTableBody');
-      const filterVal = normalizeText(document.getElementById('filterAuditInput').value);
+      const searchVal = normalizeText(document.getElementById('filterAuditInput').value);
 
       const filtered = results.filter(row => {
-        if (!filterVal) return true;
-        return normalizeText(`${row.park} ${row.ride} ${row.status}`).includes(filterVal);
+        if (currentCategoryFilter !== 'all' && row.classification.toLowerCase() !== currentCategoryFilter) return false;
+        if (!searchVal) return true;
+        return normalizeText(`${row.park} ${row.ride} ${row.status} ${row.detail}`).includes(searchVal);
       });
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">No matching audit records found.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">No matching audit records found for current filter.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = filtered.map(row => {
-        let badgeClass = 'badge-operating';
-        if (row.status === 'UNKNOWN' || row.status === 'UNAVAILABLE') badgeClass = 'badge-unknown';
-        else if (row.status === 'CLOSED' || row.status === 'REFURBISHMENT') badgeClass = 'badge-closed';
+        const isWorking = row.classification === 'Working';
+        const badgeClass = isWorking ? 'badge-working' : 'badge-problem';
 
         return `
           <tr>
             <td><strong>${row.park}</strong></td>
             <td>${row.ride}</td>
             <td style="font-family: monospace; font-size: 0.75rem; color: var(--muted);">${row.uuid}</td>
-            <td><span class="badge ${badgeClass}">${row.status}</span></td>
-            <td>${row.detail}</td>
-            <td style="color: var(--accent); font-size: 0.82rem; font-weight: 600;">${row.action}</td>
+            <td><span class="badge ${badgeClass}">${row.classification}</span></td>
+            <td>${row.status}</td>
+            <td style="font-size: 0.85rem;">${row.detail}</td>
           </tr>
         `;
       }).join('');
     }
 
-    document.getElementById('runAuditBtn').addEventListener('click', runAudit);
+    document.getElementById('runAuditBtn').addEventListener('click', () => runAudit(false));
+    document.getElementById('auditProblemsBtn').addEventListener('click', () => runAudit(true));
     document.getElementById('filterAuditInput').addEventListener('input', () => renderAuditTable(auditResults));
+
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        e.target.classList.add('active');
+        currentCategoryFilter = e.target.getAttribute('data-filter');
+        renderAuditTable(auditResults);
+      });
+    });
   </script>
 </body>
 </html>
