@@ -204,8 +204,9 @@
     .live-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; }
     .live-toggle-btn.active { background: rgba(34, 197, 94, 0.15); color: #22c55e; border-color: #22c55e; }
 
-    .debug-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .debug-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; }
     .debug-toggle-btn.active { background: rgba(245, 158, 11, 0.15); color: var(--star-active); border-color: var(--star-active); }
+    .debug-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .pills-container { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .filter-pill { background: var(--badge-bg); border: 1px solid var(--border); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 16px; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem; }
@@ -494,14 +495,14 @@
   <!-- Debug Console Drawer -->
   <div class="debug-console" id="debugConsole">
     <div class="debug-header">
-      <span>🐛 Live API Debug Console (v100)</span>
+      <span>🐛 Live API Debug Console (v101)</span>
       <button class="debug-close" id="closeDebugBtn">✕</button>
     </div>
     <div id="debugLogContent"></div>
   </div>
 
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v100</div>
+    <div class="version-badge" id="versionBadgeBtn">v101</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -621,9 +622,15 @@
       <span id="rideCounter">Showing 0 rides</span>
       
       <div class="status-controls-group">
+        <!-- Original Inline Console Debug Toggle Button -->
         <button class="debug-toggle-btn" id="debugToggleBtn" title="Toggle Live API Debug Mode">
           🐛 <span id="debugToggleText">Debug Mode: OFF</span>
         </button>
+
+        <!-- New Dedicated Button linking to debug.html -->
+        <a href="debug.html" class="debug-toggle-btn" id="apiDebuggerBtn" title="Open Standalone API Debugger Page">
+          🔍 API Inspector
+        </a>
 
         <button class="live-toggle-btn" id="liveWaitToggleBtn" title="Toggle Live Wait Times & Showtimes">
           ⚡ <span id="liveToggleText">Show Live Times</span>
@@ -666,7 +673,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v100';
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v101';
 
     let debugModeActive = false;
     function logDebug(message, type = 'info') {
@@ -716,7 +723,7 @@
 
     const WATER_PARK_NAMES = ['blizzard beach', 'typhoon lagoon', 'volcano bay'];
 
-const THEME_PARKS_WIKI_IDS = {
+    const THEME_PARKS_WIKI_IDS = {
       // Walt Disney World Resort Destination (Covers Magic Kingdom, Epcot, Animal Kingdom, Hollywood Studios)
       'magic kingdom': 'e957da41-3552-4cf6-b636-5babc5cbc4e5',
       'magic kingdom park': 'e957da41-3552-4cf6-b636-5babc5cbc4e5',
@@ -1192,7 +1199,6 @@ const THEME_PARKS_WIKI_IDS = {
       if (liveWaitNameMap[nameKey]) {
         return liveWaitNameMap[nameKey];
       }
-      // Fallback: search partial keys if exact match misses
       for (const [key, val] of Object.entries(liveWaitNameMap)) {
         if (key.startsWith(normPark) && key.includes(normalizeText(r.ride))) {
           return val;
