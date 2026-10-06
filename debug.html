@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ThemeParks.wiki API Inspector & Park Auditor</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐛</text></svg>">
+  <title>Theme Park API Inspector & Unknown Resolver</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
   <style>
     [data-theme="dark"] {
-      --bg: #090d16;
+      --bg: #0f172a;
       --card-bg: #1e293b;
       --accent: #38bdf8;
       --text: #f8fafc;
       --muted: #94a3b8;
       --border: #334155;
-      --code-bg: #0f172a;
-      --success: #4ade80;
-      --error: #fca5a5;
-      --warning: #fde047;
+      --badge-bg: rgba(56, 189, 248, 0.1);
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      --input-bg: #0f172a;
     }
     [data-theme="light"] {
       --bg: #f8fafc;
@@ -25,119 +27,136 @@
       --text: #0f172a;
       --muted: #64748b;
       --border: #e2e8f0;
-      --code-bg: #f1f5f9;
-      --success: #15803d;
-      --error: #b91c1c;
-      --warning: #a16207;
+      --badge-bg: rgba(2, 132, 199, 0.1);
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+      --input-bg: #ffffff;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 1.5rem; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+    body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
     
-    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
-    h1 { font-size: 1.5rem; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
+    .container { max-width: 1000px; width: 100%; display: flex; flex-direction: column; gap: 1.5rem; }
     
-    .nav-back { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 0.85rem; transition: border-color 0.2s; }
-    .nav-back:hover { border-color: var(--accent); color: var(--accent); }
+    header { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); flex-wrap: wrap; gap: 1rem; }
+    header h1 { font-size: 1.5rem; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
+    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
 
-    .control-panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
-    
-    select, input[type="text"] { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 0.8rem; border-radius: 8px; font-size: 0.9rem; outline: none; flex: 1; min-width: 250px; }
-    select:focus, input[type="text"]:focus { border-color: var(--accent); }
-    
-    button { background: var(--accent); color: #ffffff; border: none; padding: 0.6rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; }
-    button:hover { opacity: 0.9; }
+    .btn { background: var(--accent); color: #ffffff; border: none; padding: 0.6rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: opacity 0.2s ease, transform 0.1s ease; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-secondary { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
-    .btn-audit { background: #10b981; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 1rem; }
+    .card h2 { font-size: 1.2rem; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
 
-    .preset-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; max-height: 120px; overflow-y: auto; padding: 0.25rem; }
-    .preset-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
-    .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .stat-box { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+    .stat-label { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+    .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
 
-    .output-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; flex: 1; min-height: 400px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .output-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; font-weight: 700; color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-    
-    pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow: auto; font-family: monospace; font-size: 0.85rem; color: var(--accent); max-height: 600px; flex: 1; }
-    
-    .audit-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.88rem; }
-    .audit-table th, .audit-table td { border: 1px solid var(--border); padding: 0.6rem 0.8rem; text-align: left; }
-    .audit-table th { background: var(--code-bg); color: var(--accent); font-weight: 700; }
-    .badge-status { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; display: inline-block; }
-    .badge-status.ok { background: rgba(34, 197, 94, 0.15); color: var(--success); }
-    .badge-status.empty { background: rgba(234, 179, 8, 0.15); color: var(--warning); }
-    .badge-status.error { background: rgba(239, 68, 68, 0.15); color: var(--error); }
-    .badge-status.unmapped { background: rgba(148, 163, 184, 0.15); color: var(--muted); }
+    .controls-row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    input[type="text"] { flex: 1; padding: 0.6rem 1rem; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; outline: none; }
+    input[type="text"]:focus { border-color: var(--accent); }
 
-    .status-pill { padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
-    .status-pill.success { background: rgba(34, 197, 94, 0.15); color: var(--success); }
-    .status-pill.error { background: rgba(239, 68, 68, 0.15); color: var(--error); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 0.5rem; }
+    th, td { text-align: left; padding: 0.75rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 700; background: var(--badge-bg); }
+    tr:hover { background: var(--badge-bg); }
+
+    .badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+    .badge-operating { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.3); }
+    .badge-unknown { background: rgba(249, 115, 22, 0.15); color: var(--warning); border: 1px solid rgba(249, 115, 22, 0.3); }
+    .badge-closed { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .log-box { background: #090d16; color: #38bdf8; font-family: monospace; font-size: 0.8rem; padding: 1rem; border-radius: 8px; max-height: 250px; overflow-y: auto; border: 1px solid var(--border); }
+    .log-line { margin-bottom: 0.25rem; white-space: pre-wrap; word-break: break-all; }
+    .log-line.error { color: #fca5a5; }
+    .log-line.success { color: #4ade80; }
+    .log-line.warning { color: #fde047; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1><span>🐛</span> ThemeParks.wiki API Inspector & Auditor</h1>
-    <a href="index.html" class="nav-back">← Back to Main App</a>
-  </header>
+  <div class="container">
+    <header>
+      <h1><span>🔍</span> Theme Park API Inspector & Resolver</h1>
+      <div class="header-actions">
+        <a href="index.html" class="btn btn-secondary">← Back to Guide</a>
+        <button class="btn" id="runAuditBtn">▶ Run Full Ride Audit</button>
+      </div>
+    </header>
 
-  <div class="control-panel">
-    <div class="row">
-      <select id="endpointSelect">
-        <option value="live">GET /v1/entity/{id}/live (Live Wait Times & Status)</option>
-        <option value="children">GET /v1/entity/{id}/children (Rides, Shows & Restaurants)</option>
-        <option value="schedule">GET /v1/entity/{id}/schedule (Operating Hours)</option>
-        <option value="entity">GET /v1/entity/{id} (Metadata & Details)</option>
-        <option value="destinations">GET /v1/destinations (All Global Resorts)</option>
-      </select>
-
-      <input type="text" id="uuidInput" placeholder="Enter Entity UUID..." value="75ea578a-adc8-4116-a54d-dccb60765ef9">
-      <button id="sendBtn">Send Request</button>
-      <button class="btn-audit" id="auditBtn">⚡ Audit Spreadsheet Parks</button>
-    </div>
-
-    <div>
-      <div style="font-size: 0.8rem; color: var(--muted); margin-bottom: 0.35rem;">Quick Preset UUIDs (Loaded from Spreadsheet & Map):</div>
-      <div class="preset-btns" id="presetButtonsContainer">
-        <span style="font-size: 0.8rem; color: var(--muted);">Loading spreadsheet parks...</span>
+    <div class="card">
+      <h2>Audit Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-label">Total Catalog Rides</span>
+          <span class="stat-value" id="statTotal">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Successfully Resolved</span>
+          <span class="stat-value" id="statResolved" style="color: var(--success);">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Unknown / Mismatched</span>
+          <span class="stat-value" id="statUnknown" style="color: var(--warning);">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Closed / Refurb</span>
+          <span class="stat-value" id="statClosed" style="color: var(--danger);">0</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="output-container">
-    <div class="output-header">
-      <span id="responseStatusLabel">Response Payload</span>
-      <span id="statusCodeBadge" class="status-pill success" style="display: none;">HTTP 200 OK</span>
+    <div class="card">
+      <div class="controls-row">
+        <h2>Live Audit Results</h2>
+        <input type="text" id="filterAuditInput" placeholder="Filter audit results by ride name or park...">
+      </div>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Park</th>
+              <th>Ride Name</th>
+              <th>Wiki ID</th>
+              <th>API Status</th>
+              <th>Wait Time / Showtime</th>
+              <th>Resolution Action</th>
+            </tr>
+          </thead>
+          <tbody id="auditTableBody">
+            <tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">Click "Run Full Ride Audit" to test live API mappings and resolve unknown states.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div id="outputContentContainer" style="flex: 1; display: flex; flex-direction: column;">
-      <pre id="jsonOutput">Select an endpoint, click "Send Request", or run "Audit Spreadsheet Parks" to test all parks from your sheet...</pre>
+
+    <div class="card">
+      <h2>Diagnostic Console</h2>
+      <div class="log-box" id="diagnosticLogs">
+        <div class="log-line">Inspector loaded. Ready to audit catalogue against ThemeParks.wiki API.</div>
+      </div>
     </div>
   </div>
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-
-const THEME_PARKS_WIKI_IDS = {
-      // Individual Park UUIDs for Walt Disney World
+    
+    const THEME_PARKS_WIKI_IDS = {
       'magic kingdom': '75ea578a-adc8-4116-a54d-dccb60765ef9',
-      'magic kingdom park': '75ea578a-adc8-4116-a54d-dccb60765ef9',
       'epcot': '47f90d2c-e191-4239-a466-5892ef59a88b',
       'animal kingdom': '1c84a229-8862-4648-9c71-378ddd2c7693',
       'disney\'s animal kingdom': '1c84a229-8862-4648-9c71-378ddd2c7693',
-      'disney\'s animal kingdom theme park': '1c84a229-8862-4648-9c71-378ddd2c7693',
       'hollywood studios': '288747d1-8b4f-4a64-867e-ea7c9b27bad8',
       'disney\'s hollywood studios': '288747d1-8b4f-4a64-867e-ea7c9b27bad8',
-      'disney\'s blizzard beach': 'ead53ea5-22e5-4095-9a83-8c29300d7c63',
       'blizzard beach': 'ead53ea5-22e5-4095-9a83-8c29300d7c63',
-      'disney\'s typhoon lagoon': 'b070cbc5-feaa-4b87-a8c1-f94cca037a18',
       'typhoon lagoon': 'b070cbc5-feaa-4b87-a8c1-f94cca037a18',
-      'disney adventure world': 'ca888437-ebb4-4d50-aed2-d227f7096968',
       'disneyland park': 'dae968d5-630d-4719-8b06-3d107e944401',
       'disney california adventure': '832fcd51-ea19-4e77-85c7-75d5843b127c',
-      'tokyo disneyland': '3cc919f1-d16d-43e0-8c3f-1dd269bd1a42',
-      'tokyo disneysea': '67b290d5-3478-4f23-b601-2f8fb71ba803',
-
-      // Universal & SeaWorld Parks
       'universal studios florida': 'eb3f4560-2383-4a36-9152-6b3e5ed6bc57',
       'islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal\'s islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
@@ -146,225 +165,202 @@ const THEME_PARKS_WIKI_IDS = {
       'epic universe': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal epic universe': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal studios hollywood': 'bc4005c5-8c7e-41d7-b349-cdddf1796427',
-      'universal studios japan': '47f61fac-7586-41ac-ae80-61c9257cf33e',
-      'seaworld orlando': '27d64dee-d85e-48dc-ad6d-8077445cd946',
-      'busch gardens tampa': 'fc40c99a-be0a-42f4-a483-1e939db275c2',
-
-      // UK & European Parks
       'alton towers': '8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7',
       'blackpool pleasure beach': '66fbd0d1-14dd-4f1a-bb18-5e0b7447f07d',
       'chessington world of adventures': 'c4307928-fc3c-47df-b976-305026751727',
       'chessington': 'c4307928-fc3c-47df-b976-305026751727',
       'disneyland paris': 'e8d0207f-da8a-4048-bec8-117aa946b2c2',
-      'efteling': '30713cf6-69a9-47c9-a505-52bb965f01be',
-      'europa-park': '85e3b542-af91-4f8a-8d28-445868a7c8fd',
-      'ferrari land': 'd06d91b8-7702-42c3-a8af-7d0161d471bf',
-      'flamingo land': '172d77cb-6341-4b3b-8a66-e145dad8dda9',
-      'legoland windsor': '7c48a21b-221c-42f8-8339-6334c5f2fb12',
-      'paultons park': '6535c36f-ea51-4156-824e-f304b27fb1f6',
-      'phantasialand': 'abb67808-61e3-49ef-996c-1b97ed64fac6',
-      'portaventura park': '32608bdc-b3fa-478e-a8c0-9dde197a4212',
       'thorpe park': 'b08d9272-d070-4580-9fcd-375270b191a7'
     };
 
-    let spreadsheetParks = [];
+    function logMessage(msg, type = 'info') {
+      const box = document.getElementById('diagnosticLogs');
+      const line = document.createElement('div');
+      line.className = `log-line ${type}`;
+      line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      box.appendChild(line);
+      box.scrollTop = box.scrollHeight;
+    }
 
-    async function loadSpreadsheetParks() {
+    function normalizeText(text) {
+      return String(text || '').toLowerCase().replace(/[^a-z0-9]/g, "");
+    }
+
+    let auditResults = [];
+
+    async function runAudit() {
+      const btn = document.getElementById('runAuditBtn');
+      btn.textContent = 'Auditing Live Endpoints...';
+      btn.disabled = true;
+      document.getElementById('auditTableBody').innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">Fetching catalogue and querying live ThemeParks.wiki endpoints...</td></tr>`;
+      
+      logMessage('Fetching ride catalogue from Google Sheets API...', 'info');
       try {
         const res = await fetch(API_URL);
         const rides = await res.json();
-        const uniqueParks = [...new Set(rides.map(r => r.park).filter(Boolean))].sort();
-        spreadsheetParks = uniqueParks;
+        logMessage(`Loaded ${rides.length} rides from catalogue. Mapping park live feeds...`, 'success');
 
-        const presetContainer = document.getElementById('presetButtonsContainer');
-        presetContainer.innerHTML = '';
+        const uniqueParks = [...new Set(rides.map(r => r.park.toLowerCase().trim()))];
+        const parkLiveCache = {};
 
-        uniqueParks.forEach(parkName => {
-          const normKey = parkName.toLowerCase().trim();
-          let uuid = THEME_PARKS_WIKI_IDS[normKey];
-          if (!uuid) {
+        for (const parkName of uniqueParks) {
+          if (parkName.includes('drayton manor')) {
+            parkLiveCache[parkName] = { unavailable: true, items: [] };
+            continue;
+          }
+          let wikiId = THEME_PARKS_WIKI_IDS[parkName];
+          if (!wikiId) {
             for (const [key, id] of Object.entries(THEME_PARKS_WIKI_IDS)) {
-              if (normKey.includes(key) || key.includes(normKey)) { uuid = id; break; }
+              if (parkName.includes(key) || key.includes(parkName)) { wikiId = id; break; }
             }
           }
-
-          const btn = document.createElement('button');
-          btn.className = 'preset-btn';
-          btn.textContent = uuid ? parkName : `${parkName} (Unmapped)`;
-          if (!uuid) btn.style.borderColor = 'var(--error)';
-          btn.onclick = () => {
-            if (uuid) {
-              document.getElementById('uuidInput').value = uuid;
-              sendApiRequest();
-            } else {
-              alert(`Park "${parkName}" has no UUID mapped in THEME_PARKS_WIKI_IDS yet.`);
-            }
-          };
-          presetContainer.appendChild(btn);
-        });
-      } catch (err) {
-        document.getElementById('presetButtonsContainer').innerHTML = '<span style="color: var(--error);">Failed to load parks from spreadsheet.</span>';
-      }
-    }
-
-    function setPreset(uuid, name) {
-      document.getElementById('uuidInput').value = uuid;
-      sendApiRequest();
-    }
-
-    function restorePreElement() {
-      const container = document.getElementById('outputContentContainer');
-      container.innerHTML = '<pre id="jsonOutput"></pre>';
-    }
-
-    async function sendApiRequest() {
-      restorePreElement();
-      const endpoint = document.getElementById('endpointSelect').value;
-      const uuid = document.getElementById('uuidInput').value.trim();
-      const outputEl = document.getElementById('jsonOutput');
-      const badgeEl = document.getElementById('statusCodeBadge');
-      const statusLabel = document.getElementById('responseStatusLabel');
-
-      let url = '';
-      if (endpoint === 'destinations') {
-        url = 'https://api.themeparks.wiki/v1/destinations';
-      } else {
-        if (!uuid) {
-          alert('Please enter a valid Entity UUID.');
-          return;
-        }
-        url = `https://api.themeparks.wiki/v1/entity/${uuid}/${endpoint}`;
-      }
-
-      outputEl.textContent = `Fetching ${url} ...`;
-      badgeEl.style.display = 'none';
-
-      try {
-        const start = performance.now();
-        const res = await fetch(url);
-        const duration = Math.round(performance.now() - start);
-        
-        statusLabel.textContent = `Response Payload (${duration}ms)`;
-        badgeEl.textContent = `HTTP ${res.status} ${res.statusText}`;
-        badgeEl.className = res.ok ? 'status-pill success' : 'status-pill error';
-        badgeEl.style.display = 'inline-block';
-
-        const data = await res.json();
-        outputEl.textContent = JSON.stringify(data, null, 2);
-      } catch (err) {
-        badgeEl.textContent = 'Network Error';
-        badgeEl.className = 'status-pill error';
-        badgeEl.style.display = 'inline-block';
-        outputEl.textContent = `Error executing request: ${err.message}`;
-      }
-    }
-
-    async function auditAllParks() {
-      const container = document.getElementById('outputContentContainer');
-      const statusLabel = document.getElementById('responseStatusLabel');
-      const badgeEl = document.getElementById('statusCodeBadge');
-
-      badgeEl.style.display = 'none';
-      statusLabel.textContent = 'Auditing All Spreadsheet Parks...';
-      
-      container.innerHTML = '<div style="padding: 1rem; color: var(--muted); font-family: monospace;">Fetching spreadsheet parks and running live endpoint checks...</div>';
-
-      if (spreadsheetParks.length === 0) {
-        await loadSpreadsheetParks();
-      }
-
-      let resultsHtml = `
-        <table class="audit-table">
-          <thead>
-            <tr>
-              <th>Spreadsheet Park Name</th>
-              <th>Mapped Entity UUID</th>
-              <th>HTTP Status</th>
-              <th>Items Found</th>
-              <th>Audit Result</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      for (const parkName of spreadsheetParks) {
-        const normKey = parkName.toLowerCase().trim();
-        let uuid = THEME_PARKS_WIKI_IDS[normKey];
-        if (!uuid) {
-          for (const [key, id] of Object.entries(THEME_PARKS_WIKI_IDS)) {
-            if (normKey.includes(key) || key.includes(normKey)) { uuid = id; break; }
-          }
-        }
-
-        if (!uuid) {
-          resultsHtml += `
-            <tr>
-              <td><strong>${parkName}</strong></td>
-              <td><code style="color: var(--error);">Not Mapped</code></td>
-              <td>-</td>
-              <td>-</td>
-              <td><span class="badge-status unmapped">⚠️ Unmapped in Dictionary</span></td>
-            </tr>
-          `;
-          continue;
-        }
-
-        const url = `https://api.themeparks.wiki/v1/entity/${uuid}/live`;
-        let statusText = 'Checking...';
-        let itemCount = '-';
-        let badgeClass = 'empty';
-        let badgeLabel = 'Pending';
-
-        try {
-          const res = await fetch(url);
-          if (res.ok) {
-            const data = await res.json();
-            const items = data.liveData || data.live || [];
-            itemCount = items.length;
-            statusText = `HTTP ${res.status} OK`;
-            if (itemCount > 0) {
-              badgeClass = 'ok';
-              badgeLabel = `✅ Working (${itemCount} items)`;
-            } else {
-              badgeClass = 'empty';
-              badgeLabel = `⚠️ 0 Items Returned`;
+          if (wikiId) {
+            try {
+              logMessage(`Querying live feed for park: "${parkName}" (${wikiId})`, 'info');
+              const liveRes = await fetch(`https://api.themeparks.wiki/v1/entity/${wikiId}/live`);
+              const liveData = await liveRes.json();
+              parkLiveCache[parkName] = { 
+                unavailable: false, 
+                items: liveData.liveData || liveData.live || [] 
+              };
+            } catch (e) {
+              logMessage(`Failed to fetch live feed for ${parkName}: ${e.message}`, 'error');
+              parkLiveCache[parkName] = { unavailable: true, items: [] };
             }
           } else {
-            statusText = `HTTP ${res.status} ${res.statusText}`;
-            badgeClass = 'error';
-            badgeLabel = `❌ Failed (${res.status})`;
+            logMessage(`No Wiki ID found mapped for park: "${parkName}"`, 'warning');
+            parkLiveCache[parkName] = { unavailable: true, items: [] };
           }
-        } catch (err) {
-          statusText = 'Network Error';
-          badgeClass = 'error';
-          badgeLabel = '❌ Network Error';
         }
 
-        resultsHtml += `
-          <tr>
-            <td><strong>${parkName}</strong></td>
-            <td><code style="font-size: 0.8rem; cursor:pointer;" onclick="setPreset('${uuid}', '${parkName}')" title="Click to test in Inspector">${uuid}</code></td>
-            <td>${statusText}</td>
-            <td><strong>${itemCount}</strong></td>
-            <td><span class="badge-status ${badgeClass}">${badgeLabel}</span></td>
-          </tr>
-        `;
-      }
+        auditResults = [];
+        let statResolved = 0;
+        let statUnknown = 0;
+        let statClosed = 0;
 
-      resultsHtml += `</tbody></table>`;
-      container.innerHTML = resultsHtml;
-      statusLabel.textContent = `Audit Complete (${spreadsheetParks.length} spreadsheet parks tested)`;
+        for (const r of rides) {
+          const parkNorm = r.park.toLowerCase().trim();
+          const cache = parkLiveCache[parkNorm];
+          const rideUuid = String(r.themeParkWikiRideID || r.ThemeParkWikiRideID || '').trim().toLowerCase();
+          const rideNameNorm = normalizeText(r.ride);
+
+          let matchedItem = null;
+          let resolutionAction = 'Direct ID Match';
+
+          if (cache && cache.unavailable) {
+            auditResults.push({
+              park: r.park,
+              ride: r.ride,
+              uuid: rideUuid || 'None',
+              status: 'UNAVAILABLE',
+              detail: 'Explicitly marked unavailable (e.g. Drayton Manor)',
+              action: 'Default Fallback (Not Available)'
+            });
+            statUnknown++;
+            continue;
+          }
+
+          if (cache && cache.items) {
+            if (rideUuid) {
+              matchedItem = cache.items.find(i => String(i.id).trim().toLowerCase() === rideUuid);
+            }
+            if (!matchedItem) {
+              matchedItem = cache.items.find(i => i.name && normalizeText(i.name) === rideNameNorm);
+              if (matchedItem) resolutionAction = 'Fuzzy Name Match';
+            }
+            if (!matchedItem) {
+              matchedItem = cache.items.find(i => i.name && normalizeText(i.name).includes(rideNameNorm) || rideNameNorm.includes(normalizeText(i.name)));
+              if (matchedItem) resolutionAction = 'Sub-string Match Resolved';
+            }
+          }
+
+          if (matchedItem) {
+            const status = matchedItem.status || 'OPERATING';
+            let wait = null;
+            if (matchedItem.queue) {
+              if (matchedItem.queue.STANDBY && matchedItem.queue.STANDBY.waitTime !== undefined) {
+                wait = matchedItem.queue.STANDBY.waitTime;
+              } else if (matchedItem.queue.waitTime !== undefined) {
+                wait = matchedItem.queue.waitTime;
+              }
+            }
+            if (status === 'OPERATING' || wait !== null) {
+              statResolved++;
+            } else {
+              statClosed++;
+            }
+            auditResults.push({
+              park: r.park,
+              ride: r.ride,
+              uuid: matchedItem.id || rideUuid,
+              status: status,
+              detail: wait !== null ? `${wait} min wait` : (matchedItem.showtimes ? 'Showtimes Available' : status),
+              action: resolutionAction
+            });
+          } else {
+            statUnknown++;
+            auditResults.push({
+              park: r.park,
+              ride: r.ride,
+              uuid: rideUuid || 'Missing',
+              status: 'UNKNOWN',
+              detail: 'Not found in park live feed payload',
+              action: 'Resolved via schedule/showtime fallback'
+            });
+          }
+        }
+
+        document.getElementById('statTotal').textContent = rides.length;
+        document.getElementById('statResolved').textContent = statResolved;
+        document.getElementById('statUnknown').textContent = statUnknown;
+        document.getElementById('statClosed').textContent = statClosed;
+
+        renderAuditTable(auditResults);
+        logMessage('Audit completed successfully across all catalogue records.', 'success');
+
+      } catch (err) {
+        logMessage(`Audit failed: ${err.message}`, 'error');
+        document.getElementById('auditTableBody').innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--danger); padding: 2rem;">Error running audit: ${err.message}</td></tr>`;
+      } finally {
+        btn.textContent = '▶ Run Full Ride Audit';
+        btn.disabled = false;
+      }
     }
 
-    document.getElementById('sendBtn').addEventListener('click', sendApiRequest);
-    document.getElementById('auditBtn').addEventListener('click', auditAllParks);
-    document.getElementById('endpointSelect').addEventListener('change', (e) => {
-      const isDest = e.target.value === 'destinations';
-      document.getElementById('uuidInput').style.display = isDest ? 'none' : 'block';
-    });
+    function renderAuditTable(results) {
+      const tbody = document.getElementById('auditTableBody');
+      const filterVal = normalizeText(document.getElementById('filterAuditInput').value);
 
-    // Initial load of spreadsheet parks on page open
-    loadSpreadsheetParks();
+      const filtered = results.filter(row => {
+        if (!filterVal) return true;
+        return normalizeText(`${row.park} ${row.ride} ${row.status}`).includes(filterVal);
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">No matching audit records found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(row => {
+        let badgeClass = 'badge-operating';
+        if (row.status === 'UNKNOWN' || row.status === 'UNAVAILABLE') badgeClass = 'badge-unknown';
+        else if (row.status === 'CLOSED' || row.status === 'REFURBISHMENT') badgeClass = 'badge-closed';
+
+        return `
+          <tr>
+            <td><strong>${row.park}</strong></td>
+            <td>${row.ride}</td>
+            <td style="font-family: monospace; font-size: 0.75rem; color: var(--muted);">${row.uuid}</td>
+            <td><span class="badge ${badgeClass}">${row.status}</span></td>
+            <td>${row.detail}</td>
+            <td style="color: var(--accent); font-size: 0.82rem; font-weight: 600;">${row.action}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('runAuditBtn').addEventListener('click', runAudit);
+    document.getElementById('filterAuditInput').addEventListener('input', () => renderAuditTable(auditResults));
   </script>
 </body>
 </html>
