@@ -117,7 +117,8 @@
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
 
-    const THEME_PARKS_WIKI_IDS = {
+ const THEME_PARKS_WIKI_IDS = {
+      // Individual Park UUIDs for Walt Disney World
       'magic kingdom': '75ea578a-adc8-4116-a54d-dccb60765ef9',
       'magic kingdom park': '75ea578a-adc8-4116-a54d-dccb60765ef9',
       'epcot': '47f90d2c-e191-4239-a466-5892ef59a88b',
@@ -126,6 +127,17 @@
       'disney\'s animal kingdom theme park': '1c84a229-8862-4648-9c71-378ddd2c7693',
       'hollywood studios': '288747d1-8b4f-4a64-867e-ea7c9b27bad8',
       'disney\'s hollywood studios': '288747d1-8b4f-4a64-867e-ea7c9b27bad8',
+      'disney\'s blizzard beach': 'ead53ea5-22e5-4095-9a83-8c29300d7c63',
+      'blizzard beach': 'ead53ea5-22e5-4095-9a83-8c29300d7c63',
+      'disney\'s typhoon lagoon': 'b070cbc5-feaa-4b87-a8c1-f94cca037a18',
+      'typhoon lagoon': 'b070cbc5-feaa-4b87-a8c1-f94cca037a18',
+      'disney adventure world': 'ca888437-ebb4-4d50-aed2-d227f7096968',
+      'disneyland park': 'dae968d5-630d-4719-8b06-3d107e944401',
+      'disney california adventure': '832fcd51-ea19-4e77-85c7-75d5843b127c',
+      'tokyo disneyland': '3cc919f1-d16d-43e0-8c3f-1dd269bd1a42',
+      'tokyo disneysea': '67b290d5-3478-4f23-b601-2f8fb71ba803',
+
+      // Universal & SeaWorld Parks
       'universal studios florida': 'eb3f4560-2383-4a36-9152-6b3e5ed6bc57',
       'islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal\'s islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
@@ -133,17 +145,26 @@
       'universal\'s volcano bay': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'epic universe': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal epic universe': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+      'universal studios hollywood': 'bc4005c5-8c7e-41d7-b349-cdddf1796427',
+      'universal studios japan': '47f61fac-7586-41ac-ae80-61c9257cf33e',
+      'seaworld orlando': '27d64dee-d85e-48dc-ad6d-8077445cd946',
+      'busch gardens tampa': 'fc40c99a-be0a-42f4-a483-1e939db275c2',
+
+      // UK & European Parks
       'alton towers': '8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7',
       'blackpool pleasure beach': '66fbd0d1-14dd-4f1a-bb18-5e0b7447f07d',
       'chessington world of adventures': 'c4307928-fc3c-47df-b976-305026751727',
       'chessington': 'c4307928-fc3c-47df-b976-305026751727',
       'disneyland paris': 'e8d0207f-da8a-4048-bec8-117aa946b2c2',
+      'efteling': '30713cf6-69a9-47c9-a505-52bb965f01be',
       'europa-park': '85e3b542-af91-4f8a-8d28-445868a7c8fd',
+      'ferrari land': 'd06d91b8-7702-42c3-a8af-7d0161d471bf',
       'flamingo land': '172d77cb-6341-4b3b-8a66-e145dad8dda9',
       'legoland windsor': '7c48a21b-221c-42f8-8339-6334c5f2fb12',
-      'thorpe park': 'b08d9272-d070-4580-9fcd-375270b191a7',
-      'disneyland park': 'dae968d5-630d-4719-8b06-3d107e944401',
-      'disney california adventure': '832fcd51-ea19-4e77-85c7-75d5843b127c'
+      'paultons park': '6535c36f-ea51-4156-824e-f304b27fb1f6',
+      'phantasialand': 'abb67808-61e3-49ef-996c-1b97ed64fac6',
+      'portaventura park': '32608bdc-b3fa-478e-a8c0-9dde197a4212',
+      'thorpe park': 'b08d9272-d070-4580-9fcd-375270b191a7'
     };
 
     let spreadsheetParks = [];
