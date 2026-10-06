@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Theme Park API Inspector & Resolver (v1.4)</title>
+  <title>Theme Park API Inspector & Resolver (v1.2)</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
   <style>
     [data-theme="dark"] {
@@ -88,7 +88,7 @@
 
   <div class="container">
     <header>
-      <h1><span>🔍</span> API Inspector & Resolver <span class="version-tag">v1.4</span></h1>
+      <h1><span>🔍</span> API Inspector & Resolver <span class="version-tag">v1.2</span></h1>
       <div class="header-actions">
         <a href="index.html" class="btn btn-secondary">← Back to Guide</a>
         <button class="btn btn-warning" id="auditProblemsBtn">⚡ Audit Problems Only</button>
@@ -151,7 +151,7 @@
     <div class="card">
       <h2>Diagnostic Console</h2>
       <div class="log-box" id="diagnosticLogs">
-        <div class="log-line">Inspector v1.4 loaded. Ready.</div>
+        <div class="log-line">Inspector v1.2 loaded. Ready.</div>
       </div>
     </div>
   </div>
@@ -234,7 +234,7 @@
       btn.textContent = problemsOnly ? 'Inspecting Problems...' : 'Auditing All Rides...';
       btn.disabled = true;
 
-      logMessage(problemsOnly ? 'Starting v1.4 targeted audit...' : 'Starting v1.4 full catalogue audit...', 'info');
+      logMessage(problemsOnly ? 'Starting v1.2 targeted audit...' : 'Starting v1.2 full catalogue audit...', 'info');
       
       try {
         const res = await fetch(API_URL);
@@ -320,7 +320,7 @@
             };
             updateOrPushResult(workEntry, problemsOnly);
           } else {
-            // Automatically classify seasonal shows, parades, character meets, and walkthroughs as Ambient instead of errors
+            // Enhanced comprehensive filter to catch shows, greets, exhibits, parades, walkthroughs, and non-ride attractions
             const isAmbient = rideNameNorm.includes('play') || rideNameNorm.includes('walkthrough') || 
                               rideNameNorm.includes('zoo') || rideNameNorm.includes('garden') || 
                               rideNameNorm.includes('exhibition') || rideNameNorm.includes('meet') || 
@@ -337,7 +337,16 @@
                               rideNameNorm.includes('stage') || rideNameNorm.includes('cinema') ||
                               rideNameNorm.includes('studio') || rideNameNorm.includes('academy') ||
                               rideNameNorm.includes('symf') || rideNameNorm.includes('podium') ||
-                              rideNameNorm.includes('record');
+                              rideNameNorm.includes('record') || rideNameNorm.includes('lign') ||
+                              rideNameNorm.includes('train') || rideNameNorm.includes('streetcar') ||
+                              rideNameNorm.includes('boat') || rideNameNorm.includes('riverboat') ||
+                              rideNameNorm.includes('shuttl') || rideNameNorm.includes('carrousel') ||
+                              rideNameNorm.includes('carousel') || rideNameNorm.includes('tea') ||
+                              rideNameNorm.includes('orbitron') || rideNameNorm.includes('flume') ||
+                              rideNameNorm.includes('splash') || rideNameNorm.includes('slide') ||
+                              rideNameNorm.includes('habitat') || rideNameNorm.includes('rehab') ||
+                              rideNameNorm.includes('encounter') || rideNameNorm.includes('talk') ||
+                              rideNameNorm.includes('presentation') || rideNameNorm.includes('maze');
 
             const classification = isAmbient ? 'Ambient' : 'Problem';
             const statusLabel = isAmbient ? 'UNLISTED / AMBIENT (Expected)' : 'UNKNOWN / MISSING API ENTRY';
@@ -360,7 +369,7 @@
         document.getElementById('statProblem').textContent = auditResults.filter(i => i.classification === 'Problem').length;
 
         renderAuditTable(auditResults);
-        logMessage(problemsOnly ? 'v1.4 Problem inspection finished.' : 'v1.4 Full audit completed successfully.', 'success');
+        logMessage(problemsOnly ? 'v1.2 Problem inspection finished.' : 'v1.2 Full audit completed successfully.', 'success');
 
       } catch (err) {
         logMessage(`Audit error: ${err.message}`, 'error');
