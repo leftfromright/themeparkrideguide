@@ -51,7 +51,7 @@
 
     .btn-audit { background: #10b981; }
 
-    .preset-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .preset-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; max-height: 120px; overflow-y: auto; padding: 0.25rem; }
     .preset-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
     .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -67,6 +67,7 @@
     .badge-status.ok { background: rgba(34, 197, 94, 0.15); color: var(--success); }
     .badge-status.empty { background: rgba(234, 179, 8, 0.15); color: var(--warning); }
     .badge-status.error { background: rgba(239, 68, 68, 0.15); color: var(--error); }
+    .badge-status.unmapped { background: rgba(148, 163, 184, 0.15); color: var(--muted); }
 
     .status-pill { padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
     .status-pill.success { background: rgba(34, 197, 94, 0.15); color: var(--success); }
@@ -92,12 +93,14 @@
 
       <input type="text" id="uuidInput" placeholder="Enter Entity UUID..." value="75ea578a-adc8-4116-a54d-dccb60765ef9">
       <button id="sendBtn">Send Request</button>
-      <button class="btn-audit" id="auditBtn">⚡ Audit All Parks</button>
+      <button class="btn-audit" id="auditBtn">⚡ Audit Spreadsheet Parks</button>
     </div>
 
     <div>
-      <div style="font-size: 0.8rem; color: var(--muted); margin-bottom: 0.35rem;">Quick Preset UUIDs:</div>
-      <div class="preset-btns" id="presetButtonsContainer"></div>
+      <div style="font-size: 0.8rem; color: var(--muted); margin-bottom: 0.35rem;">Quick Preset UUIDs (Loaded from Spreadsheet & Map):</div>
+      <div class="preset-btns" id="presetButtonsContainer">
+        <span style="font-size: 0.8rem; color: var(--muted);">Loading spreadsheet parks...</span>
+      </div>
     </div>
   </div>
 
@@ -107,11 +110,13 @@
       <span id="statusCodeBadge" class="status-pill success" style="display: none;">HTTP 200 OK</span>
     </div>
     <div id="outputContentContainer" style="flex: 1; display: flex; flex-direction: column;">
-      <pre id="jsonOutput">Select an endpoint, click "Send Request", or run "Audit All Parks" to test all configured IDs...</pre>
+      <pre id="jsonOutput">Select an endpoint, click "Send Request", or run "Audit Spreadsheet Parks" to test all parks from your sheet...</pre>
     </div>
   </div>
 
   <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
+
     const THEME_PARKS_WIKI_IDS = {
       'magic kingdom': '75ea578a-adc8-4116-a54d-dccb60765ef9',
       'magic kingdom park': '75ea578a-adc8-4116-a54d-dccb60765ef9',
@@ -121,7 +126,7 @@
       'disney\'s animal kingdom theme park': '1c84a229-8862-4648-9c71-378ddd2c7693',
       'hollywood studios': '288747d1-8b4f-4a64-867e-ea7c9b27bad8',
       'disney\'s hollywood studios': '288747d1-8b4f-4a64-867e-ea7c9b27bad8',
-      'universal studios florida': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+      'universal studios florida': 'eb3f4560-2383-4a36-9152-6b3e5ed6bc57',
       'islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal\'s islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'volcano bay': 'eb68212e-141a-4d43-a616-5c589a19eb14',
@@ -137,26 +142,49 @@
       'flamingo land': '172d77cb-6341-4b3b-8a66-e145dad8dda9',
       'legoland windsor': '7c48a21b-221c-42f8-8339-6334c5f2fb12',
       'thorpe park': 'b08d9272-d070-4580-9fcd-375270b191a7',
-      'disneyland park': 'da40d870-f8f8-4034-8be0-b5bf46f7f637',
-      'disney california adventure': 'eb2d56a4-44bc-4475-b040-4273570624d6'
+      'disneyland park': 'dae968d5-630d-4719-8b06-3d107e944401',
+      'disney california adventure': '832fcd51-ea19-4e77-85c7-75d5843b127c'
     };
 
-    // Populate Presets
-    const presetContainer = document.getElementById('presetButtonsContainer');
-    const uniqueParksMap = {};
-    Object.entries(THEME_PARKS_WIKI_IDS).forEach(([name, uuid]) => {
-      if (!uniqueParksMap[uuid]) {
-        uniqueParksMap[uuid] = name.charAt(0).toUpperCase() + name.slice(1);
-      }
-    });
+    let spreadsheetParks = [];
 
-    Object.entries(uniqueParksMap).forEach(([uuid, name]) => {
-      const btn = document.createElement('button');
-      btn.className = 'preset-btn';
-      btn.textContent = name;
-      btn.onclick = () => setPreset(uuid, name);
-      presetContainer.appendChild(btn);
-    });
+    async function loadSpreadsheetParks() {
+      try {
+        const res = await fetch(API_URL);
+        const rides = await res.json();
+        const uniqueParks = [...new Set(rides.map(r => r.park).filter(Boolean))].sort();
+        spreadsheetParks = uniqueParks;
+
+        const presetContainer = document.getElementById('presetButtonsContainer');
+        presetContainer.innerHTML = '';
+
+        uniqueParks.forEach(parkName => {
+          const normKey = parkName.toLowerCase().trim();
+          let uuid = THEME_PARKS_WIKI_IDS[normKey];
+          if (!uuid) {
+            for (const [key, id] of Object.entries(THEME_PARKS_WIKI_IDS)) {
+              if (normKey.includes(key) || key.includes(normKey)) { uuid = id; break; }
+            }
+          }
+
+          const btn = document.createElement('button');
+          btn.className = 'preset-btn';
+          btn.textContent = uuid ? parkName : `${parkName} (Unmapped)`;
+          if (!uuid) btn.style.borderColor = 'var(--error)';
+          btn.onclick = () => {
+            if (uuid) {
+              document.getElementById('uuidInput').value = uuid;
+              sendApiRequest();
+            } else {
+              alert(`Park "${parkName}" has no UUID mapped in THEME_PARKS_WIKI_IDS yet.`);
+            }
+          };
+          presetContainer.appendChild(btn);
+        });
+      } catch (err) {
+        document.getElementById('presetButtonsContainer').innerHTML = '<span style="color: var(--error);">Failed to load parks from spreadsheet.</span>';
+      }
+    }
 
     function setPreset(uuid, name) {
       document.getElementById('uuidInput').value = uuid;
@@ -216,17 +244,20 @@
       const badgeEl = document.getElementById('statusCodeBadge');
 
       badgeEl.style.display = 'none';
-      statusLabel.textContent = 'Auditing All Configured Parks...';
+      statusLabel.textContent = 'Auditing All Spreadsheet Parks...';
       
-      container.innerHTML = '<div style="padding: 1rem; color: var(--muted); font-family: monospace;">Running live endpoint checks across all unique park UUIDs...</div>';
+      container.innerHTML = '<div style="padding: 1rem; color: var(--muted); font-family: monospace;">Fetching spreadsheet parks and running live endpoint checks...</div>';
 
-      const uniqueEntries = Object.entries(uniqueParksMap);
+      if (spreadsheetParks.length === 0) {
+        await loadSpreadsheetParks();
+      }
+
       let resultsHtml = `
         <table class="audit-table">
           <thead>
             <tr>
-              <th>Park Name</th>
-              <th>Entity UUID</th>
+              <th>Spreadsheet Park Name</th>
+              <th>Mapped Entity UUID</th>
               <th>HTTP Status</th>
               <th>Items Found</th>
               <th>Audit Result</th>
@@ -235,7 +266,28 @@
           <tbody>
       `;
 
-      for (const [uuid, name] of uniqueEntries) {
+      for (const parkName of spreadsheetParks) {
+        const normKey = parkName.toLowerCase().trim();
+        let uuid = THEME_PARKS_WIKI_IDS[normKey];
+        if (!uuid) {
+          for (const [key, id] of Object.entries(THEME_PARKS_WIKI_IDS)) {
+            if (normKey.includes(key) || key.includes(normKey)) { uuid = id; break; }
+          }
+        }
+
+        if (!uuid) {
+          resultsHtml += `
+            <tr>
+              <td><strong>${parkName}</strong></td>
+              <td><code style="color: var(--error);">Not Mapped</code></td>
+              <td>-</td>
+              <td>-</td>
+              <td><span class="badge-status unmapped">⚠️ Unmapped in Dictionary</span></td>
+            </tr>
+          `;
+          continue;
+        }
+
         const url = `https://api.themeparks.wiki/v1/entity/${uuid}/live`;
         let statusText = 'Checking...';
         let itemCount = '-';
@@ -269,8 +321,8 @@
 
         resultsHtml += `
           <tr>
-            <td><strong>${name}</strong></td>
-            <td><code style="font-size: 0.8rem; cursor:pointer;" onclick="setPreset('${uuid}', '${name}')" title="Click to test in Inspector">${uuid}</code></td>
+            <td><strong>${parkName}</strong></td>
+            <td><code style="font-size: 0.8rem; cursor:pointer;" onclick="setPreset('${uuid}', '${parkName}')" title="Click to test in Inspector">${uuid}</code></td>
             <td>${statusText}</td>
             <td><strong>${itemCount}</strong></td>
             <td><span class="badge-status ${badgeClass}">${badgeLabel}</span></td>
@@ -280,7 +332,7 @@
 
       resultsHtml += `</tbody></table>`;
       container.innerHTML = resultsHtml;
-      statusLabel.textContent = `Audit Complete (${uniqueEntries.length} parks tested)`;
+      statusLabel.textContent = `Audit Complete (${spreadsheetParks.length} spreadsheet parks tested)`;
     }
 
     document.getElementById('sendBtn').addEventListener('click', sendApiRequest);
@@ -289,6 +341,9 @@
       const isDest = e.target.value === 'destinations';
       document.getElementById('uuidInput').style.display = isDest ? 'none' : 'block';
     });
+
+    // Initial load of spreadsheet parks on page open
+    loadSpreadsheetParks();
   </script>
 </body>
 </html>
