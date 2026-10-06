@@ -366,15 +366,23 @@
     .debug-log-line.error { color: #fca5a5; }
     .debug-log-line.success { color: #4ade80; }
 
+    /* Modal / Sensory Popup Styling */
     .modal-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); z-index: 300; align-items: center; justify-content: center; padding: 1rem; }
     .modal-backdrop.show { display: flex; }
-    .modal-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; max-width: 400px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); text-align: center; position: relative; animation: modalPop 0.25s ease; }
+    .modal-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; max-width: 450px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); text-align: center; position: relative; animation: modalPop 0.25s ease; }
     @keyframes modalPop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     .modal-box h3 { font-size: 1.5rem; margin-bottom: 0.75rem; color: var(--accent); }
     .modal-box p { font-size: 1rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 500; }
     .modal-box .modal-date { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
     .modal-close-btn { background: var(--accent); color: #ffffff; border: none; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: opacity 0.2s ease; }
     .modal-close-btn:hover { opacity: 0.9; }
+
+    /* Sensory Modal specific styling */
+    .sensory-modal-box { max-width: 650px; text-align: left; max-height: 85vh; display: flex; flex-direction: column; padding: 1.5rem; }
+    .sensory-modal-body { overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; margin-bottom: 1rem; padding-right: 0.25rem; }
+    .sensory-section { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
+    .sensory-section h4 { color: var(--accent); margin-bottom: 0.5rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem; }
+    .sensory-section ul { padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; color: var(--text); }
 
     .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); border: 1px solid var(--accent); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 200; transition: transform 0.3s ease; }
     .toast.show { transform: translateX(-50%) translateY(0); }
@@ -489,6 +497,20 @@
       <p>Made for EW and AW</p>
       <div class="modal-date">Created: October 2026</div>
       <button class="modal-close-btn" id="closeModalBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- Sensory Guide Modal Popup -->
+  <div class="modal-backdrop" id="sensoryModal">
+    <div class="modal-box sensory-modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+        <h3 id="sensoryModalTitle" style="margin: 0; font-size: 1.2rem;">🧠 Park Sensory Guide</h3>
+        <button class="modal-close-btn" id="closeSensoryModalBtn" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">✕</button>
+      </div>
+      <div class="sensory-modal-body" id="sensoryModalContent">
+        <!-- Dynamically populated -->
+      </div>
+      <button class="modal-close-btn" id="closeSensoryModalBtnBottom" style="width: 100%;">Close Guide</button>
     </div>
   </div>
 
@@ -632,6 +654,11 @@
           🔍 API Inspector
         </a>
 
+        <!-- Sensory Guide Button -->
+        <button class="debug-toggle-btn" id="sensoryGuideBtn" title="View Park Sensory Guide & Quiet Zones" style="border-color: var(--accent); color: var(--accent);">
+          🧠 Sensory Guide
+        </button>
+
         <button class="live-toggle-btn" id="liveWaitToggleBtn" title="Toggle Live Wait Times & Showtimes">
           ⚡ <span id="liveToggleText">Show Live Times</span>
         </button>
@@ -723,8 +750,7 @@
 
     const WATER_PARK_NAMES = ['blizzard beach', 'typhoon lagoon', 'volcano bay'];
 
- const THEME_PARKS_WIKI_IDS = {
-      // Individual Park UUIDs for Walt Disney World
+    const THEME_PARKS_WIKI_IDS = {
       'magic kingdom': '75ea578a-adc8-4116-a54d-dccb60765ef9',
       'magic kingdom park': '75ea578a-adc8-4116-a54d-dccb60765ef9',
       'epcot': '47f90d2c-e191-4239-a466-5892ef59a88b',
@@ -742,8 +768,6 @@
       'disney california adventure': '832fcd51-ea19-4e77-85c7-75d5843b127c',
       'tokyo disneyland': '3cc919f1-d16d-43e0-8c3f-1dd269bd1a42',
       'tokyo disneysea': '67b290d5-3478-4f23-b601-2f8fb71ba803',
-
-      // Universal & SeaWorld Parks
       'universal studios florida': 'eb3f4560-2383-4a36-9152-6b3e5ed6bc57',
       'islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal\'s islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
@@ -755,8 +779,6 @@
       'universal studios japan': '47f61fac-7586-41ac-ae80-61c9257cf33e',
       'seaworld orlando': '27d64dee-d85e-48dc-ad6d-8077445cd946',
       'busch gardens tampa': 'fc40c99a-be0a-42f4-a483-1e939db275c2',
-
-      // UK & European Parks
       'alton towers': '8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7',
       'blackpool pleasure beach': '66fbd0d1-14dd-4f1a-bb18-5e0b7447f07d',
       'chessington world of adventures': 'c4307928-fc3c-47df-b976-305026751727',
@@ -941,6 +963,89 @@
     document.getElementById('closeModalBtn').addEventListener('click', () => aboutModal.classList.remove('show'));
     aboutModal.addEventListener('click', (e) => { if (e.target === aboutModal) aboutModal.classList.remove('show'); });
 
+    // Sensory Modal Handlers
+    const sensoryModal = document.getElementById('sensoryModal');
+    function closeSensoryModal() { sensoryModal.classList.remove('show'); }
+    document.getElementById('closeSensoryModalBtn').addEventListener('click', closeSensoryModal);
+    document.getElementById('closeSensoryModalBtnBottom').addEventListener('click', closeSensoryModal);
+    sensoryModal.addEventListener('click', (e) => { if (e.target === sensoryModal) closeSensoryModal(); });
+
+    const PARK_SENSORY_GUIDES = {
+      'magic kingdom': {
+        title: 'Magic Kingdom Park - Sensory Guide',
+        quietZones: ['Center Street (Main Street U.S.A.) – Quiet alcove away from crowds.', 'Behind Ye Olde Christmas Shoppe (Liberty Square) – Shaded tables.', 'Area near Swiss Family Treehouse (Adventureland).'],
+        rooms: 'First Aid & Baby Care Center (near entrance) offers private climate-controlled quiet rooms.',
+        tips: 'Fireworks and sudden loud shows can be intense; noise-canceling headphones recommended.'
+      },
+      'epcot': {
+        title: 'EPCOT - Sensory Guide',
+        quietZones: ['Imagination Pavilion upper levels.', 'Morocco Pavilion rear courtyards.', 'Canada Pavilion Waterfall Garden.'],
+        rooms: 'Baby Care Center located near Odyssey Center transition.',
+        tips: 'World Showcase gets busy during festivals; mornings are calmer.'
+      },
+      'disney\'s hollywood studios': {
+        title: 'Disney\'s Hollywood Studios - Sensory Guide',
+        quietZones: ['Walt Disney Presents (Animation Courtyard) – Air-conditioned quiet gallery.', 'Galaxy\'s Edge perimeter walkways.'],
+        rooms: 'First Aid station located near the main entrance.',
+        tips: 'Thrill rides feature sudden drops and loud theatrical audio.'
+      },
+      'disney\'s animal kingdom': {
+        title: 'Disney\'s Animal Kingdom - Sensory Guide',
+        quietZones: ['Rafiki\'s Planet Watch & Conservation Station – Indoor quiet exhibit.', 'The Oasis lush walking paths.'],
+        rooms: 'First Aid near Discovery Island Medical Center.',
+        tips: 'Keep voices low near animal viewing areas.'
+      },
+      'alton towers': {
+        title: 'Alton Towers Resort - Sensory Guide',
+        quietZones: ['CBeebies Land Sensory Space – Calm sensory room with low lighting.', 'Gardens area – Extensive peaceful walking paths.'],
+        rooms: 'Resort Box Office / First Aid offers ear defender hire (£20 deposit).',
+        tips: 'Forbidden Valley features loud background soundscapes.'
+      },
+      'thorpe park': {
+        title: 'Thorpe Park - Sensory Guide',
+        quietZones: ['Sunken Gardens near Stealth queue.', 'SAW Walkway shaded rest areas.'],
+        rooms: 'First Aid houses a dedicated Quiet Room with dimmable lighting.',
+        tips: 'High-intensity music plays across thrill zones.'
+      }
+    };
+
+    function getSensoryGuideForPark(parkName) {
+      const key = parkName ? parkName.toLowerCase().trim() : '';
+      if (PARK_SENSORY_GUIDES[key]) {
+        return PARK_SENSORY_GUIDES[key];
+      }
+      return {
+        title: `${parkName || 'Theme Park'} - Sensory & SEND Guide`,
+        quietZones: ['First Aid / Guest Services building (designated quiet calm area).', 'Park perimeter walkways and quiet garden alcoves.', 'Shaded restaurant patios during off-peak times.'],
+        rooms: 'First Aid staff can assist with temporary quiet space access if needed.',
+        tips: 'Bring noise-canceling headphones for high-thrill coaster areas, parades, and loud evening shows.'
+      };
+    }
+
+    document.getElementById('sensoryGuideBtn').addEventListener('click', () => {
+      let targetPark = 'Magic Kingdom';
+      if (selectedParks.length === 1) {
+        targetPark = selectedParks[0];
+      }
+      const guide = getSensoryGuideForPark(targetPark);
+      document.getElementById('sensoryModalTitle').textContent = `🧠 ${guide.title}`;
+      document.getElementById('sensoryModalContent').innerHTML = `
+        <div class="sensory-section">
+          <h4>🌳 Quiet Rest Areas & Calm Zones</h4>
+          <ul>${guide.quietZones.map(z => `<li>• ${z}</li>`).join('')}</ul>
+        </div>
+        <div class="sensory-section">
+          <h4>🏥 Sensory Rooms & First Aid Support</h4>
+          <p>${guide.rooms}</p>
+        </div>
+        <div class="sensory-section">
+          <h4>💡 Helpful Tips for Your Visit</h4>
+          <p>${guide.tips}</p>
+        </div>
+      `;
+      sensoryModal.classList.add('show');
+    });
+
     let currentTheme = localStorage.getItem('site_theme') || 'dark';
 
     function applyTheme(theme) {
@@ -952,7 +1057,7 @@
       if (theme === 'light') {
         icon.textContent = '🌙'; label.textContent = 'Dark Mode';
       } else {
-        icon.textContent = '☀'; label.textContent = 'Light Mode';
+        icon.textContent = '☀️'; label.textContent = 'Light Mode';
       }
     }
 
@@ -1163,9 +1268,9 @@
                   } else if (item.queue.waitTime !== undefined) {
                     wait = item.queue.waitTime;
                   }
-                  if (item.queue.SHOWTIMES && Array.isArray(item.queue.SHOWTIMES)) {
-                    showtimes = item.queue.SHOWTIMES;
-                  }
+                }
+                if (item.showtimes && Array.isArray(item.showtimes)) {
+                  showtimes = item.showtimes;
                 }
 
                 const status = item.status || 'OPERATING';
@@ -1183,20 +1288,6 @@
         } catch (err) {
           if (debugModeActive) logDebug(`Failed fetch live times for ${parkName}: ${err.message}`, 'error');
         }
-      }
-
-      if (debugModeActive) {
-        logDebug(`Evaluating internal database rides against live lookup map...`, 'success');
-        allRides.forEach(r => {
-          const matched = getLiveInfoForRide(r);
-          const uuid = getRideUuid(r);
-          const nameKey = `${r.park.toLowerCase().trim()}_${normalizeText(r.ride)}`;
-          if (matched) {
-            logDebug(`MATCHED: "${r.ride}" (${r.park}) -> Status: ${matched.status}, Wait: ${matched.waitTime}m`, 'success');
-          } else {
-            logDebug(`UNMATCHED: "${r.ride}" (${r.park}) [UUID: ${uuid || 'None'}, Key: ${nameKey}]`, 'error');
-          }
-        });
       }
 
       isFetchingLive = false;
@@ -2021,6 +2112,15 @@
               if (liveInfo) {
                 if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
                   liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱ ${liveInfo.waitTime}m</span>`;
+                } else if (liveInfo.showtimes && Array.isArray(liveInfo.showtimes) && liveInfo.showtimes.length > 0) {
+                  const now = new Date();
+                  const upcoming = liveInfo.showtimes.find(s => new Date(s.endTime) > now);
+                  if (upcoming) {
+                    const startTime = new Date(upcoming.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    liveBadgeHtml = `<span style="font-size:0.75rem; font-weight:bold; color:#38bdf8;">🎭 Next: ${startTime}</span>`;
+                  } else {
+                    liveBadgeHtml = `<span style="font-size:0.75rem; color:#38bdf8;">🎭 Show Today</span>`;
+                  }
                 } else if (liveInfo.status === 'REFURBISHMENT' || liveInfo.status === 'CLOSED') {
                   liveBadgeHtml = `<span style="font-size:0.8rem; color:#ef4444;" onclick="event.stopPropagation(); navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔴 Closed</span>`;
                 } else {
@@ -2109,6 +2209,15 @@
               if (liveInfo.waitTime >= 30 && liveInfo.waitTime < 60) badgeClass = 'wait-medium';
               else if (liveInfo.waitTime >= 60) badgeClass = 'wait-long';
               liveBadgeHtml = `<div class="live-wait-badge ${badgeClass}" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">⏱️ ${liveInfo.waitTime} min wait</div>`;
+            } else if (liveInfo.showtimes && Array.isArray(liveInfo.showtimes) && liveInfo.showtimes.length > 0) {
+              const now = new Date();
+              const upcoming = liveInfo.showtimes.find(s => new Date(s.endTime) > now);
+              if (upcoming) {
+                const startTime = new Date(upcoming.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                liveBadgeHtml = `<div class="live-wait-badge wait-short" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🎭 Next Show: ${startTime}</div>`;
+              } else {
+                liveBadgeHtml = `<div class="live-wait-badge wait-short" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🎭 Scheduled Show</div>`;
+              }
             } else if (liveInfo.status === 'REFURBISHMENT' || liveInfo.status === 'CLOSED') {
               liveBadgeHtml = `<div class="live-wait-badge wait-closed" onclick="navigateToParkInfo('${r.park.replace(/'/g, "\\'")}')">🔴 Closed</div>`;
             } else {
