@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Theme Park API Inspector & Resolver (v1.2)</title>
+  <title>Theme Park API Inspector & Resolver (v1.6)</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
   <style>
     [data-theme="dark"] {
@@ -88,7 +88,7 @@
 
   <div class="container">
     <header>
-      <h1><span>🔍</span> API Inspector & Resolver <span class="version-tag">v1.2</span></h1>
+      <h1><span>🔍</span> API Inspector & Resolver <span class="version-tag">v1.6</span></h1>
       <div class="header-actions">
         <a href="index.html" class="btn btn-secondary">← Back to Guide</a>
         <button class="btn btn-warning" id="auditProblemsBtn">⚡ Audit Problems Only</button>
@@ -151,7 +151,7 @@
     <div class="card">
       <h2>Diagnostic Console</h2>
       <div class="log-box" id="diagnosticLogs">
-        <div class="log-line">Inspector v1.2 loaded. Ready.</div>
+        <div class="log-line">Inspector v1.6 loaded. Ready.</div>
       </div>
     </div>
   </div>
@@ -234,7 +234,7 @@
       btn.textContent = problemsOnly ? 'Inspecting Problems...' : 'Auditing All Rides...';
       btn.disabled = true;
 
-      logMessage(problemsOnly ? 'Starting v1.2 targeted audit...' : 'Starting v1.2 full catalogue audit...', 'info');
+      logMessage(problemsOnly ? 'Starting v1.6 targeted audit...' : 'Starting v1.6 full catalogue audit...', 'info');
       
       try {
         const res = await fetch(API_URL);
@@ -272,10 +272,30 @@
           const cache = parkLiveCache[parkNorm];
           const rideUuid = String(r.themeParkWikiRideID || r.ThemeParkWikiRideID || '').trim().toLowerCase();
           const rideNameNorm = normalizeText(r.ride);
+          
+          // Read Column E type (supports r.type or r.Type)
+          const sheetType = String(r.type || r.Type || '').trim();
+          const sheetTypeUpper = sheetType.toUpperCase();
 
           if (problemsOnly) {
             const existing = auditResults.find(item => item.park === r.park && item.ride === r.ride);
             if (existing && existing.classification === 'Working') continue;
+          }
+
+          // Strict Column E type check: Rides/Attractions go through matching; everything else is Ambient
+          const isRideType = sheetTypeUpper === 'RIDE' || sheetTypeUpper ===/ATTRACTION/.test(sheetTypeUpper) || sheetType === '';
+
+          if (!isRideType && !sheetTypeUpper.includes('ATTRACTION') && !sheetTypeUpper.includes('RIDE')) {
+            const ambientEntry = {
+              park: r.park,
+              ride: r.ride,
+              uuid: rideUuid || 'None',
+              classification: 'Ambient',
+              status: `UNLISTED / AMBIENT (${sheetType})`,
+              detail: `Column E type '${sheetType}' is expected to be absent from live queue feeds`
+            };
+            updateOrPushResult(ambientEntry, problemsOnly);
+            continue;
           }
 
           let matchedItem = null;
@@ -320,46 +340,15 @@
             };
             updateOrPushResult(workEntry, problemsOnly);
           } else {
-            // Enhanced comprehensive filter to catch shows, greets, exhibits, parades, walkthroughs, and non-ride attractions
-            const isAmbient = rideNameNorm.includes('play') || rideNameNorm.includes('walkthrough') || 
-                              rideNameNorm.includes('zoo') || rideNameNorm.includes('garden') || 
-                              rideNameNorm.includes('exhibition') || rideNameNorm.includes('meet') || 
-                              rideNameNorm.includes('adventure') || rideNameNorm.includes('hunt') || 
-                              rideNameNorm.includes('band') || rideNameNorm.includes('show') || 
-                              rideNameNorm.includes('parade') || rideNameNorm.includes('fireworks') || 
-                              rideNameNorm.includes('arcade') || rideNameNorm.includes('train') ||
-                              rideNameNorm.includes('halloween') || rideNameNorm.includes('celebration') ||
-                              rideNameNorm.includes('greeting') || rideNameNorm.includes('challenge') ||
-                              rideNameNorm.includes('labyrinth') || rideNameNorm.includes('cabane') ||
-                              rideNameNorm.includes('galerie') || rideNameNorm.includes('taniere') ||
-                              rideNameNorm.includes('mysteres') || rideNameNorm.includes('platypus') ||
-                              rideNameNorm.includes('animat') || rideNameNorm.includes('shop') ||
-                              rideNameNorm.includes('stage') || rideNameNorm.includes('cinema') ||
-                              rideNameNorm.includes('studio') || rideNameNorm.includes('academy') ||
-                              rideNameNorm.includes('symf') || rideNameNorm.includes('podium') ||
-                              rideNameNorm.includes('record') || rideNameNorm.includes('lign') ||
-                              rideNameNorm.includes('train') || rideNameNorm.includes('streetcar') ||
-                              rideNameNorm.includes('boat') || rideNameNorm.includes('riverboat') ||
-                              rideNameNorm.includes('shuttl') || rideNameNorm.includes('carrousel') ||
-                              rideNameNorm.includes('carousel') || rideNameNorm.includes('tea') ||
-                              rideNameNorm.includes('orbitron') || rideNameNorm.includes('flume') ||
-                              rideNameNorm.includes('splash') || rideNameNorm.includes('slide') ||
-                              rideNameNorm.includes('habitat') || rideNameNorm.includes('rehab') ||
-                              rideNameNorm.includes('encounter') || rideNameNorm.includes('talk') ||
-                              rideNameNorm.includes('presentation') || rideNameNorm.includes('maze');
-
-            const classification = isAmbient ? 'Ambient' : 'Problem';
-            const statusLabel = isAmbient ? 'UNLISTED / AMBIENT (Expected)' : 'UNKNOWN / MISSING API ENTRY';
-
-            const entry = {
+            const probEntry = {
               park: r.park,
               ride: r.ride,
               uuid: rideUuid || 'Missing',
-              classification: classification,
-              status: statusLabel,
-              detail: isAmbient ? 'Ambient/entertainment/show/play area not tracked in live queue feed' : 'Not found in park live feed payload'
+              classification: 'Problem',
+              status: 'UNKNOWN / MISSING API ENTRY',
+              detail: 'Attraction marked as Ride in Column E but not found in live feed'
             };
-            updateOrPushResult(entry, problemsOnly);
+            updateOrPushResult(probEntry, problemsOnly);
           }
         }
 
@@ -369,7 +358,7 @@
         document.getElementById('statProblem').textContent = auditResults.filter(i => i.classification === 'Problem').length;
 
         renderAuditTable(auditResults);
-        logMessage(problemsOnly ? 'v1.2 Problem inspection finished.' : 'v1.2 Full audit completed successfully.', 'success');
+        logMessage(problemsOnly ? 'v1.6 Problem inspection finished.' : 'v1.6 Full audit completed successfully.', 'success');
 
       } catch (err) {
         logMessage(`Audit error: ${err.message}`, 'error');
