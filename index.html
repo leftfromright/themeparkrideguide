@@ -204,10 +204,6 @@
     .live-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; }
     .live-toggle-btn.active { background: rgba(34, 197, 94, 0.15); color: #22c55e; border-color: #22c55e; }
 
-    .debug-toggle-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; }
-    .debug-toggle-btn.active { background: rgba(245, 158, 11, 0.15); color: var(--star-active); border-color: var(--star-active); }
-    .debug-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
-
     .pills-container { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .filter-pill { background: var(--badge-bg); border: 1px solid var(--border); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 16px; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem; }
     .pill-remove { cursor: pointer; font-size: 0.85rem; opacity: 0.8; }
@@ -356,16 +352,6 @@
     .live-wait-badge.wait-unknown { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
     .live-wait-badge.wait-closed { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-    /* Floating Debug Console Drawer Styling */
-    .debug-console { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #090d16; border-top: 2px solid var(--star-active); color: #38bdf8; font-family: monospace; font-size: 0.8rem; z-index: 400; padding: 1rem; max-height: 250px; overflow-y: auto; box-shadow: 0 -10px 25px rgba(0,0,0,0.5); }
-    .debug-console.show { display: block; }
-    .debug-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; border-bottom: 1px solid #334155; padding-bottom: 0.3rem; font-weight: bold; color: #f59e0b; }
-    .debug-close { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1rem; }
-    .debug-close:hover { color: #f8fafc; }
-    .debug-log-line { margin-bottom: 0.2rem; white-space: pre-wrap; word-break: break-all; }
-    .debug-log-line.error { color: #fca5a5; }
-    .debug-log-line.success { color: #4ade80; }
-
     /* Modal / Sensory Popup Styling */
     .modal-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); z-index: 300; align-items: center; justify-content: center; padding: 1rem; }
     .modal-backdrop.show { display: flex; }
@@ -476,7 +462,7 @@
 
     @media print {
       body { background: #ffffff !important; color: #000000 !important; padding: 0 !important; }
-      header, .controls, .status-bar, footer, .pov-link, .fav-btn, .version-badge, .hero-banner, .modal-backdrop, .favs-action-bar, .debug-console { display: none !important; }
+      header, .controls, .status-bar, footer, .pov-link, .fav-btn, .version-badge, .hero-banner, .modal-backdrop, .favs-action-bar { display: none !important; }
       .grid, .park-info-view { display: block !important; }
       .card, .park-info-card { page-break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 1rem !important; padding: 1rem !important; color: #000 !important; background: #fff !important; }
       .card h2, .park-info-title-group h2 { color: #000 !important; }
@@ -514,17 +500,8 @@
     </div>
   </div>
 
-  <!-- Debug Console Drawer -->
-  <div class="debug-console" id="debugConsole">
-    <div class="debug-header">
-      <span>🐛 Live API Debug Console (v101)</span>
-      <button class="debug-close" id="closeDebugBtn">✕</button>
-    </div>
-    <div id="debugLogContent"></div>
-  </div>
-
   <div class="hero-banner">
-    <div class="version-badge" id="versionBadgeBtn">v101</div>
+    <div class="version-badge" id="versionBadgeBtn">v102</div>
     <img src="banner.png" alt="Theme Park Banner" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
     <div class="hero-content">
       <h1 id="homeHeaderLink" title="Reset filters and return to home">Theme Park Ride Guide</h1>
@@ -644,21 +621,6 @@
       <span id="rideCounter">Showing 0 rides</span>
       
       <div class="status-controls-group">
-        <!-- Original Inline Console Debug Toggle Button -->
-        <button class="debug-toggle-btn" id="debugToggleBtn" title="Toggle Live API Debug Mode">
-          🐛 <span id="debugToggleText">Debug Mode: OFF</span>
-        </button>
-
-        <!-- New Dedicated Button linking to debug.html -->
-        <a href="debug.html" class="debug-toggle-btn" id="apiDebuggerBtn" title="Open Standalone API Debugger Page">
-          🔍 API Inspector
-        </a>
-
-        <!-- Sensory Guide Button -->
-        <button class="debug-toggle-btn" id="sensoryGuideBtn" title="View Park Sensory Guide & Quiet Zones" style="border-color: var(--accent); color: var(--accent);">
-          🧠 Sensory Guide
-        </button>
-
         <button class="live-toggle-btn" id="liveWaitToggleBtn" title="Toggle Live Wait Times & Showtimes">
           ⚡ <span id="liveToggleText">Show Live Times</span>
         </button>
@@ -700,43 +662,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrZD7tmZInw2SNc4401D8zliFoIVsFU_0qkPjjPH34LmJH-XTBU1EPyi0nf9c0fmrB/exec';
-    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v101';
-
-    let debugModeActive = false;
-    function logDebug(message, type = 'info') {
-      const consoleEl = document.getElementById('debugLogContent');
-      if (!consoleEl) return;
-      const timestamp = new Date().toLocaleTimeString();
-      const line = document.createElement('div');
-      line.className = `debug-log-line ${type}`;
-      line.textContent = `[${timestamp}] ${message}`;
-      consoleEl.appendChild(line);
-      consoleEl.scrollTop = consoleEl.scrollHeight;
-      console.log(`[DEBUG] ${message}`);
-    }
-
-    document.getElementById('debugToggleBtn').addEventListener('click', () => {
-      debugModeActive = !debugModeActive;
-      const btn = document.getElementById('debugToggleBtn');
-      const consoleBox = document.getElementById('debugConsole');
-      const text = document.getElementById('debugToggleText');
-      
-      if (debugModeActive) {
-        btn.classList.add('active');
-        consoleBox.classList.add('show');
-        text.textContent = 'Debug Mode: ON';
-        logDebug('Debug mode enabled. Fetching live entity payloads...', 'success');
-        if (showLiveWaitTimes) fetchLiveWaitTimes();
-      } else {
-        btn.classList.remove('active');
-        consoleBox.classList.remove('show');
-        text.textContent = 'Debug Mode: OFF';
-      }
-    });
-
-    document.getElementById('closeDebugBtn').addEventListener('click', () => {
-      document.getElementById('debugConsole').classList.remove('show');
-    });
+    const CURRENT_CACHE_KEY = 'theme_park_rides_cache_v102';
 
     const SENSORY_TAGS = [
       { id: 'none', label: '🌿 None / Gentle (No Warnings)', keywords: ['none', 'mild', 'gentle', 'calm'] },
@@ -847,7 +773,8 @@
       'alton towers': 'Alton, Staffordshire, ST10 4DB, United Kingdom',
       'thorpe park': 'Staines Road, Chertsey, Surrey, KT16 8PN, United Kingdom',
       'chessington world of adventures': 'Leatherhead Road, Chessington, Surrey, KT9 2NE, United Kingdom',
-      'legoland windsor': 'Winkfield Road, Windsor, Berkshire, SL4 4AY, United Kingdom'
+      'legoland windsor': 'Winkfield Road, Windsor, Berkshire, SL4 4AY, United Kingdom',
+      'drayton manor': 'Fazeley, Tamworth, Staffordshire, B78 3TW, United Kingdom'
     };
 
     const PRIORITY_PASS_URLS = {
@@ -876,6 +803,7 @@
       'alton towers': 'https://www.altontowers.com/plan-your-visit/before-you-visit/opening-times/',
       'thorpe park': 'https://www.thorpepark.com/plan-your-visit/before-you-visit/opening-times/',
       'chessington world of adventures': 'https://www.chessington.com/plan-your-visit/before-you-visit/opening-hours/',
+      'drayton manor': 'https://www.draytonmanor.co.uk/opening-hours',
       'magic kingdom': 'https://disneyworld.disney.go.com/calendars/day/',
       'epcot': 'https://disneyworld.disney.go.com/calendars/day/',
       'disney\'s animal kingdom': 'https://disneyworld.disney.go.com/calendars/day/',
@@ -1006,6 +934,12 @@
         quietZones: ['Sunken Gardens near Stealth queue.', 'SAW Walkway shaded rest areas.'],
         rooms: 'First Aid houses a dedicated Quiet Room with dimmable lighting.',
         tips: 'High-intensity music plays across thrill zones.'
+      },
+      'drayton manor': {
+        title: 'Drayton Manor Resort - Sensory Guide',
+        quietZones: ['Thomas Land quieter garden corners.', 'Zoo picnic areas away from rides.'],
+        rooms: 'First Aid post near main entrance offers assistance and quiet respite upon request.',
+        tips: 'Thomas Land can be bustling with families; visiting early helps maintain a calmer pace.'
       }
     };
 
@@ -1022,12 +956,8 @@
       };
     }
 
-    document.getElementById('sensoryGuideBtn').addEventListener('click', () => {
-      let targetPark = 'Magic Kingdom';
-      if (selectedParks.length === 1) {
-        targetPark = selectedParks[0];
-      }
-      const guide = getSensoryGuideForPark(targetPark);
+    function openSensoryGuideModal(parkName) {
+      const guide = getSensoryGuideForPark(parkName);
       document.getElementById('sensoryModalTitle').textContent = `🧠 ${guide.title}`;
       document.getElementById('sensoryModalContent').innerHTML = `
         <div class="sensory-section">
@@ -1044,7 +974,7 @@
         </div>
       `;
       sensoryModal.classList.add('show');
-    });
+    }
 
     let currentTheme = localStorage.getItem('site_theme') || 'dark';
 
@@ -1229,31 +1159,27 @@
 
       const toggleText = document.getElementById('liveToggleText');
       toggleText.textContent = 'Fetching Live Times...';
-      if (debugModeActive) logDebug('Starting live wait times fetch across parks...', 'info');
 
       const uniqueParks = [...new Set(allRides.map(r => r.park.toLowerCase().trim()))];
 
       for (const parkName of uniqueParks) {
+        if (parkName.includes('drayton manor')) {
+          continue; // Handled as unavailable
+        }
+
         let wikiId = THEME_PARKS_WIKI_IDS[parkName];
         if (!wikiId) {
           for (const [key, id] of Object.entries(THEME_PARKS_WIKI_IDS)) {
             if (parkName.includes(key) || key.includes(parkName)) { wikiId = id; break; }
           }
         }
-        if (!wikiId) {
-          if (debugModeActive) logDebug(`No wiki ID mapped for park: "${parkName}"`, 'error');
-          continue;
-        }
+        if (!wikiId) continue;
 
         try {
           const liveUrl = `https://api.themeparks.wiki/v1/entity/${wikiId}/live`;
-          if (debugModeActive) logDebug(`Fetching live API for [${parkName}]: ${liveUrl}`, 'info');
-          
           const res = await fetch(liveUrl);
           const data = await res.json();
           const liveArray = data.liveData || data.live || [];
-          
-          if (debugModeActive) logDebug(`Received ${liveArray.length} items from API for ${parkName}`, 'success');
 
           if (Array.isArray(liveArray)) {
             liveArray.forEach(item => {
@@ -1280,14 +1206,11 @@
                 if (item.name) {
                   const normName = normalizeText(item.name);
                   liveWaitNameMap[`${parkName}_${normName}`] = liveObj;
-                  if (debugModeActive) logDebug(`Mapped live item -> Park: "${parkName}", Name: "${item.name}" (Norm: "${normName}"), ID: ${cleanId}, Status: ${status}, Wait: ${wait}m`, 'info');
                 }
               }
             });
           }
-        } catch (err) {
-          if (debugModeActive) logDebug(`Failed fetch live times for ${parkName}: ${err.message}`, 'error');
-        }
+        } catch (err) {}
       }
 
       isFetchingLive = false;
@@ -1297,6 +1220,9 @@
     }
 
     function getLiveInfoForRide(r) {
+      if (r.park && r.park.toLowerCase().includes('drayton manor')) {
+        return { status: 'UNAVAILABLE', waitTime: null, unavailable: true };
+      }
       const rideUuid = getRideUuid(r);
       if (rideUuid && liveWaitData[rideUuid]) {
         return liveWaitData[rideUuid];
@@ -1798,6 +1724,7 @@
               <div class="park-info-actions">
                 ${officialUrl ? `<a href="${officialUrl}" target="_blank" rel="noopener" class="park-action-btn">🌐 Official Website</a>` : ''}
                 <a href="${mapsUrl}" target="_blank" rel="noopener" class="park-action-btn">🗺 Google Maps Directions</a>
+                <button class="park-action-btn" onclick="openSensoryGuideModal('${p.name.replace(/'/g, "\\'")}')">🧠 Sensory Guide</button>
                 <button class="park-action-btn" onclick="switchToRideView('all'); filterByParkOnly('${p.name.replace(/'/g, "\\'")}');">🎢 View Park Rides (${p.ridesCount})</button>
               </div>
             </div>
@@ -2109,7 +2036,9 @@
             let liveBadgeHtml = '';
             if (showLiveWaitTimes) {
               const liveInfo = getLiveInfoForRide(r);
-              if (liveInfo) {
+              if (liveInfo && liveInfo.unavailable) {
+                liveBadgeHtml = `<span style="font-size:0.8rem; color:var(--muted);">⏱️ Not available</span>`;
+              } else if (liveInfo) {
                 if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
                   liveBadgeHtml = `<span style="font-size:0.8rem; font-weight:bold; color:#22c55e;">⏱ ${liveInfo.waitTime}m</span>`;
                 } else if (liveInfo.showtimes && Array.isArray(liveInfo.showtimes) && liveInfo.showtimes.length > 0) {
@@ -2203,7 +2132,9 @@
         let liveBadgeHtml = '';
         if (showLiveWaitTimes) {
           const liveInfo = getLiveInfoForRide(r);
-          if (liveInfo) {
+          if (liveInfo && liveInfo.unavailable) {
+            liveBadgeHtml = `<div class="live-wait-badge wait-unknown" style="color:var(--muted);">⏱️ Not available</div>`;
+          } else if (liveInfo) {
             if (liveInfo.status === 'OPERATING' && liveInfo.waitTime !== null) {
               let badgeClass = 'wait-short';
               if (liveInfo.waitTime >= 30 && liveInfo.waitTime < 60) badgeClass = 'wait-medium';
