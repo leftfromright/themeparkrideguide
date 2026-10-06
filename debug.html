@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Theme Park API Inspector & Problem Resolver (v1.1)</title>
+  <title>Theme Park API Inspector & Resolver (v1.2)</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
   <style>
     [data-theme="dark"] {
@@ -87,7 +87,7 @@
 
   <div class="container">
     <header>
-      <h1><span>🔍</span> API Inspector & Resolver <span class="version-tag">v1.1</span></h1>
+      <h1><span>🔍</span> API Inspector & Resolver <span class="version-tag">v1.2</span></h1>
       <div class="header-actions">
         <a href="index.html" class="btn btn-secondary">← Back to Guide</a>
         <button class="btn btn-warning" id="auditProblemsBtn">⚡ Audit Problems Only</button>
@@ -145,7 +145,7 @@
     <div class="card">
       <h2>Diagnostic Console</h2>
       <div class="log-box" id="diagnosticLogs">
-        <div class="log-line">Inspector v1.1 loaded. Ready.</div>
+        <div class="log-line">Inspector v1.2 loaded. Ready.</div>
       </div>
     </div>
   </div>
@@ -162,19 +162,20 @@
       'disney\'s hollywood studios': '288747d1-8b4f-4a64-867e-ea7c9b27bad8',
       'blizzard beach': 'ead53ea5-22e5-4095-9a83-8c29300d7c63',
       'typhoon lagoon': 'b070cbc5-feaa-4b87-a8c1-f94cca037a18',
-      'disneyland park': 'dae968d5-630d-4719-8b06-3d107e944401',
+      'disneyland park': '7340550b-c14d-4def-80bb-acdb51d49a66',
+      'disneyland park (california)': '7340550b-c14d-4def-80bb-acdb51d49a66',
       'disney california adventure': '832fcd51-ea19-4e77-85c7-75d5843b127c',
       'tokyo disneyland': '3cc919f1-d16d-43e0-8c3f-1dd269bd1a42',
       'tokyo disneysea': '67b290d5-3478-4f23-b601-2f8fb71ba803',
       'universal studios florida': 'eb3f4560-2383-4a36-9152-6b3e5ed6bc57',
       'universal studio': 'eb3f4560-2383-4a36-9152-6b3e5ed6bc57',
-      'islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
-      'universal\'s islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
-      'universal islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+      'islands of adventure': '267615cc-8943-4c2a-ae2c-5da728ca591f',
+      'universal\'s islands of adventure': '267615cc-8943-4c2a-ae2c-5da728ca591f',
+      'universal islands of adventure': '267615cc-8943-4c2a-ae2c-5da728ca591f',
       'volcano bay': 'fe78a026-b91b-470c-b906-9d2266b692da',
       'universal volcano bay': 'fe78a026-b91b-470c-b906-9d2266b692da',
-      'epic universe': '06013a7c-674b-4860-9908-54c72834b6e5',
-      'universal epic universe': '06013a7c-674b-4860-9908-54c72834b6e5',
+      'epic universe': '12dbb85b-265f-44e6-bccf-f1faa17211fc',
+      'universal epic universe': '12dbb85b-265f-44e6-bccf-f1faa17211fc',
       'universal studios hollywood': 'bc4005c5-8c7e-41d7-b349-cdddf1796427',
       'universal studios japan': '0efd8f74-3475-4b07-88d4-53907c1b0c03',
       'alton towers': '8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7',
@@ -227,7 +228,7 @@
       btn.textContent = problemsOnly ? 'Inspecting Problems...' : 'Auditing All Rides...';
       btn.disabled = true;
 
-      logMessage(problemsOnly ? 'Starting v1.1 targeted audit on Problem entries...' : 'Starting v1.1 full catalogue audit...', 'info');
+      logMessage(problemsOnly ? 'Starting v1.2 targeted audit on Problem entries...' : 'Starting v1.2 full catalogue audit...', 'info');
       
       try {
         const res = await fetch(API_URL);
@@ -313,7 +314,6 @@
             };
             updateOrPushResult(workEntry, problemsOnly);
           } else {
-            // Differentiate true missing IDs from unlisted static walkthroughs/shows
             const isStaticOrPlayArea = rideNameNorm.includes('play') || rideNameNorm.includes('walkthrough') || rideNameNorm.includes('zoo') || rideNameNorm.includes('garden') || rideNameNorm.includes('exhibition');
             const statusLabel = isStaticOrPlayArea ? 'UNLISTED / AMBIENT (Expected)' : 'UNKNOWN / MISSING API ENTRY';
 
@@ -334,7 +334,7 @@
         document.getElementById('statProblem').textContent = auditResults.filter(i => i.classification === 'Problem').length;
 
         renderAuditTable(auditResults);
-        logMessage(problemsOnly ? 'v1.1 Problem inspection completed successfully.' : 'v1.1 Full audit completed successfully.', 'success');
+        logMessage(problemsOnly ? 'v1.2 Problem inspection completed successfully.' : 'v1.2 Full audit completed successfully.', 'success');
 
       } catch (err) {
         logMessage(`Audit error: ${err.message}`, 'error');
