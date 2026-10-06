@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThemeParks.wiki API Debugger</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐛</text></svg>">
+  <style>
+    [data-theme="dark"] {
+      --bg: #090d16;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+      --code-bg: #0f172a;
+      --success: #4ade80;
+      --error: #fca5a5;
+    }
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --accent: #0284c7;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+      --success: #15803d;
+      --error: #b91c1c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 1.5rem; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+    h1 { font-size: 1.5rem; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
+    
+    .nav-back { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 0.85rem; transition: border-color 0.2s; }
+    .nav-back:hover { border-color: var(--accent); color: var(--accent); }
+
+    .control-panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+    
+    select, input[type="text"] { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 0.8rem; border-radius: 8px; font-size: 0.9rem; outline: none; flex: 1; min-width: 250px; }
+    select:focus, input[type="text"]:focus { border-color: var(--accent); }
+    
+    button { background: var(--accent); color: #ffffff; border: none; padding: 0.6rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; }
+    button:hover { opacity: 0.9; }
+
+    .preset-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .preset-btn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
+    .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .output-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; flex: 1; min-height: 400px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .output-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; font-weight: 700; color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    
+    pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow: auto; font-family: monospace; font-size: 0.85rem; color: var(--accent); max-height: 600px; flex: 1; }
+    .status-pill { padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+    .status-pill.success { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+    .status-pill.error { background: rgba(239, 68, 68, 0.15); color: var(--error); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1><span>🐛</span> ThemeParks.wiki API Inspector</h1>
+    <a href="index.html" class="nav-back">← Back to Main App</a>
+  </header>
+
+  <div class="control-panel">
+    <div class="row">
+      <select id="endpointSelect">
+        <option value="live">GET /v1/entity/{id}/live (Live Wait Times & Status)</option>
+        <option value="children">GET /v1/entity/{id}/children (Rides, Shows & Restaurants)</option>
+        <option value="schedule">GET /v1/entity/{id}/schedule (Operating Hours)</option>
+        <option value="entity">GET /v1/entity/{id} (Metadata & Details)</option>
+        <option value="destinations">GET /v1/destinations (All Global Resorts)</option>
+      </select>
+
+      <input type="text" id="uuidInput" placeholder="Enter Entity UUID..." value="75ea578a-adc8-4116-a54d-dccb60765ef9">
+      <button id="sendBtn">Send Request</button>
+    </div>
+
+    <div>
+      <div style="font-size: 0.8rem; color: var(--muted); margin-bottom: 0.35rem;">Quick Preset UUIDs:</div>
+      <div class="preset-btns">
+        <button class="preset-btn" onclick="setPreset('e957da41-3552-4cf6-b636-5babc5cbc4e5', 'Walt Disney World Resort')">Walt Disney World (Resort)</button>
+        <button class="preset-btn" onclick="setPreset('eb68212e-141a-4d43-a616-5c589a19eb14', 'Universal Orlando Resort')">Universal Orlando (Resort)</button>
+        <button class="preset-btn" onclick="setPreset('75ea578a-adc8-4116-a54d-dccb60765ef9', 'Magic Kingdom')">Magic Kingdom</button>
+        <button class="preset-btn" onclick="setPreset('438d0111-adc6-4d04-b9c1-8b01267b1407', 'Epcot')">Epcot</button>
+        <button class="preset-btn" onclick="setPreset('8d6722d6-b51c-4235-96be-a7c8cfb9a0ce', 'Animal Kingdom')">Animal Kingdom</button>
+        <button class="preset-btn" onclick="setPreset('284dc8cb-ed80-49ae-9e7d-afa964d4f828', 'Hollywood Studios')">Hollywood Studios</button>
+        <button class="preset-btn" onclick="setPreset('8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7', 'Alton Towers')">Alton Towers</button>
+        <button class="preset-btn" onclick="setPreset('6f9c3c13-8b74-4b47-b73a-4efb7189a05b', 'Thorpe Park')">Thorpe Park</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="output-container">
+    <div class="output-header">
+      <span id="responseStatusLabel">Response Payload</span>
+      <span id="statusCodeBadge" class="status-pill success" style="display: none;">HTTP 200 OK</span>
+    </div>
+    <pre id="jsonOutput">Select an endpoint or preset and click "Send Request" to inspect live API output...</pre>
+  </div>
+
+  <script>
+    function setPreset(uuid, name) {
+      document.getElementById('uuidInput').value = uuid;
+      sendApiRequest();
+    }
+
+    async function sendApiRequest() {
+      const endpoint = document.getElementById('endpointSelect').value;
+      const uuid = document.getElementById('uuidInput').value.trim();
+      const outputEl = document.getElementById('jsonOutput');
+      const badgeEl = document.getElementById('statusCodeBadge');
+      const statusLabel = document.getElementById('responseStatusLabel');
+
+      let url = '';
+      if (endpoint === 'destinations') {
+        url = 'https://api.themeparks.wiki/v1/destinations';
+      } else {
+        if (!uuid) {
+          alert('Please enter a valid Entity UUID.');
+          return;
+        }
+        if (endpoint === 'live') url = `https://api.themeparks.wiki/v1/entity/${uuid}/live`;
+        else if (endpoint === 'children') url = `https://api.themeparks.wiki/v1/entity/${uuid}/children`;
+        else if (endpoint === 'schedule') url = `https://api.themeparks.wiki/v1/entity/${uuid}/schedule`;
+        else if (endpoint === 'entity') url = `https://api.themeparks.wiki/v1/entity/${uuid}`;
+      }
+
+      outputEl.textContent = `Fetching ${url} ...`;
+      badgeEl.style.display = 'none';
+
+      try {
+        const start = performance.now();
+        const res = await fetch(url);
+        const duration = Math.round(performance.now() - start);
+        
+        statusLabel.textContent = `Response Payload (${duration}ms)`;
+        badgeEl.textContent = `HTTP ${res.status} ${res.statusText}`;
+        badgeEl.className = res.ok ? 'status-pill success' : 'status-pill error';
+        badgeEl.style.display = 'inline-block';
+
+        const data = await res.json();
+        outputEl.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        badgeEl.textContent = 'Network Error';
+        badgeEl.className = 'status-pill error';
+        badgeEl.style.display = 'inline-block';
+        outputEl.textContent = `Error executing request: ${err.message}`;
+      }
+    }
+
+    document.getElementById('sendBtn').addEventListener('click', sendApiRequest);
+    document.getElementById('endpointSelect').addEventListener('change', (e) => {
+      const isDest = e.target.value === 'destinations';
+      document.getElementById('uuidInput').style.display = isDest ? 'none' : 'block';
+    });
+  </script>
+</body>
+</html>
