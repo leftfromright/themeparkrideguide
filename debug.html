@@ -113,8 +113,8 @@
     </div>
 
     <div class="card">
+      <h2>Live Audit Results</h2>
       <div class="controls-row">
-        <h2>Live Audit Results</h2>
         <div class="filter-group">
           <button class="filter-tab active" data-filter="all">All</button>
           <button class="filter-tab" data-filter="working">Working</button>
@@ -144,7 +144,7 @@
     <div class="card">
       <h2>Diagnostic Console</h2>
       <div class="log-box" id="diagnosticLogs">
-        <div class="log-line">Inspector ready. Click 'Audit Problems Only' to inspect unmatched rides and extract logs.</div>
+        <div class="log-line">Inspector ready. Click 'Run Full Ride Audit' or 'Audit Problems Only'.</div>
       </div>
     </div>
   </div>
@@ -166,19 +166,33 @@
       'tokyo disneyland': '3cc919f1-d16d-43e0-8c3f-1dd269bd1a42',
       'tokyo disneysea': '67b290d5-3478-4f23-b601-2f8fb71ba803',
       'universal studios florida': 'eb3f4560-2383-4a36-9152-6b3e5ed6bc57',
+      'universal studio': 'eb3f4560-2383-4a36-9152-6b3e5ed6bc57',
       'islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal\'s islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
+      'universal islands of adventure': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'volcano bay': 'fe78a026-b91b-470c-b906-9d2266b692da',
-      'universal\'s volcano bay': 'fe78a026-b91b-470c-b906-9d2266b692da',
+      'universal volcano bay': 'fe78a026-b91b-470c-b906-9d2266b692da',
       'epic universe': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal epic universe': 'eb68212e-141a-4d43-a616-5c589a19eb14',
       'universal studios hollywood': 'bc4005c5-8c7e-41d7-b349-cdddf1796427',
+      'universal studios japan': '47f61fac-7586-41ac-ae80-61c9257cf33e',
       'alton towers': '8e6bf2ae-77ac-403d-8e10-d7cd9b6c05d7',
       'blackpool pleasure beach': '66fbd0d1-14dd-4f1a-bb18-5e0b7447f07d',
       'chessington world of adventures': 'c4307928-fc3c-47df-b976-305026751727',
       'chessington': 'c4307928-fc3c-47df-b976-305026751727',
       'disneyland paris': 'e8d0207f-da8a-4048-bec8-117aa946b2c2',
-      'thorpe park': 'b08d9272-d070-4580-9fcd-375270b191a7'
+      'disney adventure world': 'ca888437-ebb4-4d50-aed2-d227f7096968',
+      'thorpe park': 'b08d9272-d070-4580-9fcd-375270b191a7',
+      'legoland windsor': '7c48a21b-221c-42f8-8339-6334c5f2fb12',
+      'europa-park': '85e3b542-af91-4f8a-8d28-445868a7c8fd',
+      'efteling': '30713cf6-69a9-47c9-a505-52bb965f01be',
+      'portaventura park': '32608bdc-b3fa-478e-a8c0-9dde197a4212',
+      'ferrari land': 'd06d91b8-7702-42c3-a8af-7d0161d471bf',
+      'phantasialand': 'abb67808-61e3-49ef-996c-1b97ed64fac6',
+      'seaworld orlando': '27d64dee-d85e-48dc-ad6d-8077445cd946',
+      'busch gardens tampa': 'fc40c99a-be0a-42f4-a483-1e939db275c2',
+      'paultons park': '6535c36f-ea51-4156-824e-f304b27fb1f6',
+      'flamingo land': '172d77cb-6341-4b3b-8a66-e145dad8dda9'
     };
 
     function logMessage(msg, type = 'info') {
@@ -196,6 +210,15 @@
 
     let auditResults = [];
     let currentCategoryFilter = 'all';
+
+    function findWikiId(parkName) {
+      const norm = parkName.toLowerCase().trim();
+      if (THEME_PARKS_WIKI_IDS[norm]) return THEME_PARKS_WIKI_IDS[norm];
+      for (const [key, id] of Object.entries(THEME_PARKS_WIKI_IDS)) {
+        if (norm.includes(key) || key.includes(norm)) return id;
+      }
+      return null;
+    }
 
     async function runAudit(problemsOnly = false) {
       const btn = problemsOnly ? document.getElementById('auditProblemsBtn') : document.getElementById('runAuditBtn');
@@ -217,12 +240,7 @@
             parkLiveCache[parkName] = { unavailable: true, items: [] };
             continue;
           }
-          let wikiId = THEME_PARKS_WIKI_IDS[parkName];
-          if (!wikiId) {
-            for (const [key, id] of Object.entries(THEME_PARKS_WIKI_IDS)) {
-              if (parkName.includes(key) || key.includes(parkName)) { wikiId = id; break; }
-            }
-          }
+          const wikiId = findWikiId(parkName);
           if (wikiId) {
             try {
               const liveRes = await fetch(`https://api.themeparks.wiki/v1/entity/${wikiId}/live`);
@@ -231,17 +249,18 @@
                 unavailable: false, 
                 items: liveData.liveData || liveData.live || [] 
               };
+              logMessage(`Successfully fetched live feed for park: "${parkName}" (${wikiId})`, 'success');
             } catch (e) {
+              logMessage(`Failed to fetch live feed for ${parkName}: ${e.message}`, 'error');
               parkLiveCache[parkName] = { unavailable: true, items: [] };
             }
           } else {
+            logMessage(`No Wiki ID found mapped for park: "${parkName}"`, 'warning');
             parkLiveCache[parkName] = { unavailable: true, items: [] };
           }
         }
 
         if (!problemsOnly) auditResults = [];
-        let statWorking = 0;
-        let statProblem = 0;
 
         for (const r of rides) {
           const parkNorm = r.park.toLowerCase().trim();
@@ -249,13 +268,9 @@
           const rideUuid = String(r.themeParkWikiRideID || r.ThemeParkWikiRideID || '').trim().toLowerCase();
           const rideNameNorm = normalizeText(r.ride);
 
-          // If problemsOnly is active, skip rides that were already determined to be Working
           if (problemsOnly) {
             const existing = auditResults.find(item => item.park === r.park && item.ride === r.ride);
-            if (existing && existing.classification === 'Working') {
-              statWorking++;
-              continue;
-            }
+            if (existing && existing.classification === 'Working') continue;
           }
 
           let matchedItem = null;
@@ -268,16 +283,10 @@
               uuid: rideUuid || 'None',
               classification: 'Problem',
               status: 'UNAVAILABLE',
-              detail: 'Park explicitly flagged unavailable (e.g. Drayton Manor)'
+              detail: 'Park explicitly flagged unavailable or unmapped'
             };
-            if (problemsOnly) {
-              const idx = auditResults.findIndex(i => i.park === r.park && i.ride === r.ride);
-              if (idx >= 0) auditResults[idx] = probEntry; else auditResults.push(probEntry);
-              logMessage(`[PROBLEM] Park: ${r.park} | Ride: ${r.ride} | Reason: Park feed unavailable/skipped`, 'warning');
-            } else {
-              auditResults.push(probEntry);
-            }
-            statProblem++;
+            updateOrPushResult(probEntry, problemsOnly);
+            if (problemsOnly) logMessage(`[PROBLEM] Park: ${r.park} | Ride: ${r.ride} | Reason: Park feed unavailable`, 'warning');
             continue;
           }
 
@@ -303,15 +312,9 @@
               uuid: matchedItem.id || rideUuid,
               classification: 'Working',
               status: status,
-              detail: wait !== null ? `${wait}m wait (${resolutionAction})` : `Showtime/Status: ${status} (${resolutionAction})`
+              detail: wait !== null ? `${wait}m wait (${resolutionAction})` : `Status: ${status} (${resolutionAction})`
             };
-            if (problemsOnly) {
-              const idx = auditResults.findIndex(i => i.park === r.park && i.ride === r.ride);
-              if (idx >= 0) auditResults[idx] = workEntry;
-            } else {
-              auditResults.push(workEntry);
-            }
-            statWorking++;
+            updateOrPushResult(workEntry, problemsOnly);
           } else {
             const probEntry = {
               park: r.park,
@@ -321,14 +324,8 @@
               status: 'UNKNOWN',
               detail: 'Not found in park live feed payload'
             };
-            if (problemsOnly) {
-              const idx = auditResults.findIndex(i => i.park === r.park && i.ride === r.ride);
-              if (idx >= 0) auditResults[idx] = probEntry; else auditResults.push(probEntry);
-              logMessage(`[PROBLEM] Park: ${r.park} | Ride: ${r.ride} | UUID: ${rideUuid} | Reason: Missing from live API array`, 'error');
-            } else {
-              auditResults.push(probEntry);
-            }
-            statProblem++;
+            updateOrPushResult(probEntry, problemsOnly);
+            if (problemsOnly) logMessage(`[PROBLEM] Park: ${r.park} | Ride: ${r.ride} | UUID: ${rideUuid} | Reason: Missing from live API array`, 'error');
           }
         }
 
@@ -337,13 +334,22 @@
         document.getElementById('statProblem').textContent = auditResults.filter(i => i.classification === 'Problem').length;
 
         renderAuditTable(auditResults);
-        logMessage(problemsOnly ? 'Targeted problem inspection finished. Logs captured above.' : 'Full audit completed.', 'success');
+        logMessage(problemsOnly ? 'Targeted problem inspection finished. Review logs above.' : 'Full audit completed.', 'success');
 
       } catch (err) {
         logMessage(`Audit error: ${err.message}`, 'error');
       } finally {
         btn.textContent = originalText;
         btn.disabled = false;
+      }
+    }
+
+    function updateOrPushResult(entry, problemsOnly) {
+      const idx = auditResults.findIndex(i => i.park === entry.park && i.ride === entry.ride);
+      if (idx >= 0) {
+        auditResults[idx] = entry;
+      } else {
+        auditResults.push(entry);
       }
     }
 
