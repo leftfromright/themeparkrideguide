@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Theme Park API Inspector & Problem Resolver</title>
+  <title>Theme Park API Inspector & Problem Resolver (v1.1)</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
   <style>
     [data-theme="dark"] {
@@ -42,6 +42,7 @@
     
     header { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); flex-wrap: wrap; gap: 1rem; }
     header h1 { font-size: 1.5rem; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
+    .version-tag { background: var(--badge-bg); color: var(--accent); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--border); margin-left: 0.5rem; vertical-align: middle; }
     .header-actions { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
 
     .btn { background: var(--accent); color: #ffffff; border: none; padding: 0.6rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: opacity 0.2s ease, transform 0.1s ease; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; }
@@ -86,7 +87,7 @@
 
   <div class="container">
     <header>
-      <h1><span>🔍</span> API Inspector & Problem Resolver</h1>
+      <h1><span>🔍</span> API Inspector & Resolver <span class="version-tag">v1.1</span></h1>
       <div class="header-actions">
         <a href="index.html" class="btn btn-secondary">← Back to Guide</a>
         <button class="btn btn-warning" id="auditProblemsBtn">⚡ Audit Problems Only</button>
@@ -106,7 +107,7 @@
           <span class="stat-value" id="statWorking" style="color: var(--success);">0</span>
         </div>
         <div class="stat-box">
-          <span class="stat-label">Problem (Unknown / Unmatched)</span>
+          <span class="stat-label">Problem / Unreported</span>
           <span class="stat-value" id="statProblem" style="color: var(--danger);">0</span>
         </div>
       </div>
@@ -118,7 +119,7 @@
         <div class="filter-group">
           <button class="filter-tab active" data-filter="all">All</button>
           <button class="filter-tab" data-filter="working">Working</button>
-          <button class="filter-tab" data-filter="problem">Problem</button>
+          <button class="filter-tab" data-filter="problem">Problem / Unreported</button>
         </div>
         <input type="text" id="filterAuditInput" placeholder="Filter results...">
       </div>
@@ -144,7 +145,7 @@
     <div class="card">
       <h2>Diagnostic Console</h2>
       <div class="log-box" id="diagnosticLogs">
-        <div class="log-line">Inspector ready. Click 'Run Full Ride Audit' or 'Audit Problems Only'.</div>
+        <div class="log-line">Inspector v1.1 loaded. Ready.</div>
       </div>
     </div>
   </div>
@@ -226,7 +227,7 @@
       btn.textContent = problemsOnly ? 'Inspecting Problems...' : 'Auditing All Rides...';
       btn.disabled = true;
 
-      logMessage(problemsOnly ? 'Starting targeted audit on Problem entries...' : 'Starting full catalogue audit...', 'info');
+      logMessage(problemsOnly ? 'Starting v1.1 targeted audit on Problem entries...' : 'Starting v1.1 full catalogue audit...', 'info');
       
       try {
         const res = await fetch(API_URL);
@@ -249,13 +250,10 @@
                 unavailable: false, 
                 items: liveData.liveData || liveData.live || [] 
               };
-              logMessage(`Successfully fetched live feed for park: "${parkName}" (${wikiId})`, 'success');
             } catch (e) {
-              logMessage(`Failed to fetch live feed for ${parkName}: ${e.message}`, 'error');
               parkLiveCache[parkName] = { unavailable: true, items: [] };
             }
           } else {
-            logMessage(`No Wiki ID found mapped for park: "${parkName}"`, 'warning');
             parkLiveCache[parkName] = { unavailable: true, items: [] };
           }
         }
@@ -283,10 +281,9 @@
               uuid: rideUuid || 'None',
               classification: 'Problem',
               status: 'UNAVAILABLE',
-              detail: 'Park explicitly flagged unavailable or unmapped'
+              detail: 'Park feed unavailable'
             };
             updateOrPushResult(probEntry, problemsOnly);
-            if (problemsOnly) logMessage(`[PROBLEM] Park: ${r.park} | Ride: ${r.ride} | Reason: Park feed unavailable`, 'warning');
             continue;
           }
 
@@ -316,16 +313,19 @@
             };
             updateOrPushResult(workEntry, problemsOnly);
           } else {
+            // Differentiate true missing IDs from unlisted static walkthroughs/shows
+            const isStaticOrPlayArea = rideNameNorm.includes('play') || rideNameNorm.includes('walkthrough') || rideNameNorm.includes('zoo') || rideNameNorm.includes('garden') || rideNameNorm.includes('exhibition');
+            const statusLabel = isStaticOrPlayArea ? 'UNLISTED / AMBIENT (Expected)' : 'UNKNOWN / MISSING API ENTRY';
+
             const probEntry = {
               park: r.park,
               ride: r.ride,
               uuid: rideUuid || 'Missing',
               classification: 'Problem',
-              status: 'UNKNOWN',
-              detail: 'Not found in park live feed payload'
+              status: statusLabel,
+              detail: isStaticOrPlayArea ? 'Ambient/play area not tracked in live queue feed' : 'Not found in park live feed payload'
             };
             updateOrPushResult(probEntry, problemsOnly);
-            if (problemsOnly) logMessage(`[PROBLEM] Park: ${r.park} | Ride: ${r.ride} | UUID: ${rideUuid} | Reason: Missing from live API array`, 'error');
           }
         }
 
@@ -334,7 +334,7 @@
         document.getElementById('statProblem').textContent = auditResults.filter(i => i.classification === 'Problem').length;
 
         renderAuditTable(auditResults);
-        logMessage(problemsOnly ? 'Targeted problem inspection finished. Review logs above.' : 'Full audit completed.', 'success');
+        logMessage(problemsOnly ? 'v1.1 Problem inspection completed successfully.' : 'v1.1 Full audit completed successfully.', 'success');
 
       } catch (err) {
         logMessage(`Audit error: ${err.message}`, 'error');
@@ -364,7 +364,7 @@
       });
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">No matching audit records found for current filter.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">No matching audit records found.</td></tr>`;
         return;
       }
 
